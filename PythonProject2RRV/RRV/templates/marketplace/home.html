@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero-section d-flex align-items-center mb-5"
+         style="
+             background: linear-gradient(rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.1)),
+                         url('{% static 'images/hero-bg.jpg' %}') no-repeat center center;
+             background-size: cover;
+             height: 320px;
+             border-radius: 0 0 50px 50px;
+             margin-top: -20px;
+             box-shadow: inset 0 0 80px rgba(0,0,0,0.1);
+         ">
+
+    <div class="container text-center text-white">
+        <h1 class="display-4 fw-bold mb-2" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">Redonnez vie au style</h1>
+        <p class="lead mb-4 fs-5" style="text-shadow: 1px 1px 5px rgba(0,0,0,0.6);">Rien ne se perd, tout se revend.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="#articles" class="btn btn-revina btn-lg px-4 shadow">Découvrir la collection</a>
+            <a href="{% url 'marketplace:create_product' %}" class="btn btn-outline-light btn-lg px-4" style="border-radius: 12px; backdrop-filter: blur(3px);">Vendre un article</a>
+        </div>
+    </div>
+</section>
+
+<div class="container" id="articles">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 style="color: #5D4037; font-family: 'Playfair Display', serif;">Articles Récents</h2>
+        <div class="dropdown">
+            <button class="btn btn-outline-dark dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
+                Filtrer par catégorie
+            </button>
+            <ul class="dropdown-menu border-0 shadow">
+                {% for category in all_categories %}
+                    <li><a class="dropdown-item" href="{% url 'marketplace:category_products' category.slug %}">{{ category.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card card-product shadow-sm">
+
+                <div class="seller-info-wrapper p-3 d-flex align-items-center">
+                    {% if product.seller.photo %}
+                        <img src="{{ product.seller.photo.url }}" class="seller-avatar" alt="{{ product.seller.username }}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                        <div class="seller-avatar bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 35px; height: 35px; border-radius: 50%;">
+                            {{ product.seller.username|slice:":1" }}
+                        </div>
+                    {% endif %}
+                    <div class="ms-2">
+                        <p class="mb-0 small fw-bold" style="color: #5D4037 !important;">{{ product.seller.username }}</p>
+                        <p class="mb-0" style="color: #5D4037 !important; font-size: 0.7rem;">{{ product.seller.city }}</p>
+                    </div>
+                </div>
+
+                <div class="product-image-container" style="height: 250px; overflow: hidden;">
+                    <img src="{{ product.image.url }}" alt="{{ product.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+
+                <div class="card-body px-3 pb-3">
+                    <h5 class="product-title fw-bold" style="color: #5D4037 !important;">{{ product.title }}</h5>
+                    <p style="color: #5D4037 !important; font-size: 0.85rem; margin-bottom: 1rem;">{{ product.description|truncatewords:8 }}</p>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="price-tag fs-5 fw-bold" style="color: #5D4037 !important;">{{ product.price }} FCFA</span>
+                        <div class="d-flex align-items-center" style="color: #5D4037 !important; font-size: 0.85rem;">
+                            <button type="button"
+                                    onclick="toggleLike(this, {{ product.id }})"
+                                    style="background: none; border: none; cursor: pointer; color: inherit;">
+                                <i class="fa{% if request.user in product.likes.all %}s{% else %}r{% endif %} fa-heart text-danger me-1"></i>
+                            </button>
+                            <span id="like-count-{{ product.id }}">{{ product.likes.count }}</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'marketplace:product_detail' product.slug %}"
+                           class="btn flex-grow-1"
+                           style="background-color: #2F4F4F !important; color: #FFFFFF !important; border-radius: 12px !important; padding: 8px 20px !important; text-align: center; text-decoration: none; border: 1px solid #2F4F4F !important; transition: all 0.3s ease !important;"
+                           onmouseover="this.style.backgroundColor='#5D4037'; this.style.borderColor='#5D4037'; this.style.transform='translateY(-2px)';"
+                           onmouseout="this.style.backgroundColor='#2F4F4F'; this.style.borderColor='#2F4F4F'; this.style.transform='translateY(0)';"
+                           >
+                           Voir
+                        </a>
+
+                        <button type="button" class="btn btn-outline-dark rounded-circle"
+                                onclick="addToCart({{ product.id }}, 'marketplace')"
+                                title="Ajouter au panier"
+                                style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-color: #5D4037; color: #5D4037;">
+                            <i class="fa fa-shopping-cart"></i>
+                        </button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <span style="color: #5D4037 !important; background-color: transparent !important; border: 1px solid #5D4037 !important; font-weight: bold !important; border-radius: 5px !important; padding: 2px 8px !important;">
+                            {{ product.get_condition_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p style="color: #5D4037 !important; font-style: italic;">Aucun trésor trouvé pour le moment...</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function addToCart(productId, productType) {
+    fetch(`/cart/add/${productId}/${productType || 'shop'}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            const badge = document.getElementById('cart-count-badge');
+            if (badge) {
+                badge.style.display = 'inline-block';
+                let currentCount = parseInt(badge.innerText) || 0;
+                badge.innerText = currentCount + 1;
+            }
+            alert("Article ajouté au panier !");
+        } else {
+            alert("Erreur: " + data.message);
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
+}
+
+function toggleLike(buttonElement, productId) {
+    // Construction dynamique de l'URL via le nom défini dans urls.py
+    const url = "{% url 'marketplace:toggle_like' 0 %}".replace('0', productId);
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            const icon = buttonElement.querySelector('i');
+            if (data.liked) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+            }
+            document.getElementById(`like-count-${productId}`).innerText = data.new_count;
+        } else {
+            alert("Erreur: " + data.message);
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
+}
+</script>
+{% endblock %}

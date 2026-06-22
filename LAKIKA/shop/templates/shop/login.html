@@ -1,0 +1,117 @@
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion LAKIKA</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body{
+            background: #f8f9fa;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-box{
+            background: white;
+            width: 450px;
+            padding: 45px;
+            border-radius: 18px;
+            box-shadow: 0px 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .logo{
+            text-align:center;
+            font-size: 30px;
+            font-weight: bold;
+            color: #198754;
+            margin-bottom: 12px;
+        }
+
+        .subtitle{
+            text-align:center;
+            color: gray;
+            margin-bottom: 35px;
+            font-size:14px;
+        }
+
+        .form-label{
+            font-weight:500;
+            margin-bottom:8px;
+        }
+
+        .form-control{
+            height:48px;
+            border-radius:10px;
+            margin-bottom:18px;
+        }
+
+        .btn-login{
+            width:100%;
+            background:#198754;
+            color:white;
+            border:none;
+            padding:12px;
+            border-radius:10px;
+            font-weight:bold;
+            margin-top:10px;
+        }
+
+        .btn-login:hover{
+            background:#157347;
+        }
+
+        .register-link{
+            text-align:center;
+            margin-top:25px;
+        }
+
+        a{
+            text-decoration:none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+
+        <div class="logo">
+            LAKIKA
+        </div>
+
+        <div class="subtitle">
+            Connectez-vous à votre compte
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Nom utilisateur</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Mot de passe</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn-login">
+                Se connecter
+            </button>
+        </form>
+
+        <div class="register-link">
+            <a href="{% url 'inscription' %}">
+                Pas encore inscrit ? Créer un compte
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

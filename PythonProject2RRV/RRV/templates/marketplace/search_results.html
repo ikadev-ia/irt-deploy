@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-5">
+
+    Résultats pour :
+    "{{ query }}"
+
+</h2>
+
+<div class="row">
+
+    {% for product in products %}
+
+    <div class="col-md-4 mb-4">
+
+        <div class="product-card">
+
+            <img
+                src="{{ product.image.url }}"
+                class="product-image"
+            >
+
+            <div class="p-3">
+
+                <h4>{{ product.title }}</h4>
+
+                <h5>{{ product.price }} FCFA</h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <div class="alert alert-warning">
+
+        Aucun article trouvé.
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

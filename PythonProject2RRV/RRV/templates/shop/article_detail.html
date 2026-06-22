@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="margin-top: 120px;">
+    <div class="row">
+        <div class="col-md-7 mb-4">
+            {% if article.image %}
+                <img src="{{ article.image.url }}" class="img-fluid shadow-sm" style="border-radius: 20px; width: 100%; max-height: 600px; object-fit: contain; background-color: #f8f9fa;">
+            {% else %}
+                <div class="d-flex align-items-center justify-content-center bg-light shadow-sm" style="border-radius: 20px; height: 400px;">
+                    <p class="text-muted">Aucune image disponible</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'shop:index' %}" class="text-decoration-none text-dark">Boutique</a></li>
+                    <li class="breadcrumb-item active text-muted" aria-current="page">{{ article.name }}</li>
+                </ol>
+            </nav>
+
+            <h1 class="display-5 fw-bold mb-3">{{ article.name }}</h1>
+
+            <div class="mb-4">
+                <span class="badge rounded-pill bg-secondary px-3 py-2">
+                    Condition : {{ article.get_condition_display }}
+                </span>
+            </div>
+
+            <h3 class="fw-bold mb-4" style="color: #5D4037;">{{ article.price }} FCFA</h3>
+
+            <div class="border-top pt-4">
+                <h5 class="fw-bold">Description</h5>
+                <p class="text-muted" style="line-height: 1.8;">{{ article.description|default:"Aucune description fournie pour cet article." }}</p>
+            </div>
+
+            <div class="mt-5">
+                <a href="{% url 'payments:checkout' article.id %}?amount={{ article.price }}&source=shop"
+                   class="btn btn-dark btn-lg w-100 py-3 shadow-sm mb-3"
+                   style="border-radius: 15px; font-weight: bold;">
+                    Acheter maintenant <i class="bi bi-lock-fill ms-2"></i>
+                </a>
+
+
+                {% if article.owner %}
+                <a href="{% url 'messaging:start_conversation' article.owner.id %}"
+                   class="btn btn-outline-dark btn-lg w-100 py-3 shadow-sm"
+                   style="border-radius: 15px; font-weight: bold;">
+                    <i class="fas fa-comments me-2"></i>Contacter le vendeur
+                </a>
+                {% endif %}
+            </div>
+
+            <p class="text-center text-muted mt-4 small">
+                <i class="fas fa-shield-alt text-success me-1"></i> Paiement sécurisé par <strong>Revina</strong>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

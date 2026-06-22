@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+    <h2 class="mb-4" style="font-family: 'Playfair Display', serif;">Mes Discussions</h2>
+    <div class="list-group shadow-sm">
+        {% for conversation in conversations %}
+            <a href="{% url 'messaging:conversation_detail' conversation.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3">
+                <div>
+                    <strong>
+                        {% for participant in conversation.participants.all %}
+                            {% if participant != user %}{{ participant.username }}{% endif %}
+                        {% endfor %}
+                    </strong>
+                    <p class="mb-0 text-muted small text-truncate" style="max-width: 300px;">
+                        {{ conversation.messages.last.content|default:"Aucun message" }}
+                    </p>
+                </div>
+                <span class="badge bg-dark rounded-pill">Voir</span>
+            </a>
+        {% empty %}
+            <div class="text-center py-5 border rounded">
+                <p class="text-muted">Vous n'avez pas encore de messages.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

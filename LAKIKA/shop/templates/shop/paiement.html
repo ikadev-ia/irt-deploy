@@ -1,0 +1,168 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="payment-container">
+    <div class="page-card">
+
+    <h1>Choisissez votre moyen de paiement</h1>
+
+    <div class="payment-methods">
+
+        <div class="payment-card" onclick="showPaymentForm('orange')">
+            <img src="{% static 'images/orange-money.png' %}">
+            <h3>Orange Money</h3>
+        </div>
+
+        <div class="payment-card" onclick="showPaymentForm('wave')">
+            <img src="{% static 'images/wave.png' %}">
+            <h3>Wave</h3>
+        </div>
+
+        <div class="payment-card" onclick="showPaymentForm('moov')">
+            <img src="{% static 'images/moov-money.png' %}">
+            <h3>Moov Money</h3>
+        </div>
+
+        <div class="payment-card" onclick="showPaymentForm('visa')">
+            <img src="{% static 'images/visa.png' %}">
+            <h3>Visa</h3>
+        </div>
+
+        <div class="payment-card" onclick="showPaymentForm('mastercard')">
+            <img src="{% static 'images/mastercard.png' %}">
+            <h3>MasterCard</h3>
+        </div>
+
+        <div class="payment-card" onclick="showPaymentForm('paypal')">
+            <img src="{% static 'images/paypal.png' %}">
+            <h3>PayPal</h3>
+        </div>
+
+        <div class="payment-card" onclick="showPaymentForm('livraison')">
+            <img src="{% static 'images/livraison.png' %}">
+            <h3>Paiement à la livraison</h3>
+        </div>
+
+    </div>
+
+    <!-- Zone vide au départ -->
+    <div id="payment-form-container"></div>
+</div>
+</section>
+
+<script>
+function showPaymentForm(method){
+
+    let container = document.getElementById("payment-form-container");
+
+    let forms = {
+
+        orange: `
+            <form class="payment-form">
+                <input type="text" placeholder="Numéro Orange Money">
+                <input type="number" placeholder="Montant">
+                <button>Payer</button>
+            </form>
+        `,
+
+        wave: `
+            <form class="payment-form">
+                <input type="text" placeholder="Numéro Wave">
+                <input type="number" placeholder="Montant">
+                <button>Payer</button>
+            </form>
+        `,
+
+        moov: `
+            <form class="payment-form">
+                <input type="text" placeholder="Numéro Moov Money">
+                <input type="number" placeholder="Montant">
+                <button>Payer</button>
+            </form>
+        `,
+
+        visa: `
+            <form class="payment-form">
+                <input type="text" placeholder="Numéro de carte Visa">
+                <input type="text" placeholder="CVV">
+                <button>Payer</button>
+            </form>
+        `,
+
+        mastercard: `
+            <form class="payment-form">
+                <input type="text" placeholder="Numéro MasterCard">
+                <input type="text" placeholder="CVV">
+                <button>Payer</button>
+            </form>
+        `,
+
+        paypal: `
+            <form class="payment-form">
+                <input type="email" placeholder="Email PayPal">
+                <button>Payer</button>
+            </form>
+        `,
+
+        livraison: `
+            <form class="payment-form">
+
+                <input type="text" placeholder="Adresse de livraison">
+
+                <input type="text" placeholder="Téléphone">
+
+                <input type="hidden" id="latitude">
+                <input type="hidden" id="longitude">
+
+                <button type="button" onclick="getLocation()">
+                     Utiliser ma position actuelle
+                </button>
+
+                <button>
+                    Confirmer
+                </button>
+
+            </form>
+        `
+    };
+
+    container.innerHTML = forms[method];
+}
+</script>
+<footer class="home-footer">
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h2>LAKIKA</h2>
+            <p>Le goût naturel qui transforme vos repas.</p>
+        </div>
+
+        <div class="footer-links">
+            <a href="{% url 'apropos' %}">À propos</a>
+            <a href="{% url 'contact' %}">Contact</a>
+            <a href="{% url 'aide' %}">Aide</a>
+            <a href="{% url 'confidentialite' %}">Confidentialité</a>
+        </div>
+<div id="notification" class="notification">
+    Produit ajouté au panier
+</div>
+
+
+        <div class="footer-socials">
+            <a href="#">Facebook</a>
+            <a href="#">TikTok</a>
+            <a href="#">WhatsApp</a>
+            <a href="#">Instagram</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2026 LAKIKA | Tous droits réservés</p>
+    </div>
+
+</footer>
+
+{% endblock %}

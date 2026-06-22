@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .notifications-wrapper {
+        background-color: #F5F5DC;
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+    .notifications-card {
+        border: none;
+        border-radius: 20px;
+        background: white;
+    }
+    .notif-item {
+        border-bottom: 1px solid #eee;
+        transition: background 0.3s;
+        padding: 20px;
+    }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-item:hover { background-color: #fafafa; }
+
+    .icon-box {
+        width: 50px; height: 50px;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.2rem;
+    }
+    .bg-like { background-color: #ffebee; color: #e91e63; }
+    .bg-message { background-color: #e3f2fd; color: #2196f3; }
+    .bg-comment { background-color: #f3e5f5; color: #9c27b0; }
+    .bg-achat { background-color: #e8f5e9; color: #2e7d32; }
+
+    .notif-text { color: #2F4F4F; font-weight: 500; }
+    .notif-time { font-size: 0.8rem; color: #888; }
+</style>
+
+<div class="notifications-wrapper">
+    <div class="container">
+        <h1 class="mb-5 fw-bold" style="color: #5D4037;">Mes Notifications</h1>
+
+        <div class="card notifications-card shadow-sm mb-5">
+            <div class="card-body p-0">
+                {% for notification in notifications %}
+                    <div class="notif-item d-flex align-items-center">
+                        <div class="icon-box me-4
+                            {% if notification.notification_type == 'like' %}bg-like
+                            {% elif notification.notification_type == 'comment' %}bg-comment
+                            {% elif notification.notification_type == 'message' %}bg-message
+                            {% elif notification.notification_type == 'achat' %}bg-achat
+                            {% else %}bg-light{% endif %}">
+
+                            {% if notification.notification_type == 'like' %}
+                                <i class="fa-solid fa-heart"></i>
+                            {% elif notification.notification_type == 'comment' %}
+                                <i class="fa-solid fa-comment"></i>
+                            {% elif notification.notification_type == 'message' %}
+                                <i class="fa-solid fa-envelope"></i>
+                            {% elif notification.notification_type == 'achat' %}
+                                <i class="fa-solid fa-bag-shopping"></i>
+                            {% else %}
+                                <i class="fa-solid fa-bell"></i>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex-grow-1">
+                            <p class="notif-text mb-0">{{ notification.text }}</p>
+                            <span class="notif-time">
+                                <i class="fa-regular fa-clock me-1"></i> {{ notification.created_at|timesince }}
+                            </span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            {% if notification.notification_type == 'message' %}
+                                <a href="{% url 'messaging:inbox' %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Voir</a>
+                            {% elif notification.notification_type == 'comment' and notification.link_id %}
+                                <a href="{% url 'marketplace:product_detail' notification.link_id %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Voir</a>
+                            {% elif notification.notification_type == 'like' %}
+                                <a href="{% url 'marketplace:dashboard' %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Voir</a>
+                            {% else %}
+                                <a href="{% url 'marketplace:home' %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Voir</a>
+                            {% endif %}
+
+                            <!-- Bouton Supprimer ajouté -->
+                            <form action="{% url 'notifications:delete' notification.id %}" method="POST" onsubmit="return confirm('Supprimer cette notification ?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="text-center py-5">
+                        <i class="fa-solid fa-bell-slash fa-3x mb-3 text-muted"></i>
+                        <h3 class="text-muted">Aucune notification pour le moment</h3>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="text-center my-5">
+            <a href="{% url 'marketplace:home' %}" class="btn btn-link text-decoration-none" style="color: #5D4037; font-weight: 500;">
+                <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+
+<section class="page-banner">
+    <div class="page-card">
+    <h1>Politique de Cookies</h1>
+</section>
+
+<section class="page-content">
+    <p>
+        Nous utilisons des cookies pour améliorer votre navigation.
+    </p>
+
+    <p>
+        Les cookies permettent de mémoriser votre panier
+        et vos préférences utilisateur.
+    </p>
+    </div>
+</section>
+<footer class="home-footer">
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h2>LAKIKA</h2>
+            <p>Le goût naturel qui transforme vos repas.</p>
+        </div>
+
+        <div class="footer-links">
+            <a href="{% url 'apropos' %}">À propos</a>
+            <a href="{% url 'contact' %}">Contact</a>
+            <a href="{% url 'aide' %}">Aide</a>
+            <a href="{% url 'confidentialite' %}">Confidentialité</a>
+        </div>
+
+        <div class="footer-socials">
+            <a href="#">Facebook</a>
+            <a href="#">TikTok</a>
+            <a href="#">WhatsApp</a>
+            <a href="#">Instagram</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2026 LAKIKA | Tous droits réservés</p>
+    </div>
+
+</footer>
+
+{% endblock %}

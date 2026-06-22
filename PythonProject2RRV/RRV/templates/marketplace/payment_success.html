@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="card shadow-lg border-0 p-5" style="border-radius: 25px; background-color: #fdfaf7;">
+        <div class="mb-4">
+            <i class="fas fa-check-circle fa-5x" style="color: #5D4037;"></i>
+        </div>
+        <h2 style="color: #5D4037; font-family: 'Playfair Display', serif;">Paiement réussi !</h2>
+        <p class="lead mt-3">Merci pour votre achat sur <strong>Revina</strong>.</p>
+        <p>Votre commande a été enregistrée avec succès. Vous allez recevoir un message de confirmation sous peu.</p>
+
+        <div class="mt-5">
+            <a href="{% url 'home' %}" class="btn btn-revina px-4 py-2" style="border-radius: 10px;">
+                Retour à l'accueil
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

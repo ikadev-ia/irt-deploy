@@ -1,0 +1,172 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>LAKIKA - Bouillon de la Santé</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  </head>
+
+  <body>
+    <!-- Loader -->
+    <div id="loader">
+      <div class="spinner"></div>
+
+      <h2>LAKIKA</h2>
+    </div>
+    <button id="topBtn" onclick="retourHaut()">↑</button>
+
+    <!-- HEADER -->
+    <header class="navbar">
+      <!-- Logo -->
+      <div class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Lakika" />
+      </div>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+      <!-- Menu -->
+      <nav class="nav-links" id="menu">
+        <a href="/">Accueil</a>
+        <a href="#produits">Produits</a>
+        <a href="/apropos/">À propos</a>
+        <a href="/contact/">Contact</a>
+        <a href="/parametres/">Paramètres</a>
+        <a href="{% url 'aide' %}">Aide</a>
+        <a href="{% url 'confidentialite' %}">Confidentialité</a>
+        <a href="{% url 'cookies' %}">Cookies</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="nav-actions">
+        {% if user.is_authenticated %}
+        <a href="/logout/" class="login-btn">Déconnexion</a>
+        {% else %}
+        <a href="/login/" class="login-btn">Connexion</a>
+        {% endif %}
+
+        <a href="{% url 'panier' %}" class="cart-icon">
+          🛒
+          <span id="cart-count">0</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- HERO SLIDER -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>LAKIKA</h1>
+
+        <h2>Le goût naturel au service de votre santé</h2>
+
+        <p>BOUILLON LAKIKA BOUILLON DE LA SANTE</p>
+
+        <div class="hero-buttons">
+          <a href="#produits" class="btn-primary"> Commander maintenant </a>
+
+          <a href="{% url 'apropos' %}" class="btn-secondary">
+            Découvrir LAKIKA
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BARRE DE RECHERCHE -->
+    <section class="search-section">
+      <h2>Rechercher un produit</h2>
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Rechercher votre bouillon..."
+        onkeyup="rechercherProduit()"
+      />
+    </section>
+
+    <!-- PRODUITS -->
+    <section id="produits" class="produits-section">
+      <h2>Nos Produits</h2>
+
+      <div class="produits-grid">
+        {% for produit in produits %}
+        <div class="produit-card searchable-product">
+    {% if produit.image %}
+    <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
+    {% endif %}
+  
+          <h3>{{ produit.nom }}</h3>
+          <p>{{ produit.prix }} FCFA</p>
+
+<div class="quantity-box">
+
+    <button type="button"
+        onclick="changeQty('qty{{ produit.id }}', -1)">
+        -
+    </button>
+
+    <input
+        type="number"
+        id="qty{{ produit.id }}"
+        value="1"
+        min="1"
+        readonly
+    >
+
+    <button type="button"
+        onclick="changeQty('qty{{ produit.id }}', 1)">
+        +
+    </button>
+
+</div>
+          <button
+            class="btn-primary"
+            onclick="ajouterPanier(
+                '{{ produit.nom }}',
+                '{{ produit.prix }}',
+                document.getElementById('qty{{ produit.id }}').value
+            )"
+          >
+            Ajouter au panier
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    <footer class="home-footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h2>LAKIKA</h2>
+          <p>Le goût naturel qui transforme vos repas.</p>
+        </div>
+
+        <div class="footer-links">
+          <a href="{% url 'apropos' %}">À propos</a>
+          <a href="{% url 'contact' %}">Contact</a>
+          <a href="{% url 'aide' %}">Aide</a>
+          <a href="{% url 'confidentialite' %}">Confidentialité</a>
+        </div>
+        <div id="notification" class="notification">
+          Produit ajouté au panier
+        </div>
+<div class="footer-socials">
+
+    <a href="https://www.facebook.com/profile.php?id=61590687704860"target="_blank">
+       <i class="fab fa-facebook"></i> Facebook
+    </a>
+
+    <a href="https://www.tiktok.com/@bouillons.lakika?_r=1&_t=ZS-97KMgDW9A5U"target="_blank">
+      <i class="fab fa-tiktok"></i> TikTok
+    </a>
+
+    <a href="https://whatsapp.com/channel/0029VbCsxa9E50Us9LdVd72E"target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp
+    </a>
+
+</div>
+
+      <div class="footer-bottom">
+        <p>© 2026 LAKIKA | Tous droits réservés</p>
+      </div>
+    </footer>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+
+{% extends 'shop/base.html' %}
+{% block content %}
+
+<div class="hero-page">
+    <h1>Paramètres</h1>
+    <p>Personnalisez votre expérience utilisateur.</p>
+</div>
+
+<div class="content-card">
+
+    <!-- PROFIL -->
+    <div class="info-box">
+        <h2> Mon profil</h2>
+
+        <form id="profileForm">
+
+            <input type="text" id="nom" placeholder="Nom complet">
+
+            <input type="email" id="email" placeholder="Adresse email">
+
+            <input type="tel" id="telephone" placeholder="Téléphone">
+
+            <button type="button" onclick="saveProfile()">
+                Enregistrer les modifications
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- MODE SOMBRE -->
+    <div class="info-box">
+
+        <h2> Mode sombre</h2>
+
+        <p>Activer ou désactiver le mode sombre.</p>
+
+        <button onclick="toggleDarkMode()">
+            Activer / Désactiver
+        </button>
+
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="info-box">
+
+        <h2> Notifications</h2>
+
+        <p>Gérer les alertes et notifications.</p>
+
+        <label>
+
+            <input
+                type="checkbox"
+                id="notifSwitch"
+                onchange="toggleNotif()"
+            >
+
+            Activer les notifications
+
+        </label>
+
+    </div>
+
+</div>
+
+{% endblock %}

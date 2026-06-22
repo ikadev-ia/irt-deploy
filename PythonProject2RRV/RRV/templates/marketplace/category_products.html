@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'marketplace:home' %}">Accueil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">Articles dans la catégorie : <strong>{{ category.name }}</strong></h1>
+
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.title }}</h5>
+                        <p class="text-muted small">{{ product.seller.username }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-light text-dark">{{ product.price }} FCFA</span>
+                            <a href="{% url 'marketplace:product_detail' product.slug %}" class="btn btn-sm btn-outline-dark">Voir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="lead text-muted">Aucun article disponible pour le moment dans cette catégorie.</p>
+                <a href="{% url 'marketplace:home' %}" class="btn btn-dark">Retour à l'accueil</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Animation pour l'icône de commentaire lors de l'ouverture */
+    .btn-comments-toggle[aria-expanded="true"] i {
+        transform: scale(1.2);
+        color: #2F4F4F !important;
+    }
+
+    /* Styles thématiques Revina */
+    .text-revina-brown { color: #5D4037; }
+    .btn-revina {
+        background-color: #2F4F4F;
+        color: white;
+        border-radius: 12px;
+        transition: 0.3s;
+    }
+    .btn-revina:hover {
+        background-color: #1e3333;
+        color: white;
+    }
+    .seller-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
+                <img src="{{ product.image.url }}" class="img-fluid w-100" alt="{{ product.title }}" style="max-height: 600px; object-fit: cover;">
+            </div>
+        </div>
+
+        <div class="col-md-5 ps-md-5">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Accueil</a></li>
+                    <li class="breadcrumb-item active text-revina-brown">{{ product.category.name }}</li>
+                </ol>
+            </nav>
+
+            <h1 class="display-5 fw-bold text-revina-brown mb-2">{{ product.title }}</h1>
+
+            <div class="d-flex align-items-center mb-3">
+                <a href="{% url 'marketplace:toggle_like' product.id %}" class="btn btn-link text-danger p-0 me-2" style="text-decoration: none;">
+                    {% if user in product.likes.all %}
+                        <i class="fa-solid fa-heart fs-4"></i>
+                    {% else %}
+                        <i class="fa-regular fa-heart fs-4"></i>
+                    {% endif %}
+                </a>
+                <span class="fw-bold text-revina-brown">
+                    {{ product.likes.count }} like{{ product.likes.count|pluralize }}
+                </span>
+            </div>
+
+            <h2 class="h3 text-success fw-bold mb-4">{{ product.price }} FCFA</h2>
+
+            <div class="p-3 mb-4" style="background-color: #f9f9f9; border-radius: 15px;">
+                <p class="text-muted mb-1 small text-uppercase fw-bold">Description</p>
+                <p>{{ product.description }}</p>
+            </div>
+
+            <div class="d-grid gap-2">
+                <a href="{% url 'payments:checkout' product.id %}?type=marketplace" class="btn btn-revina btn-lg shadow-sm">
+                    <i class="fas fa-shopping-cart me-2"></i>Acheter cet article
+                </a>
+
+                {% if user.is_authenticated and user != product.seller %}
+                    <a href="{% url 'messaging:start_conversation' product.seller.id %}" class="btn btn-outline-dark shadow-sm mt-2" style="border-radius: 12px; padding: 10px;">
+                        <i class="fas fa-comments me-2"></i>Contacter le vendeur
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="mt-5 d-flex align-items-center p-3 border rounded-pill shadow-sm bg-white">
+                {% if product.seller.photo %}
+                    <img src="{{ product.seller.photo.url }}" class="seller-avatar me-3" alt="Avatar">
+                {% else %}
+                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white me-3" style="width: 50px; height: 50px;">
+                        {{ product.seller.username|slice:":1" }}
+                    </div>
+                {% endif %}
+                <div>
+                    <h6 class="mb-0 fw-bold">{{ product.seller.username }}</h6>
+                    <small class="text-muted">Membre depuis {{ product.seller.date_joined|date:"Y" }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-7">
+            <div class="d-flex align-items-center mb-3">
+                <h3 class="fw-bold m-0" style="color: #2F4F4F;">Commentaires ({{ comments.count }})</h3>
+                <button class="btn btn-comments-toggle ms-3 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComments" aria-expanded="false" aria-controls="collapseComments" style="border: none; background: none;">
+                    <i class="fa-solid fa-comments fa-2x" style="color: #5D4037; transition: transform 0.3s;"></i>
+                </button>
+            </div>
+
+            <div class="collapse" id="collapseComments">
+                <div class="card card-body border-0 bg-transparent p-0">
+                    <div class="comments-list mb-4">
+                        {% for comment in comments %}
+                            <div class="comment-item p-3 mb-2 rounded-4 shadow-sm" style="background-color: white; border: 1px solid #eee; border-left: 5px solid #5D4037;">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <strong style="color: #5D4037;">{{ comment.user.username }}</strong>
+                                    <small class="text-muted">le {{ comment.created_at|date:"d/m/Y" }}</small>
+                                </div>
+                                <p class="mb-0" style="color: #2F4F4F;">{{ comment.content }}</p>
+                            </div>
+                        {% empty %}
+                            <p class="text-muted">Aucun commentaire pour le moment.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+            <div class="mt-4 bg-white p-4 rounded-4 shadow-sm border">
+                <form action="{% url 'marketplace:add_comment' product.id %}" method="POST">
+                    {% csrf_token %}
+                    <textarea name="content" class="form-control border-0 bg-light rounded-3 mb-3" rows="3" placeholder="Ajouter un commentaire..." required></textarea>
+                    <button type="submit" class="btn btn-revina px-4 shadow-sm">Publier</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

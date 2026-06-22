@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Mes Discussions | Revina{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --revina-green: #2d4a43;
+        --revina-beige: #fdfaf0;
+    }
+
+    body { background-color: var(--revina-beige); }
+
+    .chat-card {
+        border-radius: 20px;
+        border: none;
+        transition: transform 0.2s;
+        background: white;
+    }
+
+    .chat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+    }
+
+    .avatar-placeholder {
+        width: 60px;
+        height: 60px;
+        background-color: #e9ecef;
+        color: var(--revina-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold" style="color: var(--revina-green);">Mes Discussions</h2>
+                <span class="badge rounded-pill bg-white text-dark shadow-sm px-3 py-2">
+                    {{ conversations.count }} discussion{{ conversations.count|pluralize }}
+                </span>
+            </div>
+
+            {% for conversation in conversations %}
+                {% with other_user=conversation.participants.all|dictsort:"id" %}
+                    {% for participant in other_user %}
+                        {% if participant != request.user %}
+                            <a href="{% url 'messaging:chat_detail' conversation.id %}" class="text-decoration-none">
+                                <div class="card chat-card shadow-sm mb-3">
+                                    <div class="card-body p-3 p-md-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3 me-md-4">
+                                                {% if participant.photo %}
+                                                    <img src="{{ participant.photo.url }}" class="rounded-circle shadow-sm" style="width: 50px; height: 50px; object-fit: cover;">
+                                                {% else %}
+                                                    <div class="avatar-placeholder" style="width: 50px; height: 50px;">
+                                                        {{ participant.username|slice:":1"|upper }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="flex-grow-1 min-width-0">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <h6 class="mb-0 fw-bold text-dark text-truncate me-2">{{ participant.username }}</h6>
+                                                    <small class="text-muted text-nowrap">{{ conversation.updated_at|date:"d M, H:i" }}</small>
+                                                </div>
+                                                <p class="mb-0 text-muted small">
+                                                    {% with last_msg=conversation.messages.last %}
+                                                        {% if last_msg %}
+                                                            <span class="message-content">{{ last_msg.content }}</span>
+                                                        {% else %}
+                                                            <span class="fst-italic">Aucun message...</span>
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% endwith %}
+            {% empty %}
+                <div class="text-center py-5 bg-white shadow-sm chat-card">
+                    <i class="fas fa-comments fa-4x mb-3" style="color: #dee2e6;"></i>
+                    <h4 class="text-muted">Vous n'avez pas encore de messages</h4>
+                    <p class="text-muted mb-4">Trouvez un article et contactez le vendeur pour commencer !</p>
+                    <a href="{% url 'marketplace:home' %}" class="btn btn-primary px-4" style="background-color: var(--revina-green); border: none; border-radius: 10px;">
+                        Découvrir les articles
+                    </a>
+                </div>
+            {% endfor %}
+
+            <div class="text-center my-5">
+                <a href="{% url 'marketplace:home' %}" class="btn btn-link text-decoration-none" style="color: #5D4037; font-weight: 500;">
+                    <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0" style="border-radius: 15px; background-color: #fdfaf0;">
+
+                <div class="card-header bg-white border-0 py-3 shadow-sm" style="border-radius: 15px 15px 0 0;">
+                    <div class="d-flex align-items-center">
+                        <a href="{% url 'messaging:chat_list' %}" class="text-dark me-3"><i class="fas fa-arrow-left"></i></a>
+
+                        {% if other_participant.photo %}
+                            <img src="{{ other_participant.photo.url }}" class="rounded-circle me-2" style="width: 45px; height: 45px; object-fit: cover; border: 2px solid #2d4a43;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 45px; height: 45px; font-weight: bold;">
+                                {{ other_participant.username|slice:":1"|upper }}
+                            </div>
+                        {% endif %}
+
+                        <div>
+                            <h5 class="mb-0 fw-bold" style="color: #2d4a43;">{{ other_participant.username }}</h5>
+                            {% if other_participant.is_online %}
+                                <small class="text-success"><i class="fas fa-circle" style="font-size: 0.5rem;"></i> En ligne</small>
+                            {% else %}
+                                <small class="text-muted">Hors ligne</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body overflow-auto" id="chat-box" style="height: 450px; background-color: #f8f9fa; padding: 1.5rem;">
+                    {% for msg in messages_list %}
+                        <div class="d-flex {% if msg.sender == request.user %}justify-content-end{% else %}justify-content-start{% endif %} mb-3">
+                            {% if msg.sender != request.user %}
+                                <div class="me-2 align-self-end">
+                                    {% if other_participant.photo %}
+                                        <img src="{{ other_participant.photo.url }}" class="rounded-circle" style="width: 25px; height: 25px; object-fit: cover;">
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+
+                            <div class="p-3 shadow-sm position-relative message-bubble" style="max-width: 75%; border-radius: 18px;
+                                {% if msg.sender == request.user %}
+                                    background: linear-gradient(135deg, #2d4a43, #3d635a); color: white; border-bottom-right-radius: 2px;
+                                {% else %}
+                                    background-color: white; color: #333; border-bottom-left-radius: 2px;
+                                {% endif %}">
+
+                                <p class="mb-1">{{ msg.content }}</p>
+
+                                <div class="d-flex justify-content-between align-items-center" style="font-size: 0.65rem; opacity: 0.8;">
+                                    {% if msg.sender == request.user %}
+                                        <a href="{% url 'messaging:delete_message' msg.id %}" class="text-white opacity-50 hover-opacity-100 me-2" onclick="return confirm('Supprimer ce message ?')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+
+                                        <span>
+                                            {{ msg.timestamp|date:"H:i" }}
+                                            <i class="fas fa-check-double ms-1"></i>
+                                        </span>
+                                    {% else %}
+                                        <span>{{ msg.timestamp|date:"H:i" }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="text-center text-muted mt-5">
+                            <i class="far fa-comments fa-3x mb-3 opacity-25"></i>
+                            <p>Dites bonjour à {{ other_participant.username }} !</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="card-footer bg-white border-0 p-3" style="border-radius: 0 0 15px 15px;">
+                    <form method="POST" class="d-flex align-items-center gap-2">
+                        {% csrf_token %}
+                        <button type="button" id="emoji-button" class="btn btn-link text-decoration-none p-0 me-1">
+                            <i class="far fa-smile fa-lg text-muted"></i>
+                        </button>
+
+                        <input type="text" name="content" id="chat-input" class="form-control border-0 bg-light py-2" placeholder="Écrivez votre message..." required style="border-radius: 25px;">
+
+                        <button type="submit" class="btn border-0 text-white d-flex align-items-center justify-content-center" style="background-color: #2d4a43; width: 40px; height: 40px; border-radius: 50%;">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/picmo@latest/dist/umd/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@picmo/popup-picker@latest/dist/umd/index.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const button = document.querySelector('#emoji-button');
+        const input = document.querySelector('#chat-input');
+
+        if (button && input) {
+            const picker = picmoPopup.createPopup({}, {
+                referenceElement: button,
+                triggerElement: button,
+                position: 'top-start',
+                className: 'shadow-lg'
+            });
+
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                picker.toggle();
+            });
+
+            picker.addEventListener('emoji:select', (selection) => {
+                input.value += selection.emoji;
+                input.focus();
+            });
+        }
+
+        const chatBox = document.getElementById('chat-box');
+        if (chatBox) {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    });
+</script>
+{% endblock %}

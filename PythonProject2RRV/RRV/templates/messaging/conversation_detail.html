@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+    <div class="card shadow-sm border-0" style="border-radius: 15px;">
+        <div class="card-header bg-white py-3">
+            <h4 class="mb-0">Discussion</h4>
+        </div>
+        <div class="card-body bg-light" style="height: 400px; overflow-y: auto;">
+            {% for message in messages %}
+                <div class="d-flex {% if message.sender == user %}justify-content-end{% endif %} mb-3">
+                    <div class="p-3 {% if message.sender == user %}bg-dark text-white{% else %}bg-white border{% endif %}"
+                         style="border-radius: 20px; max-width: 70%;">
+                        <p class="mb-0">{{ message.content }}</p>
+                        <small class="{% if message.sender == user %}text-light{% else %}text-muted{% endif %} opacity-75" style="font-size: 0.7rem;">
+                            {{ message.created_at|date:"H:i" }}
+                        </small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="card-footer bg-white border-top-0">
+            <form method="POST" class="d-flex gap-2">
+                {% csrf_token %}
+                <input type="text" name="content" class="form-control rounded-pill border-0 bg-light px-4" placeholder="Votre message..." required>
+                <button type="submit" class="btn btn-dark rounded-circle" style="width: 45px; height: 45px;">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

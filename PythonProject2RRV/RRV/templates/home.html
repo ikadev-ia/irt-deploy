@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero-section d-flex align-items-center mb-5"
+         style="
+             /* 1. On baisse l'opacité à 0.1 pour que l'image soit très claire et nette */
+             background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.2)),
+                         url('{% static 'images/hero-bg.jpg' %}') no-repeat center center;
+             background-size: cover;
+
+             /* 2. On réduit la hauteur à 320px pour un look plus fin */
+             height: 320px;
+
+             border-radius: 0 0 50px 50px;
+             margin-top: -20px;
+             box-shadow: inset 0 0 100px rgba(0,0,0,0.2); /* Ajoute un peu de profondeur */
+         ">
+
+    <div class="container text-center text-white">
+        <h1 class="display-4 fw-bold mb-2" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.4);">Redonnez vie au style</h1>
+        <p class="lead mb-4 fs-5" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">La première marketplace vintage au Mali.</p>
+
+        <div class="d-flex justify-content-center gap-3">
+            <a href="#articles" class="btn btn-revina btn-lg px-4 shadow">Découvrir</a>
+            <a href="{% url 'create_product' %}" class="btn btn-outline-light btn-lg px-4" style="border-radius: 12px; backdrop-filter: blur(2px);">Vendre</a>
+        </div>
+    </div>
+</section>
+
+<div class="container" id="articles">
+    {% if messages %}
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-10">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert" style="border-radius: 15px;">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 class="text-revina-brown" style="font-family: 'Playfair Display', serif;">Articles Récents</h2>
+        <div class="dropdown">
+            <button class="btn btn-outline-dark dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
+                Filtrer par catégorie
+            </button>
+            <ul class="dropdown-menu border-0 shadow">
+                <li><a class="dropdown-item" href="#">Vêtements</a></li>
+                <li><a class="dropdown-item" href="#">Accessoires</a></li>
+                <li><a class="dropdown-item" href="#">Chaussures</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card card-product shadow-sm">
+                <div class="seller-info-wrapper">
+                    {% if product.seller.photo %}
+                        <img src="{{ product.seller.photo.url }}" class="seller-avatar" alt="{{ product.seller.username }}">
+                    {% else %}
+                        <div class="seller-avatar bg-secondary d-flex align-items-center justify-content-center text-white">
+                            {{ product.seller.username|slice:":1" }}
+                        </div>
+                    {% endif %}
+                    <div>
+                        <p class="mb-0 small fw-bold" style="color: #5D4037;">{{ product.seller.username }}</p>
+                        <p class="mb-0 text-muted" style="font-size: 0.7rem;">{{ product.seller.city }}</p>
+                    </div>
+                </div>
+
+                <div class="product-image-container">
+                    <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                </div>
+
+                <div class="card-body">
+                    <h5 class="fw-bold" style="color: #5D4037;">{{ product.title }}</h5>
+                    <p class="text-muted small">{{ product.description|truncatewords:8 }}</p>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fs-5 fw-bold" style="color: #8D6E63;">{{ product.price }} FCFA</span>
+                        <span class="badge-condition">{{ product.get_condition_display }}</span>
+                    </div>
+
+                    <a href="{% url 'product_detail' product.id %}" class="btn btn-revina w-100 mt-3">
+                        Voir l'article
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted italic">Aucun trésor trouvé pour le moment...</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

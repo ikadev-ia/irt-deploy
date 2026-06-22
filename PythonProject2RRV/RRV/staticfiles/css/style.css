@@ -1,0 +1,225 @@
+/* --- VARIABLES D'IDENTITÉ REVINA --- */
+:root {
+    --beige: #F5F5DC;
+    --marron-fonce: #5D4037;
+    --vert-afrique: #2F4F4F;
+    --brun-doux: #8D6E63;
+    --blanc-pur: #FFFFFF;
+    --shadow-soft: 0 10px 30px rgba(47, 79, 79, 0.08);
+}
+
+/* --- STRUCTURE GÉNÉRALE --- */
+body {
+    background-color: var(--beige) !important;
+    font-family: 'Poppins', sans-serif;
+    color: var(--marron-fonce);
+    margin: 0;
+    padding-top: 70px !important;
+    overflow-x: hidden;
+}
+
+body.loader-active {
+    overflow: hidden !important;
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+/* --- NAVIGATION --- */
+.navbar {
+    height: 70px !important;
+    background-color: var(--blanc-pur) !important;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05) !important;
+    border-bottom: 2px solid rgba(47, 79, 79, 0.1) !important;
+    z-index: 1040 !important;
+}
+
+/* --- CARTES PRODUITS --- */
+.card-product, .article-card {
+    background: var(--blanc-pur) !important;
+    border: 1px solid rgba(93, 64, 55, 0.1) !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05) !important;
+    padding: 10px;
+}
+
+.card-product:hover, .article-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 40px rgba(93, 64, 55, 0.12) !important;
+}
+
+.card.article-card img.article-card-img {
+    height: 200px !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    border-radius: 20px 20px 0 0 !important;
+}
+
+/* --- BOUTONS --- */
+.btn-revina {
+    background-color: var(--vert-afrique);
+    color: white !important;
+    border-radius: 12px;
+    padding: 10px 25px;
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-revina:hover {
+    background-color: var(--marron-fonce);
+    transform: translateY(-2px);
+}
+
+/* Bouton Voir dynamique */
+/* Bouton Voir dynamique */
+.btn-voir {
+    border: 1px solid var(--vert-afrique) !important; /* Bordure verte */
+    color: var(--vert-afrique) !important;            /* Texte vert */
+    background-color: transparent !important;         /* Fond transparent */
+    border-radius: 12px !important;
+    padding: 8px 20px !important;
+    transition: all 0.3s ease-in-out !important;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* Effet dynamique au survol */
+.btn-voir:hover {
+    background-color: var(--vert-afrique) !important; /* Devient vert plein au survol */
+    color: var(--blanc-pur) !important;               /* Texte blanc */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(47, 79, 79, 0.2);      /* Ombre adaptée au vert */
+}
+
+/* --- TYPOGRAPHIE ET DÉTAILS CARTE --- */
+.product-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--marron-fonce);
+    margin-bottom: 0.5rem;
+}
+
+.price-tag {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--brun-doux);
+}
+
+/* --- LOADER DYNAMIQUE --- */
+#dynamic-loader-wrapper {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    z-index: 9999;
+    background-color: #F5F5DC;
+    transition: opacity 0.6s ease, visibility 0.6s;
+}
+
+.model-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.loader-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    justify-items: center;
+    width: 90%;
+    max-width: 1100px;
+}
+
+.model-column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.loader-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* --- DESIGN MÉTHODES DE PAIEMENT --- */
+.payment-method-card {
+    border: 2px solid rgba(47, 79, 79, 0.1);
+    border-radius: 15px;
+    background: white;
+    padding: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.payment-method-card img {
+    max-height: 40px !important;
+    width: auto !important;
+    object-fit: contain !important;
+}
+
+.payment-method-card:hover {
+    border-color: var(--vert-afrique);
+    transform: translateY(-3px);
+}
+
+/* --- RESPONSIVITÉ --- */
+@media (max-width: 768px) {
+    h1 { font-size: 1.8rem !important; }
+    body { padding-top: 70px !important; }
+    .card-product, .article-card {
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+}
+
+/* --- AJOUTS PERSONNALISÉS --- */
+
+.btn.btn-outline-dark.btn-green-hover {
+    color: #212529 !important;
+    border-color: #212529 !important;
+    background-color: transparent !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn.btn-outline-dark.btn-green-hover:hover {
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+    color: #ffffff !important;
+}
+
+.badge-condition {
+    color: #5D4037 !important;
+    background-color: #F5F5DC !important;
+    border: 1px solid #8D6E63 !important;
+    font-weight: bold !important;
+    border-radius: 5px !important;
+    display: inline-block;
+    padding: 2px 8px !important;
+}
+
+/* Nettoyage global pour forcer le marron sur les textes de la carte */
+.card-product .text-muted,
+.card-product .text-revina-dark,
+.card-product p,
+.card-product .small {
+    color: #5D4037 !important;
+}

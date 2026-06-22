@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+
+    <div class="text-center py-4">
+        <h1 style="font-family: 'Playfair Display', serif; color: #2F4F4F; font-size: 3rem; margin-bottom: 0.5rem;">
+            Boutique REVINA
+        </h1>
+        <p class="text-muted" style="font-size: 1.2rem; font-style: italic;">Les articles d'ici et d'ailleurs.</p>
+        <hr class="mx-auto" style="width: 60px; border-top: 2px solid #2F4F4F; opacity: 1;">
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <form action="{% url 'shop:index' %}" method="GET" class="d-flex shadow-sm" style="border-radius: 30px; overflow: hidden; border: 1px solid #dee2e6;">
+                    <input type="text" name="q" class="form-control border-0 px-4" placeholder="Rechercher un article..." value="{{ query|default:'' }}" style="height: 50px;">
+                    <button type="submit" class="btn btn-dark px-4" style="border-radius: 0;">
+                        Chercher
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-2">
+        {% for item in products %}
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 text-center" style="border-radius: 20px;">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img-top" style="height: 280px; object-fit: cover; border-radius: 20px 20px 0 0;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="fw-bold mb-1">{{ item.name }}</h5>
+                    <p class="fw-bold" style="color: #8B4513;">{{ item.price }} FCFA</p>
+
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{% url 'shop:article_detail' item.pk %}" class="btn btn-outline-dark rounded-pill px-4">Détails</a>
+
+                        <button type="button"
+                                class="btn btn-outline-dark rounded-circle"
+                                onclick="addToCart({{ item.id }}, 'shop')"
+                                title="Ajouter au panier"
+                                style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa fa-shopping-cart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <h3 class="text-muted">Aucun article trouvé pour "{{ query }}".</h3>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-5 mb-5 pt-4 border-top">
+        <a href="{% url 'marketplace:home' %}" class="btn btn-outline-dark px-5 py-2" style="border-radius: 25px;">
+            Retour à l'accueil
+        </a>
+    </div>
+
+</div>
+
+<script>
+function addToCart(productId, productType) {
+    fetch(`/cart/add/${productId}/${productType || 'shop'}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            const badge = document.getElementById('cart-count-badge');
+
+            // Rendre le badge visible s'il était caché
+            badge.style.display = 'inline-block';
+
+            // Mettre à jour le chiffre
+            let currentCount = parseInt(badge.innerText) || 0;
+            badge.innerText = currentCount + 1;
+
+            alert("Article ajouté au panier !");
+        } else {
+            alert("Erreur: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert("Une erreur est survenue.");
+    });
+}
+</script>
+{% endblock %}

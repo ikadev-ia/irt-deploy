@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh; padding-top: 100px;">
+    <div class="card shadow-lg p-4" style="border-radius: 25px; width: 100%; max-width: 500px; background-color: #fff; border: none;">
+
+        <h3 class="text-center mb-4" style="color: #5D4037; font-family: 'Playfair Display', serif;">Paiement</h3>
+        <p class="text-center text-muted mb-4">Choisissez votre méthode et confirmez le règlement</p>
+
+        <form action="{% url 'payments:confirmer_paiement' %}" method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="montant" class="form-label fw-bold" style="color: #5D4037;">Montant à régler (FCFA)</label>
+                <input type="number"
+                       name="amount"
+                       id="montant"
+                       value="{{ montant_total|floatformat:0 }}"
+                       class="form-control"
+                       style="border-radius: 10px;"
+                       required>
+            </div>
+
+            <div class="row g-3 mb-4">
+                {% for method in payment_methods %}
+                <div class="col-6">
+                    <input type="radio" class="btn-check" name="method" id="{{ method.id }}" value="{{ method.id }}" required>
+                    <label class="btn btn-outline-secondary w-100 p-3 d-flex align-items-center justify-content-center" for="{{ method.id }}" style="border-radius: 15px;">
+                        {% if method.id == 'OM' %}<img src="{% static 'images/orange-money.png' %}" style="height: 20px; margin-right: 8px;">{% endif %}
+                        {% if method.id == 'W' %}<img src="{% static 'images/wave.png' %}" style="height: 20px; margin-right: 8px;">{% endif %}
+                        {% if method.id == 'MOOV' %}<img src="{% static 'images/moov.png' %}" style="height: 20px; margin-right: 8px;">{% endif %}
+                        {% if method.id == 'CARD' %}
+                            <img src="{% static 'images/visa.png' %}" style="height: 20px; margin-right: 4px;">
+                            <img src="{% static 'images/mastercard.png' %}" style="height: 20px; margin-right: 4px;">
+                        {% endif %}
+                        {{ method.name }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-4" id="phone-container" style="display: none;">
+                <label class="form-label fw-bold">Numéro de téléphone</label>
+                <input type="tel" name="phone" class="form-control" placeholder="Ex: 77 000 00 00" style="border-radius: 10px;">
+            </div>
+
+            <div id="card-container" style="display: none;">
+                <input type="text" class="form-control mb-2" placeholder="Numéro de carte (16 chiffres)" maxlength="16">
+                <div class="row g-2">
+                    <div class="col-6"><input type="text" class="form-control" placeholder="MM/YY"></div>
+                    <div class="col-6"><input type="text" class="form-control" placeholder="CVC" maxlength="3"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn w-100 mt-4" style="background-color: #2F4F4F; color: white; padding: 12px; border-radius: 12px; font-weight: bold;">
+                Confirmer le paiement
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('input[name="method"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.getElementById('phone-container').style.display = (this.value === 'CARD') ? 'none' : 'block';
+            document.getElementById('card-container').style.display = (this.value === 'CARD') ? 'block' : 'none';
+        });
+    });
+</script>
+{% endblock %}

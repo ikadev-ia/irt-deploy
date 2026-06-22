@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement - FASO TULU</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header id="navbar">
+
+    <div class="logo-container">
+        <img src="images/logo.png" alt="Logo" class="logo-img">
+        <div class="logo-text">FASO TULU</div>
+    </div>
+
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="products.html">Produits</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+</header>
+
+<section class="payment-page">
+
+    <div class="payment-box">
+
+        <h1>Finaliser votre commande</h1>
+
+        <div class="order-summary">
+
+
+            <p>Produit : Huile végétale FASO TULU</p>
+
+
+        </div>
+
+        <form id="paymentForm">
+
+            <label>Moyen de paiement</label>
+
+            <select id="paymentMethod" required>
+
+                <option value="">Choisir...</option>
+
+                <option>Orange Money</option>
+
+                <option>Moov Money</option>
+
+                <option>Wave</option>
+
+                <option>Carte Bancaire</option>
+
+                <option>Paiement à la livraison</option>
+
+            </select>
+
+            <button type="submit">
+                Payer maintenant
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+<script>
+
+document.getElementById("paymentForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    let methode =
+    document.getElementById("paymentMethod").value;
+
+    if(methode === ""){
+
+        alert("Veuillez choisir un moyen de paiement");
+
+        return;
+
+    }
+
+    alert(
+        "Paiement simulé avec succès via " +
+        methode +
+        " !"
+    );
+
+});
+
+</script>
+
+</body>
+</html>

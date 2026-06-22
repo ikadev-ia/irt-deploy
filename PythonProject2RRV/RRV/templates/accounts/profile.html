@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon Profil | Revina{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --revina-green: #2d4a43; /* Le vert sombre caractéristique */
+        --revina-beige: #fdfaf0; /* Le fond crème */
+        --revina-brown: #5d4037; /* Le marron pour le texte */
+    }
+
+    body { background-color: var(--revina-beige); }
+
+    .profile-card {
+        border-radius: 20px;
+        border: none;
+        background: white;
+        overflow: hidden;
+    }
+
+    .profile-header {
+        background-color: white;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile-img {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border: 4px solid var(--revina-beige);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .btn-revina-primary {
+        background-color: var(--revina-green);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        transition: 0.3s;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+    }
+
+    .btn-revina-primary:hover {
+        background-color: #1e332e;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .btn-revina-outline {
+        border: 2px solid var(--revina-green);
+        color: var(--revina-green);
+        background: transparent;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+    }
+
+    .btn-revina-outline:hover {
+        background: var(--revina-green);
+        color: white;
+    }
+
+    .info-label { color: var(--revina-brown); font-weight: bold; }
+
+    .logout-btn {
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .logout-btn:hover {
+        opacity: 0.7;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card profile-card shadow-lg">
+                <div class="profile-header text-center py-5">
+                    <h2 class="fw-bold" style="color: var(--revina-green); letter-spacing: 1px;">MON PROFIL REVINA</h2>
+                </div>
+
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        {% if user.photo %}
+                            <img src="{{ user.photo.url }}" alt="{{ user.username }}" class="rounded-circle profile-img">
+                        {% else %}
+                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto profile-img">
+                                <i class="fas fa-user fa-3x text-secondary"></i>
+                            </div>
+                        {% endif %}
+                        <h3 class="mt-3 fw-bold" style="color: var(--revina-brown);">{{ user.first_name }} {{ user.last_name }}</h3>
+                        <p class="text-muted">@{{ user.username }}</p>
+                        <span class="badge rounded-pill px-3 py-2" style="background-color: #e8f5e9; color: #2e7d32;">Membre actif</span>
+                    </div>
+
+                    <div class="row mt-5 g-4">
+                        <div class="col-6">
+                            <p class="mb-1 info-label small text-uppercase">Email</p>
+                            <p class="text-dark">{{ user.email }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-1 info-label small text-uppercase">Téléphone</p>
+                            <p class="text-dark">{{ user.phone|default:"+223 ..." }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-1 info-label small text-uppercase">Ville</p>
+                            <p class="text-dark">{{ user.city|default:"Bamako" }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-1 info-label small text-uppercase">Statut/Bio</p>
+                            <p class="text-dark">{{ user.bio|default:"Vendeur passionné" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-3 mt-5">
+                        <a href="{% url 'edit_profile' %}" class="btn btn-revina-primary">
+                            <i class="fas fa-user-edit me-2"></i>Modifier mes informations
+                        </a>
+
+                        <a href="{% url 'marketplace:dashboard' %}" class="btn btn-revina-outline">
+                            <i class="fas fa-store me-2"></i>Gérer ma boutique
+                        </a>
+
+                        <hr class="my-4">
+
+                        <div class="text-center">
+                            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="text-danger fw-bold border-0 bg-transparent logout-btn">
+                                    <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
+                                </button>
+                            </form>
+
+                            <a href="{% url 'marketplace:home' %}" class="text-dark fw-bold text-decoration-none ms-4">
+                                <i class="fas fa-home me-1"></i>Retour à l'accueil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

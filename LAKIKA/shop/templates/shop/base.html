@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAKIKA</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+   
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="logo">
+            <a href="{% url 'index' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Logo">
+            </a>
+        </div>
+
+<!-- Navigation -->
+<nav class="nav-links" id="menu">
+
+    <a href="{% url 'index' %}">Accueil</a>
+
+    <a href="{% url 'apropos' %}">À propos</a>
+
+    <a href="{% url 'contact' %}">Contact</a>
+
+    <a href="{% url 'aide' %}">Aide</a>
+
+    <a href="{% url 'parametres' %}">Paramètres</a>
+
+    <a href="{% url 'login' %}">Connexion</a>
+
+    <a href="{% url 'logout' %}">Déconnexion</a>
+
+    <a href="{% url 'panier' %}" class="cart-icon">
+        🛒 <span id="cart-count">0</span>
+    </a>
+
+    <button onclick="toggleDarkMode()" class="dark-btn">
+        🌙
+    </button>
+
+</nav>
+    </header>
+
+    <!-- CONTENU DES PAGES -->
+    <main class="page-wrapper">
+        {% block content %}
+        {% endblock %}
+    </main>
+     <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
