@@ -12,7 +12,19 @@ services:
       - .env
     environment:
       - DEBUG=1
+    networks:
+      - proxy-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lakika.rule=Host(`www.bouillon-lakika.com`) || Host(`bouillon-lakika.com`)"
+      - "traefik.http.routers.lakika.entrypoints=websecure"
+      - "traefik.http.routers.lakika.tls.certresolver=myresolver"
+      - "traefik.http.services.lakika.loadbalancer.server.port=8000"
     restart: always
+
+networks:
+  proxy-net:
+    external: true
 
 volumes:
   media_volume:

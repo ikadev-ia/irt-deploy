@@ -21,7 +21,7 @@ providers:
 certificatesResolvers:
   myresolver:
     acme:
-      email: votre-email@exemple.com
+      email: ikadev.services@gmail.com
       storage: acme.json
       httpChallenge:
         entryPoint: web

@@ -11,6 +11,14 @@ services:
     environment:
       - DEBUG=1
       - DJANGO_SETTINGS_MODULE=config.settings
+    networks:
+      - proxy-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rrv.rule=Host(`www.shop-revina.com`) || Host(`shop-revina.com`)"
+      - "traefik.http.routers.rrv.entrypoints=websecure"
+      - "traefik.http.routers.rrv.tls.certresolver=myresolver"
+      - "traefik.http.services.rrv.loadbalancer.server.port=8000"
     # Si vous utilisez une base de données PostgreSQL plus tard :
     # depends_on:
     #   - db
@@ -26,3 +34,7 @@ services:
 
 # volumes:
 #   postgres_data:
+
+networks:
+  proxy-net:
+    external: true
