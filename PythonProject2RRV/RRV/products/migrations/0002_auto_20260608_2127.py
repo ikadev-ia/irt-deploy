@@ -33,7 +33,9 @@ def transferer_produits(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0001_initial'), # Assurez-vous que c'est le bon nom de dépendance
+        ('products', '0001_initial'),
+        ('shop', '0001_initial'),        # Ajouté
+        ('marketplace', '0001_initial'), # Ajouté
     ]
 
     operations = [
