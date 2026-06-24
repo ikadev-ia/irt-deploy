@@ -14,8 +14,7 @@ services:
       - ./acme.json:/acme.json
     labels:
       - "traefik.enable=true"
-      # Dashboard (optionnel, sécurisez-le en production)
-      - "traefik.http.routers.dashboard.rule=Host(`traefik.votre-domaine.com`)"
+      - "traefik.http.routers.dashboard.rule=Host(`www.monmarche-mali.com`) || Host(`monmarche-mali.com`)"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.entrypoints=websecure"
       - "traefik.http.routers.dashboard.tls.certresolver=myresolver"
