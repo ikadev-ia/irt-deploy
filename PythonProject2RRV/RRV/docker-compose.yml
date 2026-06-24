@@ -1,17 +1,32 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - rrv_db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=rrv_db
+      - POSTGRES_USER=rrv_user
+      - POSTGRES_PASSWORD=rrv_password
+    networks:
+      - rrv-net
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
-    ports:
-      - "8000:8000"
+    # ports:  <-- Supprimé pour éviter le conflit de port 8000
+    #   - "8000:8000"
+    depends_on:
+      - db
     environment:
       - DEBUG=1
       - DJANGO_SETTINGS_MODULE=config.settings
+      - DATABASE_URL=postgres://rrv_user:rrv_password@db:5432/rrv_db
     networks:
+      - rrv-net
       - proxy-net
     labels:
       - "traefik.enable=true"
@@ -36,5 +51,9 @@ services:
 #   postgres_data:
 
 networks:
+  rrv-net:
   proxy-net:
     external: true
+
+volumes:
+  rrv_db_data:

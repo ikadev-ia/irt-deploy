@@ -4,3 +4,5 @@ django-crispy-forms==2.1
 crispy-bootstrap5==2024.2
 channels==4.1.0
 psycopg2-binary==2.9.9
+dj-database-url
+#psycopg2-binary
