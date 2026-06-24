@@ -9,6 +9,15 @@ SECRET_KEY = 'revina-secret-key-super-secure'
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'shop-revina.com','www.shop-revina.com', '31.207.38.14']
 
+# Configuration CSRF pour le HTTPS (Traefik)
+CSRF_TRUSTED_ORIGINS = [
+    "https://shop-revina.com",
+    "https://www.shop-revina.com"
+]
+
+# Indiquer à Django qu'il est derrière un proxy HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # 3. Applications
 INSTALLED_APPS = [
     'django.contrib.admin',
