@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # 2. Sécurité & Debug
 SECRET_KEY = 'revina-secret-key-super-secure'
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '', '192.168.1.13']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'shop-revina.com','www.shop-revina.com', '31.207.38.14']
 
 # 3. Applications
 INSTALLED_APPS = [
