@@ -17,6 +17,7 @@ providers:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
     network: proxy-net
+    httpClientTimeout: 300
 
 certificatesResolvers:
   myresolver:
