@@ -44,7 +44,7 @@ if ($batch) {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Enregistrement quotidien - Poulplume</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -90,7 +90,7 @@ if ($batch) {
             position: fixed; left: 0; top: 0; width: 280px; height: 100vh;
             background: linear-gradient(145deg, var(--green) 0%, var(--green-dark) 100%);
             backdrop-filter: blur(2px); display: flex; flex-direction: column; z-index: 1000;
-            transition: transform 0.3s; box-shadow: 4px 0 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); box-shadow: 4px 0 25px rgba(0,0,0,0.15);
         }
         .sidebar-header {
             padding: 36px 24px 28px; text-align: center; border-bottom: 2px solid var(--yellow);
@@ -144,7 +144,7 @@ if ($batch) {
         }
         /* Main content */
         .main-content { margin-left: 280px; padding: 40px 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .form-container { width: 550px; max-width: 90%; background: var(--white-glass-card); backdrop-filter: blur(12px); border-radius: 48px; box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25); border: 1px solid var(--border-light); overflow: hidden; }
+        .form-container { width: 550px; max-width: 95%; background: var(--white-glass-card); backdrop-filter: blur(12px); border-radius: 48px; box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25); border: 1px solid var(--border-light); overflow: hidden; }
         .form-header { background: var(--yellow); color: #1e293b; padding: 20px 25px; text-align: center; position: relative; }
         .form-header i { font-size: 2.2rem; color: var(--green); margin-bottom: 8px; }
         .form-header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; }
@@ -168,8 +168,11 @@ if ($batch) {
         .input-group { margin-bottom: 22px; }
         .input-group label { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-dark); }
         .input-group label i { color: var(--green); width: 20px; }
-        .input-group input, .input-group textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--border-light); border-radius: 30px; font-family: 'Inter', sans-serif; font-size: 0.9rem; background: var(--white-glass); color: var(--text-dark); transition: 0.15s; }
+        .input-group input, .input-group textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--border-light); border-radius: 30px; font-family: 'Inter', sans-serif; font-size: 0.9rem; background: var(--white-glass); color: var(--text-dark); transition: 0.15s; -webkit-appearance: none; appearance: none; }
         .input-group input:focus, .input-group textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 2px #14B53A; }
+        .input-group input[type="number"] { -moz-appearance: textfield; }
+        .input-group input[type="number"]::-webkit-outer-spin-button,
+        .input-group input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .double-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
         .btn-submit {
             width: 100%; background: linear-gradient(135deg, var(--green), var(--green-dark)); color: white;
@@ -192,17 +195,302 @@ if ($batch) {
         .empty-state { text-align: center; padding: 40px 20px; }
         .empty-state i { font-size: 3rem; color: var(--yellow); margin-bottom: 15px; }
         .btn-primary { background: var(--green); color: white; padding: 10px 24px; border-radius: 40px; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: 600; }
+
+        /* ============================================
+                   RESPONSIVITÉ RENFORCÉE - RIEN N'EST CHANGÉ
+                   ============================================ */
+
+        /* Tablettes et petits écrans */
         @media (max-width: 1024px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
             .burger-btn { display: block; }
-            .main-content { margin-left: 0; }
+            .main-content { margin-left: 0; padding: 20px 12px; }
+            .form-container { max-width: 98%; border-radius: 32px; }
         }
-        @media (max-width: 640px) {
-            .double-row { grid-template-columns: 1fr; }
-            .form-body { padding: 20px; }
-            .home-btn { position: static; display: inline-block; margin-top: 10px; }
-            .form-header { text-align: center; }
+
+        /* Téléphones moyens */
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            .form-header {
+                padding: 16px 18px;
+            }
+            .form-header h1 {
+                font-size: 1.2rem;
+            }
+            .form-header p {
+                font-size: 0.7rem;
+            }
+            .form-header i {
+                font-size: 1.8rem;
+            }
+            .home-btn {
+                position: static;
+                display: inline-block;
+                margin-top: 8px;
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+            .form-body {
+                padding: 18px 16px;
+            }
+            .double-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .input-group {
+                margin-bottom: 16px;
+            }
+            .input-group label {
+                font-size: 0.75rem;
+            }
+            .input-group label i {
+                width: 16px;
+                font-size: 0.8rem;
+            }
+            .input-group input, .input-group textarea {
+                padding: 10px 14px;
+                font-size: 0.8rem;
+                border-radius: 24px;
+            }
+            .batch-info {
+                font-size: 0.75rem;
+                padding: 10px 14px;
+                border-radius: 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .batch-badge {
+                font-size: 0.65rem;
+                padding: 2px 10px;
+                margin-left: 4px;
+            }
+            .btn-submit {
+                padding: 12px;
+                font-size: 0.85rem;
+                border-radius: 32px;
+            }
+            .toast {
+                bottom: 16px;
+                right: 16px;
+                font-size: 0.8rem;
+                padding: 8px 16px;
+            }
+        }
+
+        /* Très petits téléphones (< 450px) */
+        @media (max-width: 450px) {
+            .main-content {
+                padding: 10px 5px;
+            }
+            .form-container {
+                max-width: 100%;
+                border-radius: 24px;
+            }
+            .form-header {
+                padding: 14px 12px;
+            }
+            .form-header h1 {
+                font-size: 1rem;
+            }
+            .form-header p {
+                font-size: 0.6rem;
+            }
+            .form-header i {
+                font-size: 1.5rem;
+                margin-bottom: 4px;
+            }
+            .home-btn {
+                font-size: 0.55rem;
+                padding: 3px 8px;
+                gap: 3px;
+            }
+            .home-btn i {
+                font-size: 0.55rem;
+            }
+            .form-body {
+                padding: 14px 12px;
+            }
+            .input-group {
+                margin-bottom: 12px;
+            }
+            .input-group label {
+                font-size: 0.65rem;
+                gap: 5px;
+            }
+            .input-group label i {
+                width: 14px;
+                font-size: 0.7rem;
+            }
+            .input-group input, .input-group textarea {
+                padding: 8px 12px;
+                font-size: 0.7rem;
+                border-radius: 20px;
+            }
+            .batch-info {
+                font-size: 0.65rem;
+                padding: 8px 12px;
+                border-radius: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+                margin-bottom: 16px;
+            }
+            .batch-badge {
+                font-size: 0.55rem;
+                padding: 2px 8px;
+                margin-left: 4px;
+            }
+            .btn-submit {
+                padding: 10px;
+                font-size: 0.75rem;
+                border-radius: 28px;
+                gap: 5px;
+                margin-top: 10px;
+            }
+            .burger-btn {
+                top: 10px;
+                left: 10px;
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            .toast {
+                bottom: 12px;
+                right: 12px;
+                font-size: 0.7rem;
+                padding: 6px 14px;
+                border-radius: 30px;
+            }
+            .empty-state i {
+                font-size: 2.5rem;
+            }
+            .empty-state h3 {
+                font-size: 1rem;
+            }
+            .empty-state p {
+                font-size: 0.8rem;
+            }
+            .btn-primary {
+                padding: 8px 18px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Orientation paysage sur téléphone */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .main-content {
+                padding: 10px 8px;
+                align-items: flex-start;
+                padding-top: 15px;
+            }
+            .form-container {
+                max-width: 100%;
+                border-radius: 20px;
+            }
+            .form-header {
+                padding: 10px 14px;
+            }
+            .form-header h1 {
+                font-size: 0.9rem;
+            }
+            .form-header p {
+                display: none;
+            }
+            .form-header i {
+                font-size: 1.2rem;
+                margin-bottom: 2px;
+            }
+            .home-btn {
+                font-size: 0.5rem;
+                padding: 2px 8px;
+                top: 8px;
+                right: 10px;
+            }
+            .form-body {
+                padding: 10px 14px;
+            }
+            .double-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .input-group {
+                margin-bottom: 8px;
+            }
+            .input-group label {
+                font-size: 0.6rem;
+                margin-bottom: 3px;
+            }
+            .input-group input, .input-group textarea {
+                padding: 6px 10px;
+                font-size: 0.65rem;
+                border-radius: 16px;
+            }
+            .batch-info {
+                font-size: 0.6rem;
+                padding: 6px 12px;
+                border-radius: 14px;
+                margin-bottom: 12px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .batch-badge {
+                font-size: 0.5rem;
+                padding: 1px 6px;
+                margin-left: 4px;
+            }
+            .btn-submit {
+                padding: 8px;
+                font-size: 0.7rem;
+                border-radius: 24px;
+                margin-top: 5px;
+            }
+            .sidebar {
+                width: 240px;
+            }
+            .burger-btn {
+                top: 8px;
+                left: 8px;
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+            .toast {
+                bottom: 10px;
+                right: 10px;
+                font-size: 0.65rem;
+                padding: 5px 12px;
+            }
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: url('Images/AR10.png') no-repeat center center fixed;
+                background-size: cover;
+            }
+            .form-container {
+                background: var(--white-glass-card);
+            }
+            .input-group input, .input-group textarea {
+                background: rgba(30, 41, 59, 0.6);
+                color: #f1f5f9;
+                border-color: rgba(51, 65, 85, 0.5);
+            }
+            .input-group input::placeholder, .input-group textarea::placeholder {
+                color: #94a3b8;
+            }
+            .batch-info {
+                background: rgba(20,181,58,0.12);
+                border-color: rgba(20,181,58,0.2);
+            }
+            .home-btn {
+                background: rgba(255,255,255,0.08);
+                color: #94a3b8;
+            }
+            .home-btn:hover {
+                background: rgba(255,255,255,0.15);
+            }
         }
     </style>
 </head>
@@ -263,8 +551,8 @@ if ($batch) {
                         <span class="batch-badge"><?php echo $batch_age; ?> jours</span>
                     </div>
                     <div>
-                        <span><i class=""><b></i> Alim. recommandée : <?php echo $needs['daily_feed_kg']; ?> kg</span></b>
-                        <span style="margin-left: 12px;"><i class=""><b></i> Effectif : <?php echo $batch['current_birds']; ?></span></b>
+                        <span><i class=""></i> Alim. : <?php echo $needs['daily_feed_kg']; ?> kg</span>
+                        <span style="margin-left: 12px;"><i class=""></i> Effectif : <?php echo $batch['current_birds']; ?></span>
                     </div>
                 </div>
 
@@ -276,11 +564,11 @@ if ($batch) {
                     <input type="hidden" name="notes" value="">
                     <div class="double-row">
                         <div class="input-group">
-                            <label><i class=""></i> Température </label>
+                            <label><i class=""></i> Température</label>
                             <input type="number" step="0.1" name="temperature" required placeholder="Ex: 32.5" value="<?php echo round($weather['temperature']); ?>">
                         </div>
                         <div class="input-group">
-                            <label><i class=""></i> Aliment distribué </label>
+                            <label><i class=""></i> Aliment distribué</label>
                             <input type="number" step="0.1" name="feed_quantity" required placeholder="Quantité en kg" value="<?php echo $needs['daily_feed_kg']; ?>">
                         </div>
                     </div>

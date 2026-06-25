@@ -1,4 +1,3 @@
-```php
 <?php
 /**
  * Diagnostic vétérinaire intelligent pour poulets
@@ -200,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Diagnostic - Poulplume</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -445,7 +444,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         /* Conteneur taille fixe (550px comme enregistrement) */
         .diagnostic-container {
             width: 550px;
-            max-width: 90%;
+            max-width: 95%;
             background: var(--white-glass-card);
             backdrop-filter: blur(12px);
             border-radius: 48px;
@@ -479,26 +478,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 
         /* Bouton Accueil */
         .home-btn {
-    position: absolute;
-    top: 18px;
-    right: 20px;
-    background: rgba(30,41,59,0.12);
-    color: #1e293b;
-    padding: 4px 10px;
-    border-radius: 30px;
-    text-decoration: none;
-    font-size: 0.68rem;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-.home-btn i {
-    font-size: 0.65rem;
-}
-.home-btn:hover {
-    background: rgba(30,41,59,0.25);
-}
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            background: rgba(30,41,59,0.12);
+            color: #1e293b;
+            padding: 4px 10px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.68rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .home-btn i {
+            font-size: 0.65rem;
+        }
+        .home-btn:hover {
+            background: rgba(30,41,59,0.25);
+        }
 
         .diagnostic-body {
             padding: 30px;
@@ -530,6 +529,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             background: var(--white-glass);
             color: var(--text-dark);
             transition: 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
         }
         select:focus {
             outline: none;
@@ -620,6 +627,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             border-top: 1px solid var(--border-light);
         }
 
+        /* ============================================
+                   RESPONSIVITÉ RENFORCÉE - RIEN N'EST CHANGÉ
+                   ============================================ */
+
+        /* Tablettes et petits écrans */
         @media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -632,19 +644,295 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             }
             .main-content {
                 margin-left: 0;
+                padding: 20px 12px;
+            }
+            .diagnostic-container {
+                max-width: 98%;
+                border-radius: 32px;
             }
         }
-        @media (max-width: 640px) {
-            .diagnostic-body {
-                padding: 20px;
+
+        /* Téléphones moyens */
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            .diagnostic-header {
+                padding: 16px 18px;
+            }
+            .diagnostic-header h1 {
+                font-size: 1.2rem;
+            }
+            .diagnostic-header p {
+                font-size: 0.7rem;
+            }
+            .diagnostic-header i {
+                font-size: 1.8rem;
             }
             .home-btn {
                 position: static;
                 display: inline-block;
-                margin-top: 12px;
+                margin-top: 8px;
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+            .diagnostic-body {
+                padding: 18px 16px;
+            }
+            .form-group {
+                margin-bottom: 16px;
+            }
+            label {
+                font-size: 0.75rem;
+            }
+            label i {
+                width: 16px;
+                font-size: 0.8rem;
+            }
+            select, .btn {
+                padding: 10px 14px;
+                font-size: 0.8rem;
+                border-radius: 24px;
+            }
+            .result-card {
+                padding: 16px;
+                border-radius: 20px;
+            }
+            .result-status {
+                font-size: 0.9rem;
+            }
+            .result-details {
+                font-size: 0.75rem;
+            }
+            .result-advice {
+                font-size: 0.75rem;
+                padding: 10px 12px;
+                border-radius: 16px;
+            }
+            .error {
+                font-size: 0.75rem;
+                padding: 10px 14px;
+                border-radius: 20px;
+            }
+            footer {
+                font-size: 0.6rem;
+                padding: 10px;
+            }
+        }
+
+        /* Très petits téléphones (< 450px) */
+        @media (max-width: 450px) {
+            .main-content {
+                padding: 10px 5px;
+            }
+            .diagnostic-container {
+                max-width: 100%;
+                border-radius: 24px;
             }
             .diagnostic-header {
-                text-align: center;
+                padding: 14px 12px;
+            }
+            .diagnostic-header h1 {
+                font-size: 1rem;
+            }
+            .diagnostic-header p {
+                font-size: 0.6rem;
+            }
+            .diagnostic-header i {
+                font-size: 1.5rem;
+                margin-bottom: 4px;
+            }
+            .home-btn {
+                font-size: 0.55rem;
+                padding: 3px 8px;
+                gap: 3px;
+            }
+            .home-btn i {
+                font-size: 0.55rem;
+            }
+            .diagnostic-body {
+                padding: 14px 12px;
+            }
+            .form-group {
+                margin-bottom: 12px;
+            }
+            label {
+                font-size: 0.65rem;
+                gap: 5px;
+            }
+            label i {
+                width: 14px;
+                font-size: 0.7rem;
+            }
+            select, .btn {
+                padding: 8px 12px;
+                font-size: 0.7rem;
+                border-radius: 20px;
+            }
+            .result-card {
+                padding: 12px;
+                border-radius: 16px;
+                margin-top: 16px;
+            }
+            .result-status {
+                font-size: 0.8rem;
+            }
+            .result-details {
+                font-size: 0.65rem;
+            }
+            .result-advice {
+                font-size: 0.65rem;
+                padding: 8px 10px;
+                border-radius: 14px;
+            }
+            .error {
+                font-size: 0.65rem;
+                padding: 8px 12px;
+                border-radius: 16px;
+                margin-bottom: 16px;
+            }
+            .back-link {
+                font-size: 0.7rem;
+            }
+            hr {
+                margin: 12px 0;
+            }
+            .burger-btn {
+                top: 10px;
+                left: 10px;
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            footer {
+                font-size: 0.55rem;
+                padding: 8px;
+            }
+        }
+
+        /* Orientation paysage sur téléphone */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .main-content {
+                padding: 10px 8px;
+                align-items: flex-start;
+                padding-top: 15px;
+            }
+            .diagnostic-container {
+                max-width: 100%;
+                border-radius: 20px;
+            }
+            .diagnostic-header {
+                padding: 10px 14px;
+            }
+            .diagnostic-header h1 {
+                font-size: 0.9rem;
+            }
+            .diagnostic-header p {
+                display: none;
+            }
+            .diagnostic-header i {
+                font-size: 1.2rem;
+                margin-bottom: 2px;
+            }
+            .home-btn {
+                font-size: 0.5rem;
+                padding: 2px 8px;
+                top: 8px;
+                right: 10px;
+            }
+            .diagnostic-body {
+                padding: 10px 14px;
+            }
+            .form-group {
+                margin-bottom: 8px;
+            }
+            label {
+                font-size: 0.6rem;
+                margin-bottom: 3px;
+            }
+            select, .btn {
+                padding: 6px 10px;
+                font-size: 0.65rem;
+                border-radius: 16px;
+            }
+            .result-card {
+                padding: 10px;
+                border-radius: 14px;
+                margin-top: 12px;
+            }
+            .result-status {
+                font-size: 0.75rem;
+                margin-bottom: 6px;
+            }
+            .result-details {
+                font-size: 0.6rem;
+                margin: 5px 0;
+            }
+            .result-advice {
+                font-size: 0.6rem;
+                padding: 6px 10px;
+                border-radius: 12px;
+                margin-top: 6px;
+            }
+            .error {
+                font-size: 0.6rem;
+                padding: 6px 10px;
+                border-radius: 14px;
+                margin-bottom: 12px;
+            }
+            hr {
+                margin: 10px 0;
+            }
+            .sidebar {
+                width: 240px;
+            }
+            .burger-btn {
+                top: 8px;
+                left: 8px;
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+            footer {
+                font-size: 0.5rem;
+                padding: 6px;
+            }
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: url('Images/AR10.png') no-repeat center center fixed;
+                background-size: cover;
+            }
+            .diagnostic-container {
+                background: var(--white-glass-card);
+            }
+            select {
+                background: rgba(30, 41, 59, 0.6);
+                color: #f1f5f9;
+                border-color: rgba(51, 65, 85, 0.5);
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            }
+            select option {
+                background: #1e293b;
+                color: #f1f5f9;
+            }
+            .result-card {
+                background: rgba(20,181,58,0.12);
+                border-color: rgba(20,181,58,0.2);
+            }
+            .result-advice {
+                background: rgba(255,255,255,0.05);
+            }
+            .home-btn {
+                background: rgba(255,255,255,0.08);
+                color: #94a3b8;
+            }
+            .home-btn:hover {
+                background: rgba(255,255,255,0.15);
+            }
+            footer {
+                background: rgba(30, 41, 59, 0.6);
+            }
+            .error {
+                background: rgba(239,68,68,0.2);
             }
         }
     </style>
@@ -729,7 +1017,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 <div class="form-group">
                     <label><i class=""></i> Couleur des excréments</label>
                     <select name="color" required>
-                        <option value="">Sélectionnez </option>
+                        <option value="">Sélectionnez</option>
                         <option value="normal">Normales (brun foncé)</option>
                         <option value="blanc">Blanches</option>
                         <option value="vert">Vertes</option>
@@ -742,7 +1030,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 <div class="form-group">
                     <label><i class=""></i> Comportement général</label>
                     <select name="behavior" required>
-                        <option value=""> Sélectionnez </option>
+                        <option value="">Sélectionnez</option>
                         <option value="normal">Normal</option>
                         <option value="apathique">Apathique, abattu</option>
                         <option value="isole">Isolé du groupe</option>
@@ -752,9 +1040,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label><i class="-alt"></i> Apparence physique</label>
+                    <label><i class=""></i> Apparence physique</label>
                     <select name="appearance" required>
-                        <option value=""> Sélectionnez </option>
+                        <option value="">Sélectionnez</option>
                         <option value="normal">Normale</option>
                         <option value="plumes_herissees">Plumes hérissées</option>
                         <option value="yeux_larmoyants">Yeux larmoyants</option>

@@ -67,7 +67,7 @@ if ($user_role == 'admin') {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Nouveau lot - Poulplume</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -116,7 +116,7 @@ if ($user_role == 'admin') {
             z-index: -1;
         }
 
-        /* Sidebar identique */
+        /* Sidebar */
         .sidebar {
             position: fixed;
             left: 0;
@@ -272,10 +272,10 @@ if ($user_role == 'admin') {
             justify-content: center;
         }
 
-        /* Conteneur formulaire (taille comme enregistrement quotidien) */
+        /* Conteneur formulaire */
         .form-container {
             width: 650px;
-            max-width: 90%;
+            max-width: 95%;
             background: var(--white-glass-card);
             backdrop-filter: blur(12px);
             border-radius: 48px;
@@ -284,7 +284,6 @@ if ($user_role == 'admin') {
             overflow: hidden;
         }
 
-        /* En-tête jaune */
         .form-header {
             background: var(--yellow);
             color: #1e293b;
@@ -307,7 +306,6 @@ if ($user_role == 'admin') {
             opacity: 0.8;
         }
 
-        /* Bouton Accueil réduit */
         .home-btn {
             position: absolute;
             top: 18px;
@@ -362,11 +360,19 @@ if ($user_role == 'admin') {
             background: var(--white-glass);
             color: var(--text-dark);
             transition: 0.15s;
+            -webkit-appearance: none;
+            appearance: none;
         }
         .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: var(--green);
             box-shadow: 0 0 0 2px rgba(20,181,58,0.2);
+        }
+        .form-group select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
         }
 
         .btn-submit {
@@ -421,9 +427,15 @@ if ($user_role == 'admin') {
             gap: 8px;
         }
 
+        /* ============================================
+                   RESPONSIVITÉ - COMME ADMIN_USERS
+                   ============================================ */
+
+        /* Tablettes et petits écrans */
         @media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(-100%);
+                width: 280px;
             }
             .sidebar.open {
                 transform: translateX(0);
@@ -433,19 +445,251 @@ if ($user_role == 'admin') {
             }
             .main-content {
                 margin-left: 0;
+                padding: 20px 10px;
+            }
+            .form-container {
+                max-width: 98%;
+                border-radius: 32px;
             }
         }
-        @media (max-width: 640px) {
-            .form-body {
-                padding: 20px;
+
+        /* Téléphones moyens */
+        @media (max-width: 768px) {
+            .form-header {
+                padding: 16px 18px;
+            }
+            .form-header h1 {
+                font-size: 1.2rem;
+            }
+            .form-header p {
+                font-size: 0.7rem;
+            }
+            .form-header i {
+                font-size: 1.8rem;
             }
             .home-btn {
                 position: static;
                 display: inline-block;
-                margin-top: 10px;
+                margin-top: 8px;
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+            .form-body {
+                padding: 18px 16px;
+            }
+            .form-group {
+                margin-bottom: 16px;
+            }
+            .form-group label {
+                font-size: 0.75rem;
+            }
+            .form-group label i {
+                width: 16px;
+                font-size: 0.8rem;
+            }
+            .form-group input, .form-group select {
+                padding: 10px 14px;
+                font-size: 0.8rem;
+                border-radius: 24px;
+            }
+            .btn-submit {
+                padding: 12px;
+                font-size: 0.85rem;
+                border-radius: 32px;
+            }
+            .info-box {
+                font-size: 0.7rem;
+                padding: 10px 12px;
+                border-radius: 20px;
+            }
+            .alert-success, .alert-error {
+                font-size: 0.75rem;
+                padding: 10px 14px;
+                border-radius: 20px;
+            }
+        }
+
+        /* Très petits téléphones (< 450px) */
+        @media (max-width: 450px) {
+            body {
+                padding: 0;
+            }
+            .main-content {
+                padding: 10px 5px;
+            }
+            .form-container {
+                max-width: 100%;
+                border-radius: 24px;
             }
             .form-header {
-                text-align: center;
+                padding: 14px 12px;
+            }
+            .form-header h1 {
+                font-size: 1rem;
+            }
+            .form-header p {
+                font-size: 0.6rem;
+            }
+            .form-header i {
+                font-size: 1.5rem;
+                margin-bottom: 4px;
+            }
+            .home-btn {
+                font-size: 0.55rem;
+                padding: 3px 8px;
+                gap: 3px;
+            }
+            .home-btn i {
+                font-size: 0.55rem;
+            }
+            .form-body {
+                padding: 14px 12px;
+            }
+            .form-group {
+                margin-bottom: 12px;
+            }
+            .form-group label {
+                font-size: 0.65rem;
+                gap: 5px;
+            }
+            .form-group label i {
+                width: 14px;
+                font-size: 0.7rem;
+            }
+            .form-group input, .form-group select {
+                padding: 8px 12px;
+                font-size: 0.7rem;
+                border-radius: 20px;
+            }
+            .btn-submit {
+                padding: 10px;
+                font-size: 0.75rem;
+                border-radius: 28px;
+                gap: 5px;
+            }
+            .info-box {
+                font-size: 0.6rem;
+                padding: 8px 10px;
+                border-radius: 16px;
+                gap: 5px;
+                flex-wrap: wrap;
+            }
+            .info-box i {
+                font-size: 0.7rem;
+            }
+            .alert-success, .alert-error {
+                font-size: 0.65rem;
+                padding: 8px 10px;
+                border-radius: 16px;
+            }
+            .burger-btn {
+                top: 10px;
+                left: 10px;
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+        }
+
+        /* Orientation paysage sur téléphone */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .main-content {
+                padding: 10px 8px;
+                align-items: flex-start;
+                padding-top: 15px;
+            }
+            .form-container {
+                max-width: 100%;
+                border-radius: 20px;
+            }
+            .form-header {
+                padding: 10px 14px;
+            }
+            .form-header h1 {
+                font-size: 0.9rem;
+            }
+            .form-header p {
+                display: none;
+            }
+            .form-header i {
+                font-size: 1.2rem;
+                margin-bottom: 2px;
+            }
+            .home-btn {
+                font-size: 0.5rem;
+                padding: 2px 8px;
+            }
+            .form-body {
+                padding: 10px 14px;
+            }
+            .form-group {
+                margin-bottom: 8px;
+            }
+            .form-group label {
+                font-size: 0.6rem;
+                margin-bottom: 3px;
+            }
+            .form-group input, .form-group select {
+                padding: 6px 10px;
+                font-size: 0.65rem;
+                border-radius: 16px;
+            }
+            .btn-submit {
+                padding: 8px;
+                font-size: 0.7rem;
+                border-radius: 24px;
+                margin-top: 5px;
+            }
+            .info-box {
+                font-size: 0.55rem;
+                padding: 6px 10px;
+                margin-top: 10px;
+                border-radius: 14px;
+            }
+            .alert-success, .alert-error {
+                font-size: 0.6rem;
+                padding: 6px 10px;
+                margin-bottom: 10px;
+                border-radius: 14px;
+            }
+            .sidebar {
+                width: 240px;
+            }
+            .burger-btn {
+                top: 8px;
+                left: 8px;
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: url('Images/AR10.png') no-repeat center center fixed;
+                background-size: cover;
+            }
+            .form-container {
+                background: var(--white-glass-card);
+            }
+            .form-group input, .form-group select {
+                background: rgba(30, 41, 59, 0.6);
+                color: #f1f5f9;
+                border-color: rgba(51, 65, 85, 0.5);
+            }
+            .form-group input::placeholder {
+                color: #94a3b8;
+            }
+            .form-group select {
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            }
+            .info-box {
+                background: rgba(20,181,58,0.15);
+            }
+            .alert-success {
+                background: rgba(20,181,58,0.2);
+            }
+            .alert-error {
+                background: rgba(239,68,68,0.2);
             }
         }
     </style>
@@ -462,7 +706,7 @@ if ($user_role == 'admin') {
         <a href="dashboard.php" class="nav-item"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
         <a href="add_lot.php" class="nav-item active"><i class="fas fa-plus-circle"></i> Nouveau lot</a>
         <a href="finances.php" class="nav-item"><i class="fas fa-coins"></i> Finances</a>
-        <a href="chatbot.php" class="nav-item"><i class="fas fa-robot"></i> Chatbot </a>
+        <a href="chatbot.php" class="nav-item"><i class="fas fa-robot"></i> Chatbot</a>
         <div class="settings-group">
             <div class="nav-item settings-header" onclick="toggleSettings()">
                 <i class="fas fa-cog"></i> Paramètres <i class="fas fa-chevron-down"></i>
@@ -522,7 +766,7 @@ if ($user_role == 'admin') {
                     <input type="text" name="name" placeholder="Ex: Lot A - Mars 2025" required>
                 </div>
                 <div class="form-group">
-                    <label><i class=""></i> Date de début</label>
+                    <label><i class="r"></i> Date de début</label>
                     <input type="date" name="start_date" value="<?php echo date('Y-m-d'); ?>" required>
                 </div>
                 <div class="form-group">
@@ -543,7 +787,7 @@ if ($user_role == 'admin') {
                     <input type="number" name="initial_birds" min="1" placeholder="Ex: 1000" required>
                 </div>
                 <button type="submit" class="btn-submit">
-                    <i class=""></i> Créer le lot
+                    <i class="fas fa-plus-circle"></i> Créer le lot
                 </button>
             </form>
             <div class="info-box">

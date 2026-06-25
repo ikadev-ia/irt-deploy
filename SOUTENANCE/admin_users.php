@@ -72,7 +72,7 @@ $users = $conn->query("SELECT id, name, email, role, status, package, created_at
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Gestion des utilisateurs - Poulplume</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -214,6 +214,7 @@ $users = $conn->query("SELECT id, name, email, role, status, package, created_at
             border-radius: 20px;
             font-size: 0.7rem;
             font-weight: 600;
+            white-space: nowrap;
         }
         
         .badge-admin {
@@ -301,6 +302,345 @@ $users = $conn->query("SELECT id, name, email, role, status, package, created_at
         .text-muted {
             color: #94a3b8;
         }
+
+        /* ============================================
+                   RESPONSIVITÉ - TABLEAU 100% VISIBLE
+                   ============================================ */
+        
+        /* Bureau et tablettes larges */
+        @media (min-width: 769px) {
+            .table-col-mobile {
+                display: none !important;
+            }
+            .table-col-desktop {
+                display: table-cell !important;
+            }
+        }
+        
+        /* Tablettes et téléphones - on cache les colonnes non essentielles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            
+            .btn-back {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+            
+            .stats {
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 15px;
+            }
+            
+            .stat-card {
+                flex: 1 1 calc(33.33% - 8px);
+                padding: 12px 10px;
+                min-width: 80px;
+            }
+            
+            .stat-card .value {
+                font-size: 1.2rem;
+            }
+            
+            .stat-card .label {
+                font-size: 0.6rem;
+            }
+            
+            .card-header {
+                padding: 12px 14px;
+            }
+            
+            .card-header h2 {
+                font-size: 0.85rem;
+            }
+            
+            /* On cache les colonnes non prioritaires */
+            .table-col-email {
+                display: none !important;
+            }
+            
+            .table-col-package {
+                display: none !important;
+            }
+            
+            .table-col-created {
+                display: none !important;
+            }
+            
+            /* Réduction des tailles */
+            th {
+                padding: 10px 8px;
+                font-size: 0.6rem;
+            }
+            
+            td {
+                padding: 10px 8px;
+                font-size: 0.75rem;
+            }
+            
+            .badge {
+                font-size: 0.6rem;
+                padding: 2px 8px;
+            }
+            
+            .btn-icon {
+                font-size: 0.9rem;
+                padding: 8px 6px;
+                min-width: 36px;
+                min-height: 36px;
+            }
+            
+            .btn-icon i {
+                font-size: 0.85rem;
+            }
+            
+            .alert {
+                font-size: 0.75rem;
+                padding: 8px 12px;
+            }
+        }
+        
+        /* Très petits téléphones (< 450px) */
+        @media (max-width: 450px) {
+            body {
+                padding: 5px;
+            }
+            
+            .header h1 {
+                font-size: 0.9rem;
+            }
+            
+            .btn-back {
+                font-size: 0.6rem;
+                padding: 4px 8px;
+            }
+            
+            .stat-card {
+                padding: 6px 4px;
+                flex: 1 1 100%;
+            }
+            
+            .stat-card .value {
+                font-size: 0.9rem;
+            }
+            
+            .stat-card .label {
+                font-size: 0.45rem;
+            }
+            
+            /* On cache encore plus pour les très petits écrans */
+            .table-col-id {
+                display: none !important;
+            }
+            
+            .table-col-role {
+                display: none !important;
+            }
+            
+            th {
+                padding: 6px 5px;
+                font-size: 0.5rem;
+            }
+            
+            td {
+                padding: 6px 5px;
+                font-size: 0.65rem;
+            }
+            
+            .badge {
+                font-size: 0.5rem;
+                padding: 1px 5px;
+            }
+            
+            .btn-icon {
+                font-size: 0.8rem;
+                padding: 6px 4px;
+                min-width: 32px;
+                min-height: 32px;
+            }
+            
+            .btn-icon i {
+                font-size: 0.75rem;
+            }
+            
+            .card-header {
+                padding: 6px 8px;
+            }
+            
+            .card-header h2 {
+                font-size: 0.65rem;
+            }
+        }
+        
+        /* Téléphones moyens (451px - 600px) */
+        @media (min-width: 451px) and (max-width: 600px) {
+            .table-col-id {
+                display: none !important;
+            }
+            
+            th {
+                padding: 8px 6px;
+                font-size: 0.55rem;
+            }
+            
+            td {
+                padding: 8px 6px;
+                font-size: 0.7rem;
+            }
+            
+            .stat-card {
+                flex: 1 1 calc(50% - 8px);
+            }
+        }
+        
+        /* Orientation paysage sur téléphone */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                padding: 5px;
+            }
+            
+            .header {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 8px;
+            }
+            
+            .header h1 {
+                font-size: 0.85rem;
+            }
+            
+            .btn-back {
+                font-size: 0.55rem;
+                padding: 3px 8px;
+            }
+            
+            .stats {
+                gap: 4px;
+                margin-bottom: 8px;
+            }
+            
+            .stat-card {
+                padding: 4px 6px;
+                flex: 1;
+            }
+            
+            .stat-card .value {
+                font-size: 0.8rem;
+            }
+            
+            .stat-card .label {
+                font-size: 0.4rem;
+            }
+            
+            .table-col-email {
+                display: none !important;
+            }
+            
+            .table-col-package {
+                display: none !important;
+            }
+            
+            .table-col-created {
+                display: none !important;
+            }
+            
+            th {
+                padding: 4px 4px;
+                font-size: 0.45rem;
+            }
+            
+            td {
+                padding: 4px 4px;
+                font-size: 0.55rem;
+            }
+            
+            .badge {
+                font-size: 0.45rem;
+                padding: 1px 4px;
+            }
+            
+            .btn-icon {
+                font-size: 0.7rem;
+                padding: 4px 3px;
+                min-width: 28px;
+                min-height: 28px;
+            }
+            
+            .btn-icon i {
+                font-size: 0.65rem;
+            }
+            
+            .card-header {
+                padding: 4px 8px;
+            }
+            
+            .card-header h2 {
+                font-size: 0.6rem;
+            }
+        }
+        
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #0f172a;
+            }
+            
+            .stat-card,
+            .card,
+            .btn-back {
+                background: #1e293b;
+                border-color: #334155;
+            }
+            
+            .card-header {
+                background: #1a2332;
+                border-color: #334155;
+            }
+            
+            .header h1,
+            .card-header h2,
+            .stat-card .value {
+                color: #f1f5f9;
+            }
+            
+            th {
+                background: #1a2332;
+                color: #94a3b8;
+                border-color: #334155;
+            }
+            
+            td {
+                color: #cbd5e1;
+                border-color: #334155;
+            }
+            
+            .badge-user {
+                background: #334155;
+                color: #94a3b8;
+            }
+            
+            .btn-back {
+                color: #94a3b8;
+            }
+            
+            .btn-back:hover {
+                background: #2d3a4f;
+            }
+        }
     </style>
 </head>
 <body>
@@ -342,17 +682,17 @@ $users = $conn->query("SELECT id, name, email, role, status, package, created_at
             <div class="card-header">
                 <h2>Liste des utilisateurs</h2>
             </div>
-            <div style="overflow-x: auto;">
+            <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th class="table-col-id">ID</th>
                             <th>Nom</th>
-                            <th>Email</th>
-                            <th>Rôle</th>
-                            <th>Forfait</th>
+                            <th class="table-col-email">Email</th>
+                            <th class="table-col-role">Rôle</th>
+                            <th class="table-col-package">Forfait</th>
                             <th>Statut</th>
-                            <th>Date d'inscription</th>
+                            <th class="table-col-created">Inscription</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -366,21 +706,21 @@ $users = $conn->query("SELECT id, name, email, role, status, package, created_at
                         <?php else: ?>
                             <?php foreach ($users as $user): ?>
                             <tr>
-                                <td><?php echo $user['id']; ?></td>
+                                <td class="table-col-id"><?php echo $user['id']; ?></td>
                                 <td><strong><?php echo htmlspecialchars($user['name']); ?></strong></td>
-                                <td><?php echo htmlspecialchars($user['email']); ?></td>
-                                <td>
+                                <td class="table-col-email"><?php echo htmlspecialchars($user['email']); ?></td>
+                                <td class="table-col-role">
                                     <span class="badge <?php echo $user['role'] == 'admin' ? 'badge-admin' : 'badge-user'; ?>">
-                                        <?php echo $user['role'] == 'admin' ? 'Administrateur' : 'Éleveur'; ?>
+                                        <?php echo $user['role'] == 'admin' ? 'Admin' : 'Éleveur'; ?>
                                     </span>
                                 </td>
-                                <td><?php echo ucfirst($user['package'] ?? 'Standard'); ?></td>
+                                <td class="table-col-package"><?php echo ucfirst($user['package'] ?? 'Standard'); ?></td>
                                 <td>
                                     <span class="badge <?php echo $user['status'] == 'active' ? 'badge-active' : 'badge-pending'; ?>">
-                                        <?php echo $user['status'] == 'active' ? 'Actif' : 'En attente'; ?>
+                                        <?php echo $user['status'] == 'active' ? 'Actif' : 'Attente'; ?>
                                     </span>
                                 </td>
-                                <td><?php echo date('d/m/Y', strtotime($user['created_at'])); ?></td>
+                                <td class="table-col-created"><?php echo date('d/m/Y', strtotime($user['created_at'])); ?></td>
                                 <td>
                                     <?php if ($user['id'] != $_SESSION['user_id']): ?>
                                         <?php if ($user['status'] == 'active'): ?>
@@ -396,7 +736,7 @@ $users = $conn->query("SELECT id, name, email, role, status, package, created_at
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     <?php else: ?>
-                                        <span class="text-muted" style="font-size: 0.7rem;">(Compte actuel)</span>
+                                        <span class="text-muted" style="font-size: 0.7rem;">Actuel</span>
                                     <?php endif; ?>
                                 </td>
                             </tr>
