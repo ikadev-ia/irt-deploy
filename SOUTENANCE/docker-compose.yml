@@ -1,0 +1,45 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: soutenance-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: poultrytracker
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: soutenance_user
+      MYSQL_PASSWORD: soutenance_password
+    volumes:
+      - soutenance_db_data:/var/lib/mysql
+      # Initialisation de la base de données avec le fichier SQL
+      - ./sql/database.sql:/docker-entrypoint-initdb.d/database.sql
+    networks:
+      - soutenance-net
+
+  web:
+    build: .
+    container_name: soutenance-web
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_NAME: poultrytracker
+      DB_USER: soutenance_user
+      DB_PASS: soutenance_password
+    depends_on:
+      - db
+    networks:
+      - soutenance-net
+      - proxy-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.soutenance.rule=Host(`poulplume-mali.com`) || Host(`www.poulplume-mali.com`)"
+      - "traefik.http.routers.soutenance.entrypoints=websecure"
+      - "traefik.http.routers.soutenance.tls.certresolver=myresolver"
+      - "traefik.http.services.soutenance.loadbalancer.server.port=80"
+
+networks:
+  soutenance-net:
+  proxy-net:
+    external: true
+
+volumes:
+  soutenance_db_data:

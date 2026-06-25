@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Poulplume – Élevage nouvelle génération</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            /* ===== MODIFIEZ ICI LE CHEMIN VERS VOTRE IMAGE ===== */
+            background-image: url('Images/IMGA1.jpeg');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: #0f172a;
+            overflow-x: hidden;
+        }
+
+        /* Overlay très doux pour la lisibilité sans cacher l'image */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(240,253,244,0.6) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Hero section */
+        .hero { 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            animation-duration: 0.6s;
+            animation-fill-mode: forwards;
+        }
+
+        .logo-wrapper { animation-name: popUp; animation-delay: 0s; }
+        .brand-name { animation-name: slideLeft; animation-delay: 0.25s; }
+        .slogan { animation-name: popUp; animation-delay: 0.55s; }
+        .btn-group { animation-name: slideRight; animation-delay: 0.85s; }
+        .scroll-down { animation-name: fadeIn; animation-delay: 1.2s; }
+
+        @keyframes popUp {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideLeft {
+            0% { opacity: 0; transform: translateX(-60px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideRight {
+            0% { opacity: 0; transform: translateX(60px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Logo amélioré */
+        .logo-wrapper {
+            margin-bottom: 30px;
+            perspective: 1200px;
+        }
+
+        .logo-circle {
+            width: 260px;
+            height: 260px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.15), 0 0 0 8px #14B53A, 0 0 0 16px rgba(20,181,58,0.4);
+            animation: float 3s ease-in-out infinite, pulseGlow 2.5s infinite;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .logo-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 40px 60px rgba(0,0,0,0.2), 0 0 0 12px #14B53A, 0 0 0 24px rgba(20,181,58,0.5);
+        }
+
+        .logo-circle img {
+            width: 160px;
+            height: auto;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.1));
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+        }
+
+        .logo-circle:hover img {
+            transform: scale(1.02);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 30px 50px rgba(0,0,0,0.15), 0 0 0 8px #14B53A, 0 0 0 16px rgba(20,181,58,0.3); }
+            50% { box-shadow: 0 35px 55px rgba(0,0,0,0.2), 0 0 0 14px #14B53A, 0 0 0 24px rgba(20,181,58,0.5); }
+            100% { box-shadow: 0 30px 50px rgba(0,0,0,0.15), 0 0 0 8px #14B53A, 0 0 0 16px rgba(20,181,58,0.3); }
+        }
+
+        /* Nom de marque plus élégant */
+        .brand-name {
+            font-size: 4.2rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 12px rgba(255,255,255,0.9);
+        }
+
+        .poul {
+            color: #FCD116;
+            display: inline-block;
+            animation: bounceText 1s ease-in-out infinite alternate;
+        }
+
+        .plume {
+            color: #14B53A;
+            display: inline-block;
+            animation: bounceText 1s ease-in-out 0.2s infinite alternate;
+        }
+
+        @keyframes bounceText {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-6px); }
+        }
+
+        /* Slogan avec dégradé */
+        .slogan {
+            font-size: 1.5rem;
+            font-weight: 1000;
+            background: linear-gradient(135deg, #FCD116, #FCD116);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 40px;
+            padding: 0 20px;
+            letter-spacing: -0.3px;
+        }
+
+        /* Bouton stylé */
+        .btn-hero {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(125deg, #14B53A, #0d8a2f);
+            color: white;
+            padding: 16px 48px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 12px 25px rgba(20,181,58,0.3);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 35px rgba(20,181,58,0.4);
+            background: linear-gradient(125deg, #1ace42, #14B53A);
+        }
+
+        /* Flèche */
+        .scroll-down {
+            position: absolute;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            animation: bounceArrow 2s infinite;
+        }
+
+        @keyframes bounceArrow {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-down i {
+            font-size: 2rem;
+            color: #14B53A;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.7));
+        }
+
+        /* Section avantages - élégante */
+        .benefits {
+            padding: 90px 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 60px 60px 0 0;
+            margin-top: 40px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 35px;
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        .benefit-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 40px 28px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(20, 181, 58, 0.25);
+            opacity: 0;
+            transform: translateY(35px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        }
+
+        .benefit-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.96);
+            border-color: #FCD116;
+            box-shadow: 0 25px 45px rgba(20,181,58,0.15);
+        }
+
+        .benefit-icon {
+            font-size: 2.8rem;
+            color: #FCD116;
+            margin-bottom: 22px;
+            transition: transform 0.3s;
+        }
+
+        .benefit-card:hover .benefit-icon {
+            transform: scale(1.08);
+        }
+
+        .benefit-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .benefit-card p {
+            color: #334155;
+            line-height: 1.5;
+        }
+
+        .footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 32px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .logo-circle {
+                width: 190px;
+                height: 190px;
+            }
+            .logo-circle img {
+                width: 115px;
+            }
+            .brand-name {
+                font-size: 2.7rem;
+            }
+            .slogan {
+                font-size: 1.1rem;
+            }
+            .btn-hero {
+                padding: 12px 32px;
+                font-size: 1rem;
+            }
+            .benefits {
+                padding: 60px 15px;
+            }
+            .benefit-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <div class="hero-content">
+            <div class="logo-wrapper reveal">
+                <div class="logo-circle">
+                    <img src="Images/Logo.png" alt="Poulplume Logo">
+                </div>
+            </div>
+            <div class="brand-name reveal">
+                <span class="poul">Poul</span><span class="plume">plume</span>
+            </div>
+            <div class="slogan reveal">
+                Elevez - Gerez - Gagnez
+            </div>
+            <div class="btn-group reveal">
+                <a href="login.php" class="btn-hero"></i> Démarrer maintenant</a>
+            </div>
+            <div class="scroll-down reveal" onclick="document.getElementById('benefits').scrollIntoView({behavior:'smooth'})">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </div>
+
+    <div id="benefits" class="benefits">
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Suivi temps réel</h3>
+                <p>Température, alimentation, mortalité – tout en direct.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-brain"></i></div>
+                <h3>Diagnostic</h3>
+                <p>Décrivez les symptômes, obtenez un diagnostic précis et des traitements.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-coins"></i></div>
+                <h3>Finances intégrées</h3>
+                <p>Dépenses, revenus, rentabilité – maîtrisez votre marge.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 Poulplume – L'innovation au service de l'élevage de poulets.</p>
+    </div>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.benefit-card').forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>
