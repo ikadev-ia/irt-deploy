@@ -4,15 +4,28 @@
  * Analyse les symptômes et fournit un diagnostic spécifique avec recommandations.
  * Enregistre l'historique dans un fichier CSV.
  */
+
+// ====== SESSION DÉMARRÉE ICI ======
+// Vérifier si la session est déjà démarrée avant de la lancer
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Inclure la base de données APRÈS la session
 require_once 'config/database_sqlite.php';
 $db = new Database();
 $conn = $db->getConnection();
-$db->startSession();
-if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit(); }
 
+// Récupérer les infos utilisateur
 $user_id = $_SESSION['user_id'];
-$user_role = $_SESSION['user_role'];
-$user_name = $_SESSION['user_name'];
+$user_role = $_SESSION['user_role'] ?? 'user';
+$user_name = $_SESSION['user_name'] ?? 'Utilisateur';
 
 $csvFile = 'diagnostics.csv';
 
@@ -27,12 +40,10 @@ function saveDiagnostic($data) {
 
 // Fonction de diagnostic intelligente
 function analyzeSymptoms($color, $behavior, $appearance) {
-    // Évaluation de gravité (score)
     $severity = 0;
     $issues = [];
     $recommendations = [];
 
-    // Analyse des excréments
     switch ($color) {
         case 'normal':
             $issues[] = "Excréments normaux.";
@@ -71,7 +82,6 @@ function analyzeSymptoms($color, $behavior, $appearance) {
             $issues[] = "Couleur des excréments non spécifiée.";
     }
 
-    // Analyse du comportement
     switch ($behavior) {
         case 'normal':
             $issues[] = "Comportement normal, actif.";
@@ -105,7 +115,6 @@ function analyzeSymptoms($color, $behavior, $appearance) {
             $issues[] = "Comportement non spécifié.";
     }
 
-    // Analyse de l'apparence physique
     switch ($appearance) {
         case 'normal':
             $issues[] = "Apparence normale.";
@@ -144,7 +153,6 @@ function analyzeSymptoms($color, $behavior, $appearance) {
             $issues[] = "Apparence non spécifiée.";
     }
 
-    // Détermination du diagnostic final
     if ($severity == 0) {
         $status = "Etat de santé normal";
         $advice = "Aucun problème détecté. Continuez les bonnes pratiques d'élevage : alimentation équilibrée, eau propre, litière sèche, vaccination à jour.";

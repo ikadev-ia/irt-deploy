@@ -1,168 +1,149 @@
 {% extends 'shop/base.html' %}
 {% load static %}
+
 {% block content %}
 
 <section class="payment-container">
-    <div class="page-card">
 
     <h1>Choisissez votre moyen de paiement</h1>
 
-    <div class="payment-methods">
+    <form method="POST" action="{% url 'paiement' %}" class="payment-form">
 
-        <div class="payment-card" onclick="showPaymentForm('orange')">
-            <img src="{% static 'images/orange-money.png' %}">
-            <h3>Orange Money</h3>
+        {% csrf_token %}
+
+        <!-- Choix du moyen de paiement -->
+        <div class="payment-methods">
+
+            <div class="payment-card" onclick="showPaymentForm('orange')">
+                <img src="{% static 'images/orange-money.png' %}" width="70">
+                <h3>Orange Money</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('wave')">
+                <img src="{% static 'images/wave.png' %}" width="70">
+                <h3>Wave</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('moov')">
+                <img src="{% static 'images/moov-money.png' %}" width="70">
+                <h3>Moov Money</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('visa')">
+                <img src="{% static 'images/visa.png' %}" width="70">
+                <h3>Visa</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('mastercard')">
+                <img src="{% static 'images/mastercard.png' %}" width="70">
+                <h3>MasterCard</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('paypal')">
+                <img src="{% static 'images/paypal.png' %}" width="70">
+                <h3>PayPal</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('livraison')">
+                <img src="{% static 'images/livraison.png' %}" width="70">
+                <h3>Paiement à la livraison</h3>
+            </div>
+
         </div>
 
-        <div class="payment-card" onclick="showPaymentForm('wave')">
-            <img src="{% static 'images/wave.png' %}">
-            <h3>Wave</h3>
+        <!-- Champ caché envoyé à Django -->
+        <input type="hidden" name="methode" id="methode">
+
+        <!-- Orange -->
+        <div id="orange" class="payment-details" style="display: none;">
+            <input type="text" name="telephone" placeholder="Numéro Orange Money">
         </div>
 
-        <div class="payment-card" onclick="showPaymentForm('moov')">
-            <img src="{% static 'images/moov-money.png' %}">
-            <h3>Moov Money</h3>
+        <!-- Wave -->
+        <div id="wave" class="payment-details" style="display: none;">
+            <input type="text" name="telephone" placeholder="Numéro Wave">
         </div>
 
-        <div class="payment-card" onclick="showPaymentForm('visa')">
-            <img src="{% static 'images/visa.png' %}">
-            <h3>Visa</h3>
+        <!-- Moov -->
+        <div id="moov" class="payment-details" style="display: none;">
+            <input type="text" name="telephone" placeholder="Numéro Moov Money">
         </div>
 
-        <div class="payment-card" onclick="showPaymentForm('mastercard')">
-            <img src="{% static 'images/mastercard.png' %}">
-            <h3>MasterCard</h3>
+        <!-- Visa -->
+        <div id="visa" class="payment-details" style="display: none;">
+            <input type="text" placeholder="Numéro de carte">
+            <input type="text" placeholder="Nom du titulaire">
+            <input type="text" placeholder="Date expiration MM/AA">
         </div>
 
-        <div class="payment-card" onclick="showPaymentForm('paypal')">
-            <img src="{% static 'images/paypal.png' %}">
-            <h3>PayPal</h3>
+        <!-- Mastercard -->
+        <div id="mastercard" class="payment-details" style="display: none;">
+            <input type="text" placeholder="Numéro de carte">
+            <input type="text" placeholder="Nom du titulaire">
+            <input type="text" placeholder="Date expiration MM/AA">
         </div>
 
-        <div class="payment-card" onclick="showPaymentForm('livraison')">
-            <img src="{% static 'images/livraison.png' %}">
-            <h3>Paiement à la livraison</h3>
+        <!-- Paypal -->
+        <div id="paypal" class="payment-details" style="display: none;" >
+            <input type="email" placeholder="Adresse email PayPal">
         </div>
 
-    </div>
+        <!-- Livraison -->
+        <div id="livraison" class="payment-details" style="display: none;">
+            <input type="text" name="telephone" placeholder="Téléphone">
 
-    <!-- Zone vide au départ -->
-    <div id="payment-form-container"></div>
-</div>
+            <input type="text"
+                   name="adresse"
+                   placeholder="Adresse de livraison">
+
+            <button type="button" onclick="getLocation()">
+                Obtenir ma position
+            </button>
+        </div>
+
+        <button type="submit" class="btn-primary">
+            Payer
+        </button>
+
+    </form>
+
 </section>
 
 <script>
+
 function showPaymentForm(method){
 
-    let container = document.getElementById("payment-form-container");
+    document.querySelectorAll(".payment-details")
+        .forEach(form => {
+            form.style.display = "none";
+        });
 
-    let forms = {
+    document.getElementById(method).style.display = "block";
 
-        orange: `
-            <form class="payment-form">
-                <input type="text" placeholder="Numéro Orange Money">
-                <input type="number" placeholder="Montant">
-                <button>Payer</button>
-            </form>
-        `,
-
-        wave: `
-            <form class="payment-form">
-                <input type="text" placeholder="Numéro Wave">
-                <input type="number" placeholder="Montant">
-                <button>Payer</button>
-            </form>
-        `,
-
-        moov: `
-            <form class="payment-form">
-                <input type="text" placeholder="Numéro Moov Money">
-                <input type="number" placeholder="Montant">
-                <button>Payer</button>
-            </form>
-        `,
-
-        visa: `
-            <form class="payment-form">
-                <input type="text" placeholder="Numéro de carte Visa">
-                <input type="text" placeholder="CVV">
-                <button>Payer</button>
-            </form>
-        `,
-
-        mastercard: `
-            <form class="payment-form">
-                <input type="text" placeholder="Numéro MasterCard">
-                <input type="text" placeholder="CVV">
-                <button>Payer</button>
-            </form>
-        `,
-
-        paypal: `
-            <form class="payment-form">
-                <input type="email" placeholder="Email PayPal">
-                <button>Payer</button>
-            </form>
-        `,
-
-        livraison: `
-            <form class="payment-form">
-
-                <input type="text" placeholder="Adresse de livraison">
-
-                <input type="text" placeholder="Téléphone">
-
-                <input type="hidden" id="latitude">
-                <input type="hidden" id="longitude">
-
-                <button type="button" onclick="getLocation()">
-                     Utiliser ma position actuelle
-                </button>
-
-                <button>
-                    Confirmer
-                </button>
-
-            </form>
-        `
-    };
-
-    container.innerHTML = forms[method];
+    document.getElementById("methode").value = method;
 }
+
+function getLocation(){
+
+    if(navigator.geolocation){
+
+        navigator.geolocation.getCurrentPosition(function(position){
+
+            document.getElementById("latitude").value =
+                position.coords.latitude;
+
+            document.getElementById("longitude").value =
+                position.coords.longitude;
+
+            alert("Position récupérée avec succès.");
+
+        });
+
+    }else{
+        alert("Votre navigateur ne supporte pas la géolocalisation.");
+    }
+}
+
 </script>
-<footer class="home-footer">
-
-    <div class="footer-content">
-
-        <div class="footer-brand">
-            <h2>LAKIKA</h2>
-            <p>Le goût naturel qui transforme vos repas.</p>
-        </div>
-
-        <div class="footer-links">
-            <a href="{% url 'apropos' %}">À propos</a>
-            <a href="{% url 'contact' %}">Contact</a>
-            <a href="{% url 'aide' %}">Aide</a>
-            <a href="{% url 'confidentialite' %}">Confidentialité</a>
-        </div>
-<div id="notification" class="notification">
-    Produit ajouté au panier
-</div>
-
-
-        <div class="footer-socials">
-            <a href="#">Facebook</a>
-            <a href="#">TikTok</a>
-            <a href="#">WhatsApp</a>
-            <a href="#">Instagram</a>
-        </div>
-
-    </div>
-
-    <div class="footer-bottom">
-        <p>© 2026 LAKIKA | Tous droits réservés</p>
-    </div>
-
-</footer>
 
 {% endblock %}

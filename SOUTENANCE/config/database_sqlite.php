@@ -180,17 +180,29 @@ class Database {
         }
     }
 
+    /**
+     * Méthode de gestion de session - CORRIGÉE
+     * Vérifie si la session est déjà active avant de la démarrer
+     */
     public function startSession() {
-        if (session_status() == PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
 
+    /**
+     * Vérifie si l'utilisateur est connecté
+     * Utilise startSession() qui gère correctement l'état de la session
+     */
     public function isLoggedIn() {
         $this->startSession();
         return isset($_SESSION['user_id']);
     }
 
+    /**
+     * Exige que l'utilisateur soit connecté
+     * Redirige vers login.php si non connecté
+     */
     public function requireLogin() {
         $this->startSession();
         if (!$this->isLoggedIn()) {
@@ -199,6 +211,10 @@ class Database {
         }
     }
 
+    /**
+     * Exige que l'utilisateur soit administrateur
+     * Redirige vers dashboard.php si non administrateur
+     */
     public function requireAdmin() {
         $this->requireLogin();
         if ($_SESSION['user_role'] != 'admin') {

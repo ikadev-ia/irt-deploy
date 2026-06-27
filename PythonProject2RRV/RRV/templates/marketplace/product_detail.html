@@ -3,30 +3,14 @@
 
 {% block content %}
 <style>
-    /* Animation pour l'icône de commentaire lors de l'ouverture */
-    .btn-comments-toggle[aria-expanded="true"] i {
-        transform: scale(1.2);
-        color: #2F4F4F !important;
-    }
-
-    /* Styles thématiques Revina */
+    .btn-comments-toggle[aria-expanded="true"] i { transform: scale(1.2); color: #2F4F4F !important; }
     .text-revina-brown { color: #5D4037; }
-    .btn-revina {
-        background-color: #2F4F4F;
-        color: white;
-        border-radius: 12px;
-        transition: 0.3s;
-    }
-    .btn-revina:hover {
-        background-color: #1e3333;
-        color: white;
-    }
-    .seller-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
+    .btn-revina { background-color: #2F4F4F; color: white; border-radius: 12px; transition: 0.3s; }
+    .btn-revina:hover { background-color: #1e3333; color: white; }
+    .seller-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+
+    /* Style pour le bouton like */
+    #like-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; }
 </style>
 
 <div class="container mt-5">
@@ -48,15 +32,11 @@
             <h1 class="display-5 fw-bold text-revina-brown mb-2">{{ product.title }}</h1>
 
             <div class="d-flex align-items-center mb-3">
-                <a href="{% url 'marketplace:toggle_like' product.id %}" class="btn btn-link text-danger p-0 me-2" style="text-decoration: none;">
-                    {% if user in product.likes.all %}
-                        <i class="fa-solid fa-heart fs-4"></i>
-                    {% else %}
-                        <i class="fa-regular fa-heart fs-4"></i>
-                    {% endif %}
-                </a>
-                <span class="fw-bold text-revina-brown">
-                    {{ product.likes.count }} like{{ product.likes.count|pluralize }}
+                <button id="like-btn" data-url="{% url 'marketplace:toggle_like' product.id %}">
+                    <i id="like-icon" class="{% if user in product.likes.all %}fa-solid fa-heart{% else %}fa-regular fa-heart{% endif %} fs-4" style="color: {% if user in product.likes.all %}red{% else %}gray{% endif %};"></i>
+                </button>
+                <span class="fw-bold text-revina-brown ms-2">
+                    <span id="like-count">{{ product.likes.count }}</span> like{{ product.likes.count|pluralize }}
                 </span>
             </div>
 
@@ -71,26 +51,11 @@
                 <a href="{% url 'payments:checkout' product.id %}?type=marketplace" class="btn btn-revina btn-lg shadow-sm">
                     <i class="fas fa-shopping-cart me-2"></i>Acheter cet article
                 </a>
-
                 {% if user.is_authenticated and user != product.seller %}
                     <a href="{% url 'messaging:start_conversation' product.seller.id %}" class="btn btn-outline-dark shadow-sm mt-2" style="border-radius: 12px; padding: 10px;">
                         <i class="fas fa-comments me-2"></i>Contacter le vendeur
                     </a>
                 {% endif %}
-            </div>
-
-            <div class="mt-5 d-flex align-items-center p-3 border rounded-pill shadow-sm bg-white">
-                {% if product.seller.photo %}
-                    <img src="{{ product.seller.photo.url }}" class="seller-avatar me-3" alt="Avatar">
-                {% else %}
-                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white me-3" style="width: 50px; height: 50px;">
-                        {{ product.seller.username|slice:":1" }}
-                    </div>
-                {% endif %}
-                <div>
-                    <h6 class="mb-0 fw-bold">{{ product.seller.username }}</h6>
-                    <small class="text-muted">Membre depuis {{ product.seller.date_joined|date:"Y" }}</small>
-                </div>
             </div>
         </div>
     </div>
@@ -103,7 +68,6 @@
                     <i class="fa-solid fa-comments fa-2x" style="color: #5D4037; transition: transform 0.3s;"></i>
                 </button>
             </div>
-
             <div class="collapse" id="collapseComments">
                 <div class="card card-body border-0 bg-transparent p-0">
                     <div class="comments-list mb-4">
@@ -121,17 +85,38 @@
                     </div>
                 </div>
             </div>
-
-            {% if user.is_authenticated %}
-            <div class="mt-4 bg-white p-4 rounded-4 shadow-sm border">
-                <form action="{% url 'marketplace:add_comment' product.id %}" method="POST">
-                    {% csrf_token %}
-                    <textarea name="content" class="form-control border-0 bg-light rounded-3 mb-3" rows="3" placeholder="Ajouter un commentaire..." required></textarea>
-                    <button type="submit" class="btn btn-revina px-4 shadow-sm">Publier</button>
-                </form>
-            </div>
-            {% endif %}
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('like-btn').addEventListener('click', function() {
+    const url = this.getAttribute('data-url');
+    const icon = document.getElementById('like-icon');
+    const countSpan = document.getElementById('like-count');
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            countSpan.innerText = data.new_count;
+            if (data.liked) {
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid');
+                icon.style.color = 'red';
+            } else {
+                icon.classList.remove('fa-solid');
+                icon.classList.add('fa-regular');
+                icon.style.color = 'gray';
+            }
+        }
+    });
+});
+</script>
 {% endblock %}
