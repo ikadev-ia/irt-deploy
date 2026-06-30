@@ -1,0 +1,346 @@
+{% extends 'base.html' %}
+{% block title %}E-Pharma — Votre pharmacie en un clic{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* HERO */
+  .hero-section {
+    background: linear-gradient(135deg, #0a3d20 0%, #0d6b3a 50%, #1aab5f 100%);
+    padding: 70px 0 90px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-section::before {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 420px; height: 420px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .hero-section::after {
+    content: '';
+    position: absolute; bottom: -80px; left: -60px;
+    width: 280px; height: 280px; border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #c6f6d5; border-radius: 30px;
+    padding: 7px 18px; font-size: 13px; font-weight: 600;
+    margin-bottom: 22px; letter-spacing: 0.2px;
+  }
+  .hero-badge span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #4ade80; display: inline-block;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+  .hero-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.6rem; font-weight: 800;
+    color: white; line-height: 1.18; margin-bottom: 18px;
+  }
+  .hero-title em { color: #7de8ab; font-style: normal; }
+  .hero-desc {
+    color: rgba(255,255,255,0.80);
+    font-size: 1.05rem; line-height: 1.75;
+    max-width: 500px; margin-bottom: 32px;
+  }
+  .hero-search-wrap {
+    background: white; border-radius: 14px;
+    padding: 7px 7px 7px 20px;
+    display: flex; align-items: center; gap: 10px;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+  }
+  .hero-search-wrap input {
+    border: none; outline: none; flex: 1;
+    font-size: 14.5px; color: #333;
+    font-family: 'Nunito', sans-serif;
+    background: transparent;
+  }
+  .hero-search-wrap input::placeholder { color: #bbb; }
+  .hero-search-wrap button {
+    background: linear-gradient(135deg, #0d8a48, #1aab5f);
+    color: white; border: none; border-radius: 10px;
+    padding: 11px 22px; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    font-family: 'Nunito', sans-serif;
+  }
+  .hero-search-wrap button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(26,171,95,0.4);
+  }
+  .hero-stats {
+    display: flex; gap: 32px; margin-top: 36px; flex-wrap: wrap;
+  }
+  .hero-stat-item { color: white; }
+  .hero-stat-num {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6rem; font-weight: 800; line-height: 1;
+  }
+  .hero-stat-lbl {
+    font-size: 12px; opacity: 0.7; margin-top: 3px; font-weight: 600;
+  }
+  .hero-stat-div { width: 1px; background: rgba(255,255,255,0.2); }
+
+  /* CATÉGORIES */
+  .cat-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; border: 1.5px solid #e8f5ee;
+    border-radius: 30px; padding: 10px 20px;
+    font-weight: 700; font-size: 14px; color: var(--texte);
+    text-decoration: none; transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .cat-pill:hover {
+    border-color: var(--vert); color: var(--vert);
+    background: var(--vert-xlight);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(26,171,95,0.15);
+  }
+  .cat-pill-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--vert-light);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--vert); font-size: 13px;
+  }
+
+  /* AMO BANNER */
+  .amo-banner {
+    background: linear-gradient(135deg, #1565c0 0%, #1976d2 60%, #1e88e5 100%);
+    border-radius: 20px; padding: 32px 36px;
+    position: relative; overflow: hidden; color: white;
+  }
+  .amo-banner::after {
+    content: 'AMO';
+    position: absolute; right: 30px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 6rem; font-weight: 900;
+    opacity: 0.07; letter-spacing: -3px;
+    font-family: 'Poppins', sans-serif;
+  }
+  .amo-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; font-weight: 600; margin-bottom: 14px;
+  }
+  .amo-banner h4 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800; font-size: 1.3rem; margin-bottom: 8px;
+  }
+  .amo-banner p {
+    font-size: 14px; opacity: 0.85;
+    margin-bottom: 20px; max-width: 480px; line-height: 1.6;
+  }
+  .btn-amo-white {
+    background: white; color: #1565c0;
+    border: none; border-radius: 10px;
+    padding: 11px 24px; font-weight: 800;
+    font-size: 14px; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    transition: all 0.2s; font-family: 'Nunito', sans-serif;
+  }
+  .btn-amo-white:hover {
+    color: #1565c0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+
+  /* FONCTIONNEMENT */
+  .how-section {
+    background: white; border-radius: 20px;
+    padding: 40px; box-shadow: var(--shadow-sm);
+  }
+  .how-step {
+    text-align: center; position: relative;
+  }
+  .how-step-num {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: var(--vert-light);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+  }
+  .how-step-num i { color: var(--vert); font-size: 1.3rem; }
+  .how-step h6 { font-weight: 800; font-size: 0.95rem; margin-bottom: 4px; }
+  .how-step p { color: var(--muted); font-size: 0.82rem; margin: 0; }
+  .how-connector {
+    position: absolute; top: 26px; left: 75%;
+    width: 50%; height: 2px;
+    background: linear-gradient(90deg, var(--vert-light), transparent);
+    z-index: 0;
+  }
+  @media (max-width: 768px) {
+    .hero-title { font-size: 1.9rem; }
+    .how-connector { display: none; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <div class="hero-badge">
+          <span></span>
+          Bamako, Mali — Service actif 24h/24
+        </div>
+        <h1 class="hero-title">
+          Vos médicaments,<br>livrés chez vous <em>en un clic</em>
+        </h1>
+        <p class="hero-desc">
+          Commandez auprès des pharmacies partenaires de Bamako.
+          Prise en charge AMO disponible. Livraison rapide à domicile.
+        </p>
+        <form class="hero-search-wrap" action="{% url 'medicaments' %}" method="GET">
+          <i class="fa fa-search" style="color:#bbb; font-size:15px;"></i>
+          <input type="text" name="q" placeholder="Paracétamol, Amoxicilline, Doliprane...">
+          <button type="submit">Rechercher</button>
+        </form>
+        <div class="hero-stats">
+          <div class="hero-stat-item">
+            <div class="hero-stat-num">24+</div>
+            <div class="hero-stat-lbl">Médicaments</div>
+          </div>
+          <div class="hero-stat-div"></div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-num">5</div>
+            <div class="hero-stat-lbl">Pharmacies</div>
+          </div>
+          <div class="hero-stat-div"></div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-num">~25 min</div>
+            <div class="hero-stat-lbl">Livraison</div>
+          </div>
+          <div class="hero-stat-div"></div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-num">AMO</div>
+            <div class="hero-stat-lbl">Prise en charge</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container py-5">
+
+  <!-- CATÉGORIES -->
+  {% if categories %}
+  <div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h4 class="section-title mb-0">Catégories</h4>
+        <p class="section-subtitle mt-1 mb-0">Trouvez rapidement ce dont vous avez besoin</p>
+      </div>
+      <a href="{% url 'medicaments' %}" class="text-success fw-bold text-decoration-none" style="font-size:.9rem">Voir tout &rarr;</a>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      {% for cat in categories %}
+      <a href="{% url 'medicaments' %}?categorie={{ cat.slug }}" class="cat-pill">
+        <span class="cat-pill-icon"><i class="fa {{ cat.icone }}"></i></span>
+        {{ cat.nom }}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- MÉDICAMENTS POPULAIRES -->
+  {% if populaires %}
+  <div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h4 class="section-title mb-0">Médicaments populaires</h4>
+        <p class="section-subtitle mt-1 mb-0">Les plus commandés cette semaine</p>
+      </div>
+      <a href="{% url 'medicaments' %}" class="text-success fw-bold text-decoration-none" style="font-size:.9rem">Voir tout &rarr;</a>
+    </div>
+    <div class="row g-3">
+      {% for med in populaires %}
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="card-med card h-100">
+          <div class="img-wrap">
+            {% if med.get_image %}
+            <img src="{{ med.get_image }}" alt="{{ med.nom }}" />
+            {% else %}
+            <i class="fa fa-capsules fa-2x" style="color:var(--vert); opacity:.35;"></i>
+            {% endif %}
+          </div>
+          <div class="p-3">
+            {% if med.sur_ordonnance %}
+            <span class="badge-ordonnance mb-1 d-inline-block">Ordonnance</span>
+            {% endif %}
+            {% if med.couvert_amo %}
+            <span class="d-inline-block mb-1" style="background:#e3f2fd;color:#1565c0;font-size:.67rem;border-radius:20px;padding:3px 9px;font-weight:700;border:1px solid #bbdefb;">AMO</span>
+            {% endif %}
+            <h6 class="fw-800 mb-1" style="font-size:.88rem">{{ med.nom }}</h6>
+            <div class="prix-tag">{{ med.prix|floatformat:0 }} FCFA</div>
+            {% if med.couvert_amo %}
+            <div style="font-size:.75rem; color:#1565c0; font-weight:600;">Après AMO : {{ med.prix_apres_amo|floatformat:0 }} FCFA</div>
+            {% endif %}
+            <a href="{% url 'ajouter_panier' med.pk %}" class="btn btn-vert btn-sm w-100 mt-2">
+              <i class="fa fa-plus me-1"></i>Ajouter
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- BANNIÈRE AMO -->
+  <div class="amo-banner mb-5">
+    <div class="amo-badge">
+      <i class="fa fa-shield-alt"></i>
+      Assurance Maladie Obligatoire — Mali
+    </div>
+    <h4>Vous avez une carte AMO ?</h4>
+    <p>Enregistrez votre numéro de carte et bénéficiez automatiquement de la prise en charge sur tous les médicaments éligibles.</p>
+    <a href="{% url 'amo' %}" class="btn-amo-white">
+      <i class="fa fa-credit-card me-2"></i>Activer ma carte AMO
+    </a>
+  </div>
+
+  <!-- COMMENT CA MARCHE -->
+  <div class="how-section mb-5">
+    <h4 class="section-title text-center mb-1">Comment ça marche ?</h4>
+    <p class="section-subtitle text-center mb-4">Commander vos médicaments en 4 étapes simples</p>
+    <div class="row g-4 position-relative">
+      <div class="col-6 col-md-3 how-step">
+        <div class="how-step-num"><i class="fa fa-search"></i></div>
+        <h6>1. Recherchez</h6>
+        <p>Trouvez votre médicament dans notre catalogue</p>
+        <div class="how-connector d-none d-md-block"></div>
+      </div>
+      <div class="col-6 col-md-3 how-step">
+        <div class="how-step-num"><i class="fa fa-cart-plus"></i></div>
+        <h6>2. Ajoutez</h6>
+        <p>Ajoutez au panier et choisissez la quantité</p>
+        <div class="how-connector d-none d-md-block"></div>
+      </div>
+      <div class="col-6 col-md-3 how-step">
+        <div class="how-step-num"><i class="fa fa-money-bill-wave"></i></div>
+        <h6>3. Payez</h6>
+        <p>Orange Money, Wave ou espèces à la livraison</p>
+        <div class="how-connector d-none d-md-block"></div>
+      </div>
+      <div class="col-6 col-md-3 how-step">
+        <div class="how-step-num"><i class="fa fa-motorcycle"></i></div>
+        <h6>4. Recevez</h6>
+        <p>Livraison rapide à votre adresse à Bamako</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Mes commandes — E-Pharma{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h2 class="fw-800 mb-1"><i class="fa fa-box me-2"></i>Mes commandes</h2>
+    <p class="mb-0 opacity-80">Suivez l'état de vos commandes</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+  {% if commandes %}
+  <!-- FILTRES ONGLETS -->
+  <ul class="nav nav-pills mb-4 gap-2">
+    <li class="nav-item"><a class="nav-link active fw-700" href="?">Toutes</a></li>
+    <li class="nav-item"><a class="nav-link fw-700" href="?statut=en_route">En cours</a></li>
+    <li class="nav-item"><a class="nav-link fw-700" href="?statut=livree">Livrées</a></li>
+    <li class="nav-item"><a class="nav-link fw-700" href="?statut=annulee">Annulées</a></li>
+  </ul>
+
+  {% for commande in commandes %}
+  <div class="card border-0 rounded-4 mb-3" style="box-shadow:0 2px 10px rgba(0,0,0,.06)">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div>
+          <h6 class="fw-800 mb-1">Commande #{{ commande.numero }}</h6>
+          <small class="text-muted">{{ commande.date_creation|date:"d M Y à H:i" }} · {{ commande.lignes.count }} article(s)</small>
+        </div>
+        <div class="d-flex gap-2 align-items-center">
+          <span class="badge statut-pill bg-{{ commande.statut_badge }}">
+            {{ commande.get_statut_display }}
+          </span>
+          <span class="fw-800 prix-tag">{{ commande.total|floatformat:0 }} FCFA</span>
+        </div>
+      </div>
+
+      <!-- PROGRESSION -->
+      {% if commande.statut != 'annulee' %}
+      <div class="steps-track mb-3">
+        <div class="step {% if commande.progression >= 1 %}done{% endif %}">
+          <div class="step-circle"><i class="fa fa-check"></i></div>
+          <div class="step-label">Confirmée</div>
+        </div>
+        <div class="step {% if commande.progression >= 2 %}done{% elif commande.progression == 1 %}active{% endif %}">
+          <div class="step-circle"><i class="fa fa-box-open"></i></div>
+          <div class="step-label">Préparée</div>
+        </div>
+        <div class="step {% if commande.progression >= 3 %}done{% elif commande.progression == 2 %}active{% endif %}">
+          <div class="step-circle"><i class="fa fa-motorcycle"></i></div>
+          <div class="step-label">En route</div>
+        </div>
+        <div class="step {% if commande.progression >= 4 %}done{% elif commande.progression == 3 %}active{% endif %}">
+          <div class="step-circle"><i class="fa fa-home"></i></div>
+          <div class="step-label">Livrée</div>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'detail_commande' commande.pk %}" class="btn btn-outline-success btn-sm fw-700">
+          <i class="fa fa-eye me-1"></i>Détails
+        </a>
+        {% if commande.statut == 'en_attente' or commande.statut == 'confirmee' %}
+        <a href="{% url 'annuler_commande' commande.pk %}" class="btn btn-outline-danger btn-sm fw-700"
+           onclick="return confirm('Annuler cette commande ?')">
+          <i class="fa fa-times me-1"></i>Annuler
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+  {% else %}
+  <div class="text-center py-5">
+    <i class="fa fa-box-open fa-5x text-muted mb-3 d-block" style="opacity:.2"></i>
+    <h4 class="text-muted fw-700">Aucune commande pour l'instant</h4>
+    <a href="{% url 'medicaments' %}" class="btn btn-vert mt-3 px-5">Commander maintenant</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

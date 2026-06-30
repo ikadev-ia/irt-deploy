@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% block title %}Suivi livraison #{{ commande.numero }} — E-Pharma{% endblock %}
+
+{% block extra_css %}
+<style>
+  #map { height: 320px; border-radius: 16px; overflow: hidden; background: #e8f5e9; }
+  .step-track { display: flex; align-items: center; gap: 0; margin-bottom: 8px; }
+  .step-item { flex: 1; text-align: center; position: relative; }
+  .step-item:not(:last-child)::after {
+    content: ''; position: absolute; top: 20px; left: 60%; width: 80%; height: 3px;
+    background: #e0e0e0; z-index: 0;
+  }
+  .step-item.done:not(:last-child)::after { background: var(--vert); }
+  .step-circle {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: #f0f0f0; color: #aaa;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 6px; font-size: 16px;
+    border: 3px solid #e0e0e0; position: relative; z-index: 1;
+    transition: all 0.3s;
+  }
+  .step-item.done .step-circle {
+    background: var(--vert); color: white; border-color: var(--vert);
+  }
+  .step-item.active .step-circle {
+    background: white; color: var(--vert); border-color: var(--vert);
+    box-shadow: 0 0 0 4px rgba(26,171,95,0.15);
+    animation: pulse-step 1.5s infinite;
+  }
+  @keyframes pulse-step {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(26,171,95,0.15); }
+    50% { box-shadow: 0 0 0 8px rgba(26,171,95,0.08); }
+  }
+  .step-label { font-size: 11px; font-weight: 700; color: #aaa; }
+  .step-item.done .step-label, .step-item.active .step-label { color: var(--vert); }
+
+  .livreur-card {
+    background: linear-gradient(135deg, #0a3d20, #0d6b3a);
+    border-radius: 14px; padding: 18px 20px;
+    display: flex; align-items: center; gap: 16px; color: white;
+  }
+  .livreur-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .badge-statut {
+    display: inline-flex; align-items: center; gap: 6px;
+    border-radius: 20px; padding: 6px 14px;
+    font-size: 13px; font-weight: 700;
+  }
+  .badge-statut.en-route {
+    background: #e8f5e9; color: #1b5e20;
+  }
+  .badge-statut.arrive {
+    background: #fff8e1; color: #f57f17;
+  }
+  .badge-statut.livree {
+    background: #e3f2fd; color: #0d47a1;
+  }
+  .ping { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: ping 1s infinite; }
+  @keyframes ping { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h2 class="fw-800 mb-1"><i class="fa fa-motorcycle me-2"></i>Suivi de livraison</h2>
+    <p class="mb-0 opacity-75">Commande #{{ commande.numero }}</p>
+  </div>
+</div>
+
+<div class="container pb-5" style="max-width:700px;">
+
+  <!-- Statut dynamique -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div id="badge-statut" class="badge-statut en-route">
+      <span class="ping"></span>
+      <span id="statut-texte">{{ commande.get_statut_display }}</span>
+    </div>
+    <div id="derniere-maj" style="font-size:12px; color:var(--muted);"></div>
+  </div>
+
+  <!-- Étapes -->
+  <div class="card-custom p-4 mb-4">
+    <div class="step-track">
+      <div class="step-item {% if commande.progression >= 1 %}done{% endif %}">
+        <div class="step-circle"><i class="fa fa-check"></i></div>
+        <div class="step-label">Confirmée</div>
+      </div>
+      <div class="step-item {% if commande.progression >= 3 %}done{% elif commande.progression == 2 %}active{% endif %}">
+        <div class="step-circle"><i class="fa fa-box-open"></i></div>
+        <div class="step-label">Préparée</div>
+      </div>
+      <div class="step-item {% if commande.progression >= 4 %}done{% elif commande.progression == 3 %}active{% endif %}" id="step-enroute">
+        <div class="step-circle"><i class="fa fa-motorcycle"></i></div>
+        <div class="step-label">En route</div>
+      </div>
+      <div class="step-item {% if commande.progression >= 5 %}done{% elif commande.progression == 4 %}active{% endif %}" id="step-livree">
+        <div class="step-circle"><i class="fa fa-home"></i></div>
+        <div class="step-label">Livrée</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carte -->
+  <div class="card-custom p-3 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="fw-800 mb-0"><i class="fa fa-map-marker-alt me-2" style="color:var(--vert);"></i>Position du livreur</h6>
+      <span style="font-size:12px; color:var(--muted);">Mise à jour toutes les 5 secondes</span>
+    </div>
+    <div id="map"></div>
+    {% if not livraison or not livraison.latitude %}
+    <div class="text-center mt-3 text-muted" style="font-size:13px;">
+      <i class="fa fa-info-circle me-1"></i>
+      La position du livreur apparaîtra dès qu'il sera en route.
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Info livreur -->
+  {% if livraison and livraison.livreur %}
+  <div class="livreur-card mb-4">
+    <div class="livreur-avatar"><i class="fa fa-user"></i></div>
+    <div style="flex:1;">
+      <div style="font-weight:800; font-size:1rem;">{{ livraison.livreur.get_full_name }}</div>
+      <div style="opacity:0.8; font-size:13px; margin-top:2px;">
+        <i class="fa fa-phone me-1"></i>{{ livraison.livreur.telephone }}
+      </div>
+      {% if livraison.heure_depart %}
+      <div style="opacity:0.7; font-size:12px; margin-top:4px;">
+        <i class="fa fa-clock me-1"></i>Parti à {{ livraison.heure_depart|date:"H:i" }}
+      </div>
+      {% endif %}
+    </div>
+    <a href="tel:{{ livraison.livreur.telephone }}"
+       style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:white;border-radius:10px;padding:10px 16px;text-decoration:none;font-size:13px;font-weight:700;">
+      <i class="fa fa-phone"></i> Appeler
+    </a>
+  </div>
+  {% else %}
+  <div class="alert alert-info mb-4">
+    <i class="fa fa-clock me-2"></i>Un livreur sera assigné à votre commande très bientôt.
+  </div>
+  {% endif %}
+
+  <!-- Adresse livraison -->
+  <div class="card-custom p-4 mb-4">
+    <h6 class="fw-800 mb-2"><i class="fa fa-map-pin me-2" style="color:var(--vert);"></i>Adresse de livraison</h6>
+    <p class="mb-0" style="color:var(--muted);">{{ commande.adresse_livraison }}</p>
+  </div>
+
+  <a href="{% url 'detail_commande' commande.pk %}" class="btn btn-outline-vert fw-700">
+    <i class="fa fa-arrow-left me-2"></i>Retour aux détails
+  </a>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // Initialiser la carte centrée sur Bamako
+  const map = L.map('map').setView([12.6392, -8.0029], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  // Icône livreur personnalisée
+  const iconLivreur = L.divIcon({
+    html: `<div style="background:#1aab5f;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;border:3px solid white;box-shadow:0 3px 12px rgba(0,0,0,0.3);">
+      <i class="fa fa-motorcycle"></i>
+    </div>`,
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    className: ''
+  });
+
+  let markerLivreur = null;
+  const commandeId = {{ commande.pk }};
+
+  function majPosition() {
+    fetch(`/livraison/api/position/${commandeId}/`)
+      .then(r => r.json())
+      .then(data => {
+        // Mettre à jour le badge statut
+        const badge = document.getElementById('badge-statut');
+        const texte = document.getElementById('statut-texte');
+        if (data.statut_display) texte.textContent = data.statut_display;
+
+        if (data.derniere_maj) {
+          document.getElementById('derniere-maj').textContent = 'Mise à jour : ' + data.derniere_maj;
+        }
+
+        // Mettre à jour la carte si position disponible
+        if (data.latitude && data.longitude) {
+          const pos = [data.latitude, data.longitude];
+          if (!markerLivreur) {
+            markerLivreur = L.marker(pos, { icon: iconLivreur })
+              .addTo(map)
+              .bindPopup(`<b>${data.livreur_nom || 'Livreur'}</b><br>${data.livreur_tel || ''}`);
+            map.setView(pos, 15);
+          } else {
+            markerLivreur.setLatLng(pos);
+          }
+        }
+
+        // Si livraison terminée, recharger la page
+        if (data.commande_statut === 'livree') {
+          setTimeout(() => location.reload(), 2000);
+        }
+      })
+      .catch(e => console.log('Erreur position:', e));
+  }
+
+  // Appeler toutes les 5 secondes
+  majPosition();
+  setInterval(majPosition, 5000);
+</script>
+{% endblock %}

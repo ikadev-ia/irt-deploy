@@ -1,0 +1,621 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}E-Pharma — Votre pharmacie en un clic{% endblock %}</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="{% static 'manifest.json' %}">
+  <meta name="theme-color" content="#1aab5f">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="E-Pharma">
+  <link rel="apple-touch-icon" href="{% static 'img/icon-192x192.png' %}">
+  <link rel="apple-touch-icon" sizes="152x152" href="{% static 'img/icon-152x152.png' %}">
+  <link rel="apple-touch-icon" sizes="512x512" href="{% static 'img/icon-512x512.png' %}">
+  <meta name="description" content="E-Pharma — Commandez vos médicaments en ligne à Bamako. Votre pharmacie en un clic.">
+  <meta name="msapplication-TileImage" content="{% static 'img/icon-144x144.png' %}">
+  <meta name="msapplication-TileColor" content="#1aab5f">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" />
+  <style>
+    :root {
+      --vert:        #1aab5f;
+      --vert-dark:   #0d8a48;
+      --vert-light:  #e8f9f0;
+      --vert-xlight: #f0fdf6;
+      --bleu:        #1565c0;
+      --bleu-light:  #e8f0fe;
+      --gris:        #f5f7fa;
+      --texte:       #1a1a2e;
+      --muted:       #6c757d;
+      --radius:      16px;
+      --radius-sm:   10px;
+      --shadow:      0 4px 24px rgba(26,171,95,.13);
+      --shadow-sm:   0 2px 12px rgba(0,0,0,.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: var(--gris); color: var(--texte); }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: var(--vert); border-radius: 10px; }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      background: linear-gradient(90deg, var(--vert-dark), var(--vert));
+      color: #fff;
+      font-size: .8rem;
+      padding: 6px 0;
+    }
+    .top-bar a { color: rgba(255,255,255,.85); text-decoration: none; }
+    .top-bar a:hover { color: #fff; }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: #fff;
+      box-shadow: 0 2px 16px rgba(0,0,0,.07);
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .navbar-brand img { height: 52px; width: auto; object-fit: contain; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .brand-name {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 1.35rem;
+      background: linear-gradient(90deg, var(--bleu), var(--vert));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .brand-tagline { font-size: .65rem; color: var(--muted); font-weight: 600; letter-spacing: .5px; }
+
+    .nav-link {
+      font-weight: 700;
+      font-size: .9rem;
+      color: var(--texte) !important;
+      padding: 8px 14px !important;
+      border-radius: 10px;
+      transition: all .2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--vert) !important;
+      background: var(--vert-xlight);
+    }
+    .nav-link i { margin-right: 5px; }
+
+    /* ── BOUTONS ── */
+    .btn-vert {
+      background: linear-gradient(135deg, var(--vert), var(--vert-dark));
+      color: #fff !important;
+      border: none;
+      border-radius: 30px;
+      padding: 9px 24px;
+      font-weight: 800;
+      font-size: .88rem;
+      transition: all .25s;
+      box-shadow: 0 4px 14px rgba(26,171,95,.3);
+    }
+    .btn-vert:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26,171,95,.4);
+    }
+    .btn-outline-vert {
+      background: transparent;
+      color: var(--vert) !important;
+      border: 2px solid var(--vert);
+      border-radius: 30px;
+      padding: 7px 22px;
+      font-weight: 700;
+      font-size: .88rem;
+      transition: all .25s;
+    }
+    .btn-outline-vert:hover {
+      background: var(--vert);
+      color: #fff !important;
+      transform: translateY(-2px);
+    }
+
+    /* ── PANIER ── */
+    .cart-icon-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--vert-xlight);
+      color: var(--vert);
+      transition: all .2s;
+      text-decoration: none;
+    }
+    .cart-icon-wrap:hover { background: var(--vert); color: #fff; }
+    .badge-panier {
+      background: #ff4444;
+      color: #fff;
+      border-radius: 50%;
+      font-size: .6rem;
+      font-weight: 800;
+      min-width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      border: 2px solid #fff;
+    }
+
+    /* ── DROPDOWN UTILISATEUR ── */
+    .user-dropdown .btn {
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: .88rem;
+    }
+    .dropdown-menu {
+      border: none;
+      box-shadow: 0 8px 30px rgba(0,0,0,.12);
+      border-radius: var(--radius);
+      padding: 8px;
+      min-width: 200px;
+    }
+    .dropdown-item {
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .88rem;
+      padding: 9px 14px;
+      transition: all .15s;
+    }
+    .dropdown-item:hover { background: var(--vert-xlight); color: var(--vert); }
+
+    /* ── CARDS MÉDICAMENT ── */
+    .card-med {
+      border: none;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      transition: all .3s;
+      overflow: hidden;
+      background: #fff;
+    }
+    .card-med:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow);
+    }
+    .card-med .img-wrap {
+      background: var(--vert-xlight);
+      padding: 16px;
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-med img { max-height: 140px; object-fit: contain; }
+    .badge-ordonnance {
+      background: #fff3cd;
+      color: #856404;
+      font-size: .68rem;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-weight: 700;
+    }
+    .prix-tag { color: var(--vert); font-size: 1.15rem; font-weight: 800; }
+
+    /* ── ALERTS ── */
+    .alert {
+      border-radius: var(--radius);
+      border: none;
+      font-weight: 600;
+      font-size: .9rem;
+    }
+
+    /* ── FORMS ── */
+    .form-control, .form-select {
+      border-radius: var(--radius-sm);
+      border: 1.5px solid #e2e8f0;
+      padding: 11px 14px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      font-size: .9rem;
+      transition: all .2s;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--vert);
+      box-shadow: 0 0 0 3px rgba(26,171,95,.12);
+    }
+    .form-label { font-weight: 700; font-size: .88rem; margin-bottom: 6px; }
+
+    /* ── HERO BANNER ── */
+    .hero-banner {
+      background: linear-gradient(135deg, #0d5c30 0%, #0d8a48 40%, #1aab5f 70%, #43d98e 100%);
+      border-radius: 24px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255,255,255,.05);
+      border-radius: 50%;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: linear-gradient(120deg, var(--vert-dark), var(--vert));
+      color: #fff;
+      border-radius: 0 0 30px 30px;
+      padding: 40px 0 30px;
+      margin-bottom: 30px;
+    }
+
+    /* ── STATUT BADGES ── */
+    .statut-pill { border-radius: 30px; padding: 5px 14px; font-size: .78rem; font-weight: 700; }
+
+    /* ── STEPS SUIVI ── */
+    .steps-track { display: flex; align-items: center; }
+    .step { flex: 1; text-align: center; position: relative; }
+    .step-circle {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 6px;
+      font-size: .85rem; font-weight: 700;
+      border: 2px solid #ddd;
+      background: #fff; color: #aaa;
+      transition: all .3s;
+    }
+    .step.done .step-circle { background: var(--vert); border-color: var(--vert); color: #fff; box-shadow: 0 4px 12px rgba(26,171,95,.3); }
+    .step.active .step-circle { border-color: var(--vert); color: var(--vert); background: var(--vert-light); }
+    .step-label { font-size: .72rem; font-weight: 700; color: #aaa; }
+    .step.done .step-label, .step.active .step-label { color: var(--vert); }
+    .step::before { content: ''; position: absolute; top: 19px; left: -50%; width: 100%; height: 2px; background: #e0e0e0; z-index: -1; }
+    .step:first-child::before { display: none; }
+    .step.done::before { background: var(--vert); }
+
+    /* ── SECTION TITRES ── */
+    .section-title { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--texte); }
+    .section-subtitle { color: var(--muted); font-size: .9rem; font-weight: 600; }
+
+    /* ── CARDS GÉNÉRALES ── */
+    .card-custom { border: none; border-radius: var(--radius); box-shadow: var(--shadow-sm); background: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: linear-gradient(180deg, #0f172a, #1a1a2e);
+      color: #ccc;
+      padding: 60px 0 20px;
+      margin-top: 60px;
+    }
+    footer h6 { color: #fff; font-family: 'Poppins', sans-serif; font-weight: 700; letter-spacing: .5px; margin-bottom: 16px; }
+    footer a { color: #9ca3af; text-decoration: none; transition: color .2s; }
+    footer a:hover { color: var(--vert); }
+    footer li { margin-bottom: 8px; font-size: .88rem; }
+    .footer-logo { height: 55px; width: auto; filter: brightness(0) invert(1); }
+    .footer-brand-name {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--vert);
+    }
+    .footer-divider { border-color: #2d3748; margin: 30px 0 20px; }
+    .social-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: rgba(255,255,255,.07);
+      display: inline-flex; align-items: center; justify-content: center;
+      color: #9ca3af;
+      text-decoration: none;
+      transition: all .2s;
+      font-size: .95rem;
+    }
+    .social-icon:hover { background: var(--vert); color: #fff; transform: translateY(-3px); }
+    .payment-badge {
+      background: rgba(255,255,255,.08);
+      color: #ccc;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: .78rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ── PWA BANNER ── */
+    #pwa-banner {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: linear-gradient(135deg, #0d8a48, #1aab5f);
+      color: white;
+      padding: 14px 20px;
+      box-shadow: 0 -4px 24px rgba(0,0,0,.2);
+      align-items: center;
+      gap: 14px;
+      animation: slideUp .4s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    #pwa-install-btn {
+      background: white; color: #0d8a48; border: none;
+      padding: 9px 20px; border-radius: 20px;
+      font-weight: 800; font-size: .85rem; cursor: pointer;
+      flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
+    #pwa-close-btn {
+      background: transparent; border: none; color: white;
+      font-size: 1.2rem; cursor: pointer; padding: 4px 8px; flex-shrink: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .top-bar .d-md-flex { display: none !important; }
+      .brand-tagline { display: none; }
+      .navbar-brand img { height: 44px; }
+    }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ── TOP BAR ── -->
+<div class="top-bar d-none d-md-block">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="d-flex gap-4">
+      <span><i class="fa fa-phone me-1"></i>+223 82 53 41 83</span>
+      <span><i class="fa fa-envelope me-1"></i>epharma473@gmail.com</span>
+    </div>
+    <div class="d-flex gap-3">
+      <a href="https://www.facebook.com/share/1DDxz4tjv7/" target="_blank"><i class="fab fa-facebook me-1"></i>Facebook</a>
+      <a href="https://www.instagram.com/ephar_ma" target="_blank"><i class="fab fa-instagram me-1"></i>Instagram</a>
+      <span><i class="fa fa-clock me-1"></i>24h/24 — 7j/7</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'accueil' %}">
+      <img src="{% static 'img/logo.png' %}" alt="E-Pharma"
+           onerror="this.onerror=null; this.style.display='none';">
+      <div class="brand-text">
+        <span class="brand-name">E-Pharma</span>
+        <span class="brand-tagline">Votre pharmacie en un clic</span>
+      </div>
+    </a>
+
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav mx-auto gap-1 my-2 my-lg-0">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'accueil' %}active{% endif %}" href="{% url 'accueil' %}">
+            <i class="fa fa-home"></i>Accueil
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'medicaments' %}active{% endif %}" href="{% url 'medicaments' %}">
+            <i class="fa fa-pills"></i>Médicaments
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'pharmacies' %}active{% endif %}" href="{% url 'pharmacies' %}">
+            <i class="fa fa-hospital"></i>Pharmacies
+          </a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'mes_commandes' %}active{% endif %}" href="{% url 'mes_commandes' %}">
+            <i class="fa fa-box"></i>Mes commandes
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+
+      <div class="d-flex align-items-center gap-3">
+        <!-- Panier -->
+        <a href="{% url 'panier' %}" class="cart-icon-wrap">
+          <i class="fa fa-shopping-cart"></i>
+          {% if panier_count %}
+          <span class="badge-panier">{{ panier_count }}</span>
+          {% endif %}
+        </a>
+
+        {% if user.is_authenticated %}
+          <div class="dropdown user-dropdown">
+            <button class="btn btn-vert dropdown-toggle" data-bs-toggle="dropdown">
+              <i class="fa fa-user me-1"></i>{{ user.first_name|default:user.username }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <div class="px-3 py-2 mb-1" style="border-bottom:1px solid #f0f0f0">
+                  <div style="font-weight:800; font-size:.9rem;">{{ user.first_name|default:user.username }}</div>
+                  <div style="font-size:.78rem; color:var(--muted);">{{ user.email }}</div>
+                </div>
+              </li>
+              <li><a class="dropdown-item" href="{% url 'profil' %}"><i class="fa fa-user-circle me-2" style="color:var(--vert)"></i>Mon profil</a></li>
+              <li><a class="dropdown-item" href="{% url 'mes_commandes' %}"><i class="fa fa-box me-2" style="color:var(--bleu)"></i>Mes commandes</a></li>
+              {% if request.user.role == 'livreur' %}
+              <li><a class="dropdown-item fw-700" href="{% url 'tableau_livreur' %}"><i class="fa fa-motorcycle me-2" style="color:var(--vert)"></i>Mon tableau livreur</a></li>
+              {% endif %}
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{% url 'deconnexion' %}"><i class="fa fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+            </ul>
+          </div>
+        {% else %}
+          <a href="{% url 'connexion' %}" class="btn-outline-vert btn">Connexion</a>
+          <a href="{% url 'inscription' %}" class="btn btn-vert">S'inscrire</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── MESSAGES ── -->
+{% if messages %}
+<div class="container mt-3">
+  {% for msg in messages %}
+  <div class="alert alert-{{ msg.tags|default:'info' }} alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
+    {% if msg.tags == 'success' %}<i class="fa fa-check-circle"></i>
+    {% elif msg.tags == 'danger' or msg.tags == 'error' %}<i class="fa fa-exclamation-circle"></i>
+    {% else %}<i class="fa fa-info-circle"></i>{% endif %}
+    <span>{{ msg }}</span>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- ── CONTENU ── -->
+{% block content %}{% endblock %}
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <div class="row gy-4">
+      <!-- Brand -->
+      <div class="col-md-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <img src="{% static 'img/logo.png' %}" alt="E-Pharma" class="footer-logo"
+               onerror="this.onerror=null; this.style.display='none';">
+          <span class="footer-brand-name">E-Pharma</span>
+        </div>
+        <p style="font-size:.88rem; color:#9ca3af; line-height:1.7;">
+          Commandez vos médicaments en ligne et faites-vous livrer rapidement à domicile au Mali.
+        </p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="https://www.facebook.com/share/1DDxz4tjv7/" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/ephar_ma" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.tiktok.com/@epharma8" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>
+          <a href="mailto:epharma473@gmail.com" class="social-icon"><i class="fa fa-envelope"></i></a>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="col-md-2 col-6">
+        <h6>Navigation</h6>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'accueil' %}"><i class="fa fa-angle-right me-1" style="color:var(--vert)"></i>Accueil</a></li>
+          <li><a href="{% url 'medicaments' %}"><i class="fa fa-angle-right me-1" style="color:var(--vert)"></i>Médicaments</a></li>
+          <li><a href="{% url 'pharmacies' %}"><i class="fa fa-angle-right me-1" style="color:var(--vert)"></i>Pharmacies</a></li>
+          <li><a href="{% url 'panier' %}"><i class="fa fa-angle-right me-1" style="color:var(--vert)"></i>Mon panier</a></li>
+        </ul>
+      </div>
+
+      <!-- Paiements -->
+      <div class="col-md-3 col-6">
+        <h6>Paiements acceptés</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="payment-badge"><i class="fab fa-cc-visa"></i> Visa</span>
+          <span class="payment-badge" style="color:#ff6600"><i class="fa fa-mobile-alt"></i> Orange Money</span>
+          <span class="payment-badge" style="color:#1e90ff"><i class="fa fa-wave-square"></i> Wave</span>
+          <span class="payment-badge"><i class="fa fa-money-bill-wave"></i> Espèces</span>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="col-md-3">
+        <h6>Contact</h6>
+        <ul class="list-unstyled">
+          <li style="margin-bottom:10px">
+            <a href="tel:+22382534183" style="font-size:.88rem">
+              <i class="fa fa-phone me-2" style="color:var(--vert)"></i>+223 82 53 41 83
+            </a>
+          </li>
+          <li style="margin-bottom:10px">
+            <a href="mailto:epharma473@gmail.com" style="font-size:.88rem">
+              <i class="fa fa-envelope me-2" style="color:var(--vert)"></i>epharma473@gmail.com
+            </a>
+          </li>
+          <li style="font-size:.88rem; color:#9ca3af">
+            <i class="fa fa-clock me-2" style="color:var(--vert)"></i>Disponible 24h/24 — 7j/7
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="footer-divider">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <p class="mb-0" style="font-size:.82rem; color:#6b7280;">© 2026 E-Pharma Mali. Tous droits réservés.</p>
+      <p class="mb-0" style="font-size:.82rem; color:#6b7280;">Fait avec <i class="fa fa-heart" style="color:var(--vert)"></i> à Bamako, Mali</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+
+<!-- ── PWA BANNER ── -->
+<div id="pwa-banner">
+  <img src="{% static 'img/icon-72x72.png' %}" alt="E-Pharma" style="width:48px; height:48px; border-radius:12px; flex-shrink:0;">
+  <div style="flex:1">
+    <div style="font-weight:800; font-size:.95rem;">📱 Installer E-Pharma</div>
+    <div style="font-size:.78rem; opacity:.85;">Accédez à votre pharmacie depuis l'écran d'accueil !</div>
+  </div>
+  <button id="pwa-install-btn">Installer</button>
+  <button id="pwa-close-btn">✕</button>
+</div>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register("{% static 'js/sw.js' %}")
+        .then(reg => console.log('[E-Pharma] SW OK :', reg.scope))
+        .catch(err => console.warn('[E-Pharma] SW erreur :', err));
+    });
+  }
+
+  let deferredPrompt;
+  const banner = document.getElementById('pwa-banner');
+  const installBtn = document.getElementById('pwa-install-btn');
+  const closeBtn = document.getElementById('pwa-close-btn');
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    setTimeout(() => {
+      if (!localStorage.getItem('epharma-pwa-dismissed')) {
+        banner.style.display = 'flex';
+      }
+    }, 3000);
+  });
+
+  installBtn && installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      banner.style.display = 'none';
+    }
+  });
+
+  closeBtn && closeBtn.addEventListener('click', () => {
+    banner.style.display = 'none';
+    localStorage.setItem('epharma-pwa-dismissed', '1');
+  });
+
+  window.addEventListener('appinstalled', () => {
+    banner.style.display = 'none';
+  });
+</script>
+</body>
+</html>

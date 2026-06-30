@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  epharma-app:
+    build: .
+    container_name: epharma-web
+    depends_on:
+      - epharma-db
+    environment:
+      - DATABASE_URL=postgres://epharma_user:epharma_password@epharma-db:5432/epharma_db
+      - DJANGO_SETTINGS_MODULE=epharma.settings
+      - SECRET_KEY=django-insecure-epharma-change-this-in-production-xyz123
+      - DEBUG=True
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.epharma.rule=Host(`epharma-mali.com`) || Host(`www.epharma-mali.com`)"
+      - "traefik.http.routers.epharma.entrypoints=web"
+      - "traefik.http.routers.epharma.entrypoints=websecure"
+      - "traefik.http.services.epharma.loadbalancer.server.port=8000"
+    networks:
+      - traefik-net
+      - epharma-net
+
+  epharma-db:
+    image: postgres:15
+    container_name: epharma-db
+    environment:
+      POSTGRES_DB: epharma_db
+      POSTGRES_USER: epharma_user
+      POSTGRES_PASSWORD: epharma_password
+    volumes:
+      - epharma-db-data:/var/lib/postgresql/data
+    networks:
+      - epharma-net
+
+networks:
+  traefik-net:
+    external: true
+  epharma-net:
+
+volumes:
+  epharma-db-data:

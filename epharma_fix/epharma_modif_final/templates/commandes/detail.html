@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}Commande #{{ commande.numero }} — E-Pharma{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+      <h3 class="fw-800 mb-1"><i class="fa fa-receipt me-2" style="color:var(--vert)"></i>Commande #{{ commande.numero }}</h3>
+      <small class="text-muted">Passée le {{ commande.date_creation|date:"d M Y à H:i" }}</small>
+    </div>
+    <span class="badge statut-pill bg-{{ commande.statut_badge }} px-4 py-2" style="font-size:.9rem">
+      {{ commande.get_statut_display }}
+    </span>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-8">
+
+      <!-- PROGRESSION -->
+      {% if commande.statut != 'annulee' %}
+      <div class="card border-0 rounded-4 p-4 mb-4" style="box-shadow:0 2px 10px rgba(0,0,0,.06)">
+        <h5 class="fw-800 mb-3"><i class="fa fa-route me-2" style="color:var(--vert)"></i>Suivi de livraison</h5>
+        <div class="steps-track">
+          <div class="step {% if commande.progression >= 1 %}done{% endif %}">
+            <div class="step-circle"><i class="fa fa-check"></i></div>
+            <div class="step-label">Confirmée</div>
+          </div>
+          <div class="step {% if commande.progression >= 2 %}done{% elif commande.progression == 1 %}active{% endif %}">
+            <div class="step-circle"><i class="fa fa-box-open"></i></div>
+            <div class="step-label">Préparée</div>
+          </div>
+          <div class="step {% if commande.progression >= 3 %}done{% elif commande.progression == 2 %}active{% endif %}">
+            <div class="step-circle"><i class="fa fa-motorcycle"></i></div>
+            <div class="step-label">En route</div>
+          </div>
+          <div class="step {% if commande.progression >= 4 %}done{% elif commande.progression == 3 %}active{% endif %}">
+            <div class="step-circle"><i class="fa fa-home"></i></div>
+            <div class="step-label">Livrée</div>
+          </div>
+        </div>
+        {% if commande.livraison and commande.livraison.livreur %}
+        <div class="mt-3 d-flex align-items-center gap-3 p-3 rounded-3" style="background:var(--vert-light)">
+          <i class="fa fa-user-circle fa-2x" style="color:var(--vert)"></i>
+          <div>
+            <div class="fw-700">Livreur : {{ commande.livraison.livreur.get_full_name }}</div>
+            <div class="text-muted small">{{ commande.livraison.livreur.telephone }}</div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <!-- ARTICLES -->
+      <div class="card border-0 rounded-4 p-4 mb-4" style="box-shadow:0 2px 10px rgba(0,0,0,.06)">
+        <h5 class="fw-800 mb-3"><i class="fa fa-pills me-2" style="color:var(--vert)"></i>Articles commandés</h5>
+        {% for ligne in commande.lignes.all %}
+        <div class="d-flex align-items-center gap-3 py-2 border-bottom">
+          <div style="width:48px;height:48px;background:var(--vert-light);border-radius:10px;display:flex;align-items:center;justify-content:center">
+            <i class="fa fa-pills" style="color:var(--vert)"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="fw-700">{{ ligne.medicament.nom }}</div>
+            <div class="text-muted small">{{ ligne.prix_unitaire|floatformat:0 }} FCFA × {{ ligne.quantite }}</div>
+          </div>
+          <div class="fw-800 prix-tag">{{ ligne.sous_total|floatformat:0 }} FCFA</div>
+        </div>
+        {% endfor %}
+        <div class="d-flex justify-content-between fw-900 mt-3 pt-2">
+          <span>Total</span>
+          <span class="prix-tag" style="font-size:1.2rem">{{ commande.total|floatformat:0 }} FCFA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <!-- INFOS LIVRAISON -->
+      <div class="card border-0 rounded-4 p-4 mb-3" style="box-shadow:0 2px 10px rgba(0,0,0,.06)">
+        <h5 class="fw-800 mb-3"><i class="fa fa-map-marker-alt me-2" style="color:var(--vert)"></i>Livraison</h5>
+        <p class="mb-1"><span class="fw-700">Adresse :</span> {{ commande.adresse_livraison }}</p>
+        <p class="mb-1"><span class="fw-700">Tél :</span> {{ commande.telephone }}</p>
+        <p class="mb-0"><span class="fw-700">Paiement :</span> {{ commande.get_mode_paiement_display }}</p>
+      </div>
+
+      {% if commande.notes %}
+      <div class="card border-0 rounded-4 p-4 mb-3" style="box-shadow:0 2px 10px rgba(0,0,0,.06)">
+        <h6 class="fw-800 mb-2"><i class="fa fa-comment me-2" style="color:var(--vert)"></i>Notes</h6>
+        <p class="text-muted mb-0">{{ commande.notes }}</p>
+      </div>
+      {% endif %}
+
+      <!-- Boutons reçu -->
+      <div class="d-flex gap-2 mb-3">
+        <a href="{% url 'recu_web' commande.pk %}" class="btn btn-outline-vert flex-fill fw-700">
+          <i class="fa fa-receipt me-2"></i>Voir le reçu
+        </a>
+        <a href="{% url 'recu_pdf' commande.pk %}" class="btn btn-vert flex-fill fw-700">
+          <i class="fa fa-file-pdf me-2"></i>Télécharger PDF
+        </a>
+      </div>
+
+      <div class="d-grid gap-2">
+        {% if commande.statut in 'en_route,preparee,confirmee' %}
+        <a href="{% url 'suivi_livraison' commande.pk %}" class="btn btn-vert fw-700 w-100 mb-2">
+          <i class="fa fa-motorcycle me-2"></i>Suivre ma livraison en direct
+        </a>
+        {% endif %}
+        <a href="{% url 'mes_commandes' %}" class="btn btn-outline-secondary fw-700">← Retour aux commandes</a>
+        {% if commande.statut in 'en_attente,confirmee' %}
+        <a href="{% url 'annuler_commande' commande.pk %}" class="btn btn-outline-danger fw-700"
+           onclick="return confirm('Annuler cette commande ?')">
+          <i class="fa fa-times me-1"></i>Annuler la commande
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

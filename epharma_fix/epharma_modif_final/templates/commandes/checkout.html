@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Passer la commande — E-Pharma{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h2 class="fw-800 mb-1"><i class="fa fa-lock me-2"></i>Finaliser la commande</h2>
+    <p class="mb-0 opacity-75">Vérifiez vos informations et validez votre commande</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row g-4">
+
+      <!-- ── COLONNE GAUCHE : formulaire ── -->
+      <div class="col-lg-7">
+
+        <!-- Adresse de livraison -->
+        <div class="card-custom p-4 mb-4">
+          <h5 class="fw-800 mb-3"><i class="fa fa-map-marker-alt me-2" style="color:var(--vert)"></i>Adresse de livraison</h5>
+          <div class="mb-3">
+            <label class="form-label">Adresse complète *</label>
+            <textarea name="adresse_livraison" class="form-control" rows="3" required
+              placeholder="Ex: Quartier Badalabougou, Rue 42, Porte 15, Bamako">{{ user.adresse }}</textarea>
+          </div>
+          <div class="mb-0">
+            <label class="form-label">Téléphone de contact *</label>
+            <div class="input-group">
+              <span class="input-group-text" style="border-radius:10px 0 0 10px; border:1.5px solid #e2e8f0; background:#f8f9fa;">
+                <i class="fa fa-phone" style="color:var(--vert)"></i>
+              </span>
+              <input type="tel" name="telephone" class="form-control" required
+                style="border-radius:0 10px 10px 0"
+                placeholder="+223 XX XX XX XX"
+                value="{{ user.telephone }}">
+            </div>
+          </div>
+        </div>
+
+        <!-- Mode de paiement -->
+        <div class="card-custom p-4 mb-4">
+          <h5 class="fw-800 mb-3"><i class="fa fa-credit-card me-2" style="color:var(--vert)"></i>Mode de paiement</h5>
+          <div class="row g-3">
+
+            <div class="col-6">
+              <label class="paiement-card" style="cursor:pointer">
+                <input type="radio" name="mode_paiement" value="orange_money" class="d-none paiement-radio">
+                <div class="paiement-box p-3 border rounded-3 text-center" style="border-color:#e2e8f0 !important; transition:all .2s">
+                  <div style="font-size:1.8rem; margin-bottom:6px">🟠</div>
+                  <div style="font-weight:800; font-size:.85rem; color:#ff6600">Orange Money</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="col-6">
+              <label class="paiement-card" style="cursor:pointer">
+                <input type="radio" name="mode_paiement" value="wave" class="d-none paiement-radio">
+                <div class="paiement-box p-3 border rounded-3 text-center" style="border-color:#e2e8f0 !important; transition:all .2s">
+                  <div style="font-size:1.8rem; margin-bottom:6px">🔵</div>
+                  <div style="font-weight:800; font-size:.85rem; color:#1e90ff">Wave</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="col-6">
+              <label class="paiement-card" style="cursor:pointer">
+                <input type="radio" name="mode_paiement" value="carte" class="d-none paiement-radio">
+                <div class="paiement-box p-3 border rounded-3 text-center" style="border-color:#e2e8f0 !important; transition:all .2s">
+                  <div style="font-size:1.8rem; margin-bottom:6px">💳</div>
+                  <div style="font-weight:800; font-size:.85rem; color:var(--bleu)">Carte bancaire</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="col-6">
+              <label class="paiement-card" style="cursor:pointer">
+                <input type="radio" name="mode_paiement" value="especes" class="d-none paiement-radio" checked>
+                <div class="paiement-box p-3 border rounded-3 text-center paiement-selected" style="transition:all .2s">
+                  <div style="font-size:1.8rem; margin-bottom:6px">💵</div>
+                  <div style="font-weight:800; font-size:.85rem; color:var(--vert)">Espèces à la livraison</div>
+                </div>
+              </label>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Ordonnance + notes -->
+        <div class="card-custom p-4">
+          <h5 class="fw-800 mb-3"><i class="fa fa-notes-medical me-2" style="color:var(--vert)"></i>Informations complémentaires</h5>
+          <div class="mb-3">
+            <label class="form-label">Ordonnance médicale <span class="text-muted fw-normal">(si nécessaire)</span></label>
+            <input type="file" name="ordonnance" class="form-control" accept="image/*,.pdf">
+            <div class="form-text"><i class="fa fa-info-circle me-1" style="color:var(--vert)"></i>Formats acceptés : JPG, PNG, PDF</div>
+          </div>
+          <div class="mb-0">
+            <label class="form-label">Notes pour le livreur <span class="text-muted fw-normal">(optionnel)</span></label>
+            <textarea name="notes" class="form-control" rows="2"
+              placeholder="Ex: Sonnez au portail bleu, 2ème étage..."></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── COLONNE DROITE : récapitulatif ── -->
+      <div class="col-lg-5">
+        <div class="card-custom p-4 sticky-top" style="top:90px">
+          <h5 class="fw-800 mb-3"><i class="fa fa-shopping-bag me-2" style="color:var(--vert)"></i>Récapitulatif</h5>
+
+          <!-- Liste des articles -->
+          <div class="mb-3" style="max-height:300px; overflow-y:auto">
+            {% for item in items %}
+            <div class="d-flex align-items-center gap-3 py-2" style="border-bottom:1px solid #f0f0f0">
+              {% if item.medicament.image %}
+              <img src="{{ item.medicament.image.url }}" alt="{{ item.medicament.nom }}"
+                style="width:50px; height:50px; object-fit:contain; background:var(--vert-xlight); border-radius:8px; padding:4px; flex-shrink:0">
+              {% else %}
+              <div style="width:50px; height:50px; background:var(--vert-xlight); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0">
+                <i class="fa fa-pills" style="color:var(--vert)"></i>
+              </div>
+              {% endif %}
+              <div style="flex:1; min-width:0">
+                <div style="font-weight:700; font-size:.88rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ item.medicament.nom }}</div>
+                <div style="font-size:.78rem; color:var(--muted)">Qté : {{ item.quantite }}</div>
+              </div>
+              <div style="font-weight:800; font-size:.88rem; color:var(--vert); flex-shrink:0">
+                {{ item.sous_total|floatformat:0 }} FCFA
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- Totaux -->
+          <div class="py-2" style="border-top:2px solid #f0f0f0">
+            <div class="d-flex justify-content-between mb-2" style="font-size:.9rem">
+              <span style="color:var(--muted)">Sous-total</span>
+              <span style="font-weight:700">{{ total|floatformat:0 }} FCFA</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2" style="font-size:.9rem">
+              <span style="color:var(--muted)">Frais de livraison</span>
+              <span style="font-weight:700; color:var(--vert)">Gratuit 🎉</span>
+            </div>
+            <div class="d-flex justify-content-between mt-3 pt-2" style="border-top:2px dashed #e0e0e0">
+              <span style="font-weight:800; font-size:1rem">Total</span>
+              <span style="font-weight:900; font-size:1.2rem; color:var(--vert)">{{ total|floatformat:0 }} FCFA</span>
+            </div>
+          </div>
+
+          <!-- Bouton commander -->
+          <button type="submit" class="btn btn-vert w-100 mt-4 py-3" style="font-size:1rem; border-radius:14px">
+            <i class="fa fa-check-circle me-2"></i>Confirmer la commande
+          </button>
+
+          <!-- Sécurité -->
+          <div class="text-center mt-3" style="font-size:.78rem; color:var(--muted)">
+            <i class="fa fa-shield-alt me-1" style="color:var(--vert)"></i>
+            Paiement sécurisé — Vos données sont protégées
+          </div>
+
+          <!-- Retour panier -->
+          <a href="{% url 'panier' %}" class="btn btn-outline-secondary w-100 mt-2" style="border-radius:14px; font-weight:700; font-size:.88rem">
+            <i class="fa fa-arrow-left me-2"></i>Retour au panier
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+<style>
+  .paiement-selected {
+    border-color: var(--vert) !important;
+    background: var(--vert-xlight);
+  }
+  .paiement-box:hover {
+    border-color: var(--vert) !important;
+    background: var(--vert-xlight);
+  }
+</style>
+
+<script>
+  // Sélection mode paiement
+  document.querySelectorAll('.paiement-radio').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.querySelectorAll('.paiement-box').forEach(box => {
+        box.classList.remove('paiement-selected');
+        box.style.borderColor = '#e2e8f0';
+      });
+      if (radio.checked) {
+        radio.closest('label').querySelector('.paiement-box').classList.add('paiement-selected');
+      }
+    });
+  });
+</script>
+{% endblock %}

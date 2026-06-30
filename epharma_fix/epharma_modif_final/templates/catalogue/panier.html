@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Mon panier — E-Pharma{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h3 class="fw-800 mb-4"><i class="fa fa-shopping-cart me-2" style="color:var(--vert)"></i>Mon panier</h3>
+
+  {% if items %}
+  <div class="row g-4">
+    <div class="col-md-8">
+      {% for item in items %}
+      <div class="card border-0 rounded-4 mb-3" style="box-shadow:0 2px 10px rgba(0,0,0,.06)">
+        <div class="card-body d-flex gap-3 align-items-center">
+          {% if item.medicament.image %}
+          <img src="{{ item.medicament.image.url }}" style="width:70px; height:70px; object-fit:contain; background:var(--vert-light); border-radius:10px; padding:6px" />
+          {% else %}
+          <div style="width:70px; height:70px; background:var(--vert-light); border-radius:10px; display:flex;align-items:center;justify-content:center">
+            <i class="fa fa-pills fa-2x" style="color:var(--vert);opacity:.4"></i>
+          </div>
+          {% endif %}
+          <div class="flex-grow-1">
+            <h6 class="fw-800 mb-1">{{ item.medicament.nom }}</h6>
+            <span class="text-muted" style="font-size:.85rem">{{ item.medicament.prix|floatformat:0 }} FCFA / unité</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <form method="post" action="{% url 'modifier_panier' item.pk %}">
+              {% csrf_token %}
+              <button name="action" value="diminuer" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:32px;height:32px;padding:0">−</button>
+            </form>
+            <span class="fw-800" style="min-width:24px; text-align:center">{{ item.quantite }}</span>
+            <form method="post" action="{% url 'modifier_panier' item.pk %}">
+              {% csrf_token %}
+              <button name="action" value="augmenter" class="btn btn-sm btn-vert rounded-circle" style="width:32px;height:32px;padding:0">+</button>
+            </form>
+          </div>
+          <div class="text-end" style="min-width:90px">
+            <div class="prix-tag fw-800">{{ item.sous_total|floatformat:0 }} FCFA</div>
+            <form method="post" action="{% url 'modifier_panier' item.pk %}" class="mt-1">
+              {% csrf_token %}
+              <button name="action" value="supprimer" class="btn btn-sm text-danger border-0 p-0">
+                <i class="fa fa-trash"></i> Retirer
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-0 rounded-4 p-4" style="box-shadow:0 2px 12px rgba(0,0,0,.08)">
+        <h5 class="fw-800 mb-3">Récapitulatif</h5>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Sous-total</span>
+          <span class="fw-700">{{ total|floatformat:0 }} FCFA</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Livraison</span>
+          <span class="text-success fw-700">Gratuite</span>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-between mb-4">
+          <span class="fw-800">Total</span>
+          <span class="prix-tag fw-900" style="font-size:1.3rem">{{ total|floatformat:0 }} FCFA</span>
+        </div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'checkout' %}" class="btn btn-vert w-100 fw-700 py-3" style="font-size:1rem; border-radius:12px">
+          <i class="fa fa-lock me-2"></i>Passer la commande
+        </a>
+        {% else %}
+        <a href="{% url 'connexion' %}?next={% url 'checkout' %}" class="btn btn-vert w-100 fw-700 py-3">
+          <i class="fa fa-sign-in-alt me-2"></i>Connectez-vous pour commander
+        </a>
+        {% endif %}
+        <a href="{% url 'medicaments' %}" class="btn btn-outline-secondary w-100 mt-2">← Continuer les achats</a>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="text-center py-5">
+    <i class="fa fa-shopping-cart fa-5x text-muted mb-3 d-block" style="opacity:.2"></i>
+    <h4 class="text-muted fw-700">Votre panier est vide</h4>
+    <p class="text-muted">Ajoutez des médicaments depuis notre catalogue</p>
+    <a href="{% url 'medicaments' %}" class="btn btn-vert px-5 mt-2">Voir les médicaments</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% block title %}Mon tableau de bord — E-Pharma Livreur{% endblock %}
+
+{% block extra_css %}
+<style>
+  #map-livreur { height: 280px; border-radius: 14px; overflow: hidden; }
+  .livraison-card {
+    background: white; border-radius: 14px;
+    border: 1.5px solid #eef0f2;
+    padding: 20px; margin-bottom: 16px;
+    transition: all 0.2s;
+  }
+  .livraison-card:hover { border-color: var(--vert); box-shadow: 0 4px 16px rgba(26,171,95,0.1); }
+  .btn-statut {
+    border: none; border-radius: 10px;
+    padding: 10px 20px; font-weight: 700;
+    font-size: 14px; cursor: pointer;
+    transition: all 0.2s; font-family: 'Nunito', sans-serif;
+  }
+  .btn-en-route { background: var(--vert); color: white; }
+  .btn-en-route:hover { background: #0d6b3a; }
+  .btn-arrive { background: #ff9800; color: white; }
+  .btn-livree { background: #1565c0; color: white; }
+  .gps-indicator {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #e8f5e9; color: #1b5e20;
+    border-radius: 20px; padding: 6px 14px;
+    font-size: 12px; font-weight: 700;
+  }
+  .gps-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: ping 1s infinite; }
+  @keyframes ping { 0%, 100% { opacity:1; } 50% { opacity:0.4; } }
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h2 class="fw-800 mb-1"><i class="fa fa-motorcycle me-2"></i>Mon tableau de bord</h2>
+    <p class="mb-0 opacity-75">Bonjour {{ request.user.get_full_name }} — Livreur E-Pharma</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <div class="row g-4">
+
+    <!-- Colonne gauche : Ma position -->
+    <div class="col-lg-5">
+      <div class="card-custom p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="fw-800 mb-0"><i class="fa fa-map-marker-alt me-2" style="color:var(--vert);"></i>Ma position GPS</h6>
+          <div class="gps-indicator" id="gps-status">
+            <span class="gps-dot"></span> Localisation...
+          </div>
+        </div>
+        <div id="map-livreur"></div>
+        <div class="mt-3" style="font-size:12px; color:var(--muted);" id="coords-display">
+          En attente de votre position GPS...
+        </div>
+      </div>
+    </div>
+
+    <!-- Colonne droite : Livraisons actives -->
+    <div class="col-lg-7">
+      <h5 class="fw-800 mb-3">
+        Livraisons en cours
+        <span class="badge rounded-pill" style="background:var(--vert); font-size:13px;">{{ livraisons|length }}</span>
+      </h5>
+
+      {% if livraisons %}
+        {% for liv in livraisons %}
+        <div class="livraison-card">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <div class="fw-800" style="font-size:1rem;">Commande #{{ liv.commande.numero }}</div>
+              <div style="color:var(--muted); font-size:13px; margin-top:2px;">
+                <i class="fa fa-user me-1"></i>{{ liv.commande.client.get_full_name }}
+                · <i class="fa fa-phone me-1"></i>{{ liv.commande.telephone }}
+              </div>
+            </div>
+            <span class="badge rounded-pill bg-{{ liv.commande.statut_badge }}">
+              {{ liv.commande.get_statut_display }}
+            </span>
+          </div>
+
+          <div class="mb-3 p-3 rounded-3" style="background:#f8fafb; font-size:13px;">
+            <i class="fa fa-map-pin me-2" style="color:var(--vert);"></i>
+            <strong>Adresse :</strong> {{ liv.commande.adresse_livraison }}
+          </div>
+
+          <!-- Articles commandés -->
+          <div class="mb-3">
+            <div style="font-size:12px; font-weight:700; color:var(--muted); margin-bottom:6px;">ARTICLES</div>
+            {% for ligne in liv.commande.lignes.all %}
+            <div style="font-size:13px; padding:4px 0; border-bottom:1px solid #f0f0f0;">
+              <i class="fa fa-pills me-2" style="color:var(--vert); font-size:11px;"></i>
+              {{ ligne.medicament.nom }} × {{ ligne.quantite }}
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- Boutons changement statut -->
+          <form method="POST" action="{% url 'changer_statut' liv.pk %}">
+            {% csrf_token %}
+            <div class="d-flex gap-2 flex-wrap">
+              {% if liv.statut == 'assignee' %}
+              <button name="statut" value="en_route" class="btn-statut btn-en-route">
+                <i class="fa fa-play me-2"></i>Démarrer la livraison
+              </button>
+              {% elif liv.statut == 'en_route' %}
+              <button name="statut" value="arrive" class="btn-statut btn-arrive">
+                <i class="fa fa-map-marker-alt me-2"></i>Je suis arrivé
+              </button>
+              {% elif liv.statut == 'arrive' %}
+              <button name="statut" value="livree" class="btn-statut btn-livree"
+                onclick="return confirm('Confirmer la livraison ?')">
+                <i class="fa fa-check me-2"></i>Confirmer la livraison
+              </button>
+              {% endif %}
+            </div>
+          </form>
+        </div>
+        {% endfor %}
+
+      {% else %}
+        <div class="text-center py-5" style="color:var(--muted);">
+          <i class="fa fa-check-circle fa-3x mb-3" style="color:#4ade80;"></i>
+          <p class="fw-700">Aucune livraison en cours</p>
+          <p style="font-size:13px;">Vous serez notifié dès qu'une livraison vous est assignée.</p>
+        </div>
+      {% endif %}
+
+      <!-- Livraisons terminées -->
+      {% if livraisons_terminees %}
+      <h5 class="fw-800 mb-3 mt-4">Livraisons terminées aujourd'hui</h5>
+      {% for liv in livraisons_terminees %}
+      <div class="d-flex justify-content-between align-items-center p-3 rounded-3 mb-2"
+           style="background:#f8fafb; border:1px solid #eee;">
+        <div>
+          <div class="fw-700" style="font-size:.9rem;">Commande #{{ liv.commande.numero }}</div>
+          <div style="font-size:12px; color:var(--muted);">
+            {% if liv.heure_arrivee %}Livré à {{ liv.heure_arrivee|date:"H:i" }}{% endif %}
+          </div>
+        </div>
+        <span class="badge rounded-pill bg-secondary">Livrée</span>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // Carte livreur
+  const map = L.map('map-livreur').setView([12.6392, -8.0029], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  const iconMoi = L.divIcon({
+    html: `<div style="background:#1aab5f;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;border:3px solid white;box-shadow:0 3px 12px rgba(0,0,0,0.3);">
+      <i class="fa fa-motorcycle"></i></div>`,
+    iconSize: [36, 36], iconAnchor: [18, 18], className: ''
+  });
+
+  let monMarker = null;
+  let dernierePosition = null;
+
+  // IDs des livraisons actives pour envoyer la position
+  const livraisonsActives = [{% for liv in livraisons %}{{ liv.pk }}{% if not forloop.last %},{% endif %}{% endfor %}];
+
+  function envoyerPosition(lat, lon) {
+    // Envoyer la position à toutes les livraisons actives
+    livraisonsActives.forEach(id => {
+      fetch(`/livraison/livreur/position/${id}/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify({ latitude: lat, longitude: lon })
+      });
+    });
+  }
+
+  function getCookie(name) {
+    const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+  }
+
+  function majPosition(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const pos = [lat, lon];
+
+    document.getElementById('gps-status').innerHTML =
+      '<span class="gps-dot"></span> GPS actif';
+    document.getElementById('coords-display').textContent =
+      `Position : ${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+
+    if (!monMarker) {
+      monMarker = L.marker(pos, { icon: iconMoi }).addTo(map).bindPopup('Ma position');
+      map.setView(pos, 15);
+    } else {
+      monMarker.setLatLng(pos);
+    }
+
+    envoyerPosition(lat, lon);
+  }
+
+  function erreurGPS(err) {
+    document.getElementById('gps-status').innerHTML =
+      '<span style="color:#e53935">GPS indisponible</span>';
+  }
+
+  // Démarrer la géolocalisation continue
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(majPosition, erreurGPS, {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 3000
+    });
+  } else {
+    erreurGPS();
+  }
+</script>
+{% endblock %}

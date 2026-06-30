@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}{{ medicament.nom }} — E-Pharma{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'accueil' %}" class="text-success">Accueil</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'medicaments' %}" class="text-success">Médicaments</a></li>
+      <li class="breadcrumb-item active">{{ medicament.nom }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-4 mb-5">
+    <!-- IMAGE -->
+    <div class="col-md-4">
+      <div class="card border-0 rounded-4 p-4 text-center" style="background:var(--vert-light); box-shadow:0 2px 12px rgba(0,0,0,.06)">
+        {% if medicament.get_image %}
+        <img src="{{ medicament.get_image }}" alt="{{ medicament.nom }}" style="max-height:280px; object-fit:contain; width:100%" />
+        {% else %}
+        <i class="fa fa-pills" style="font-size:8rem; color:var(--vert); opacity:.4"></i>
+        {% endif %}
+        {% if medicament.sur_ordonnance %}
+        <div class="mt-3"><span class="badge-ordonnance">📋 Médicament sur ordonnance</span></div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- INFOS -->
+    <div class="col-md-8">
+      <div class="card border-0 rounded-4 p-4" style="box-shadow:0 2px 12px rgba(0,0,0,.06)">
+        {% if medicament.categorie %}
+        <span class="badge bg-light text-success mb-2 px-3 py-2 fw-700">{{ medicament.categorie.nom }}</span>
+        {% endif %}
+        <h2 class="fw-900 mb-2">{{ medicament.nom }}</h2>
+        <p class="text-muted mb-3">{{ medicament.description }}</p>
+
+        {% if medicament.composition %}
+        <div class="mb-3 p-3 rounded-3" style="background:#f8f9fa">
+          <h6 class="fw-700 mb-1"><i class="fa fa-flask me-2" style="color:var(--vert)"></i>Composition</h6>
+          <p class="mb-0 small text-muted">{{ medicament.composition }}</p>
+        </div>
+        {% endif %}
+
+        {% if medicament.posologie %}
+        <div class="mb-3 p-3 rounded-3" style="background:#fff3cd">
+          <h6 class="fw-700 mb-1"><i class="fa fa-info-circle me-2 text-warning"></i>Posologie</h6>
+          <p class="mb-0 small">{{ medicament.posologie }}</p>
+        </div>
+        {% endif %}
+
+        <div class="d-flex align-items-center gap-3 mb-4 mt-2">
+          <span class="fw-900" style="font-size:2rem; color:var(--vert)">{{ medicament.prix|floatformat:0 }} FCFA</span>
+          {% if medicament.en_stock %}
+          <span class="badge bg-success px-3 py-2">✓ En stock ({{ medicament.stock }})</span>
+          {% else %}
+          <span class="badge bg-danger px-3 py-2">Rupture de stock</span>
+          {% endif %}
+        </div>
+
+        {% if medicament.en_stock %}
+        <a href="{% url 'ajouter_panier' medicament.pk %}" class="btn btn-vert px-5 py-2 fw-700" style="font-size:1.05rem">
+          <i class="fa fa-shopping-cart me-2"></i>Ajouter au panier
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- SIMILAIRES -->
+  {% if similaires %}
+  <h5 class="fw-800 mb-3">Produits similaires</h5>
+  <div class="row g-3">
+    {% for med in similaires %}
+    <div class="col-6 col-md-3">
+      <div class="card-med card h-100">
+        {% if med.get_image %}<img src="{{ med.get_image }}" alt="{{ med.nom }}" />
+        {% else %}<div style="height:140px; background:var(--vert-light); display:flex;align-items:center;justify-content:center"><i class="fa fa-pills fa-2x" style="color:var(--vert);opacity:.4"></i></div>{% endif %}
+        <div class="p-3">
+          <h6 class="fw-700 mb-1" style="font-size:.88rem">{{ med.nom }}</h6>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="prix-tag">{{ med.prix|floatformat:0 }} FCFA</span>
+            <a href="{% url 'ajouter_panier' med.pk %}" class="btn btn-vert btn-sm"><i class="fa fa-plus"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

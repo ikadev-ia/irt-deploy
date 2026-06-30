@@ -1,0 +1,46 @@
+{
+  "name": "E-Pharma — Votre pharmacie en un clic",
+  "short_name": "E-Pharma",
+  "description": "Commandez vos médicaments en ligne et faites-vous livrer rapidement à domicile.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1aab5f",
+  "orientation": "portrait-primary",
+  "lang": "fr",
+  "scope": "/",
+  "categories": ["health", "medical", "shopping"],
+  "icons": [
+    { "src": "/static/img/icon-72x72.png",   "sizes": "72x72",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/img/icon-96x96.png",   "sizes": "96x96",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/img/icon-128x128.png", "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/img/icon-144x144.png", "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/img/icon-152x152.png", "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/img/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/img/icon-384x384.png", "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/img/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Médicaments",
+      "short_name": "Médicaments",
+      "description": "Voir tous les médicaments",
+      "url": "/medicaments/",
+      "icons": [{ "src": "/static/img/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Pharmacies",
+      "short_name": "Pharmacies",
+      "description": "Nos pharmacies partenaires",
+      "url": "/pharmacies/",
+      "icons": [{ "src": "/static/img/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Mon Panier",
+      "short_name": "Panier",
+      "description": "Voir mon panier",
+      "url": "/panier/",
+      "icons": [{ "src": "/static/img/icon-96x96.png", "sizes": "96x96" }]
+    }
+  ]
+}

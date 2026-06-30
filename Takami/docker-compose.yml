@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  takami-app:
+    build: .
+    container_name: takami-web
+    depends_on:
+      - takami-db
+    environment:
+      - DB_HOST=takami-db
+      - DB_USER=takami_user
+      - DB_PASSWORD=takami_password
+      - DB_NAME=takami_db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.takami.rule=Host(`takami-mali.com`) || Host(`www.takami-mali.com`)"
+      - "traefik.http.routers.takami.entrypoints=web"
+      - "traefik.http.routers.takami.entrypoints=websecure"
+      # Décommentez pour HTTPS avec Traefik si configuré
+      # - "traefik.http.routers.takami.tls=true"
+      # - "traefik.http.routers.takami.tls.certresolver=myresolver"
+      - "traefik.http.services.takami.loadbalancer.server.port=80"
+    networks:
+      - traefik-net
+      - takami-net
+
+  takami-db:
+    image: mysql:8.0
+    container_name: takami-db
+    environment:
+      MYSQL_DATABASE: takami_db
+      MYSQL_USER: takami_user
+      MYSQL_PASSWORD: takami_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - ./takami_db.sql:/docker-entrypoint-initdb.d/db.sql
+      - takami-db-data:/var/lib/mysql
+    networks:
+      - takami-net
+
+networks:
+  traefik-net:
+    external: true
+  takami-net:
+
+volumes:
+  takami-db-data:

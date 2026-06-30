@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Nos Pharmacies — E-Pharma{% endblock %}
+
+{% block content %}
+<div class="page-header text-center">
+  <div class="container">
+    <h2 class="fw-900 mb-1">🏥 Nos Pharmacies Partenaires</h2>
+    <p class="opacity-90 mb-0">Commandez depuis votre pharmacie de proximité à Bamako</p>
+  </div>
+</div>
+
+<div class="container py-4">
+
+  {% if pharmacies %}
+  <div class="row g-4">
+    {% for ph in pharmacies %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card border-0 h-100" style="border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.08); overflow:hidden; transition:all .3s" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 8px 30px rgba(26,171,95,.2)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(0,0,0,.08)'">
+
+        <!-- Header coloré -->
+        <div style="background:linear-gradient(135deg,#0d8a48,#1aab5f); padding:30px 20px; text-align:center; position:relative;">
+          <div style="background:rgba(255,255,255,.15); border-radius:50%; width:80px; height:80px; display:flex; align-items:center; justify-content:center; margin:0 auto 10px;">
+            <i class="fa fa-hospital" style="font-size:2.5rem; color:#fff;"></i>
+          </div>
+          <h5 class="fw-800 text-white mb-0" style="font-size:1.15rem">{{ ph.nom }}</h5>
+          <span class="badge mt-2" style="background:rgba(255,255,255,.25); color:#fff; font-size:.78rem; border-radius:20px; padding:4px 14px;">
+            <i class="fa fa-check-circle me-1"></i>Partenaire E-Pharma
+          </span>
+        </div>
+
+        <!-- Infos -->
+        <div class="card-body p-4">
+          <div class="d-flex align-items-start gap-2 mb-3">
+            <i class="fa fa-map-marker-alt mt-1" style="color:var(--vert); width:16px; flex-shrink:0;"></i>
+            <div>
+              <div class="fw-700" style="font-size:.9rem">{{ ph.quartier }}</div>
+              <div class="text-muted" style="font-size:.83rem">{{ ph.adresse }}</div>
+            </div>
+          </div>
+
+          {% if ph.telephone %}
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fa fa-phone" style="color:var(--vert); width:16px; flex-shrink:0;"></i>
+            <a href="tel:{{ ph.telephone }}" class="text-decoration-none fw-600" style="font-size:.88rem; color:var(--texte)">{{ ph.telephone }}</a>
+          </div>
+          {% endif %}
+
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fa fa-clock" style="color:var(--vert); width:16px; flex-shrink:0;"></i>
+            <span style="font-size:.83rem; color:var(--muted)">{{ ph.horaires }}</span>
+          </div>
+
+          <div class="d-flex align-items-center gap-2 mb-4">
+            <i class="fa fa-circle" style="color:#28a745; font-size:.6rem; width:16px; flex-shrink:0;"></i>
+            <span class="fw-700" style="font-size:.83rem; color:#28a745;">Ouverte</span>
+          </div>
+
+          <a href="{% url 'medicaments' %}" class="btn btn-vert w-100 fw-700" style="border-radius:30px;">
+            <i class="fa fa-pills me-2"></i>Commander ici
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="text-center py-5">
+    <div style="font-size:4rem; margin-bottom:16px;">🏥</div>
+    <h4 class="fw-700">Aucune pharmacie disponible</h4>
+    <p class="text-muted">Les pharmacies partenaires seront bientôt disponibles.</p>
+  </div>
+  {% endif %}
+
+  <!-- Bandeau info -->
+  <div class="mt-5 p-4 rounded-4 text-center" style="background:linear-gradient(135deg,#e8f9f0,#d0f5e4);">
+    <h5 class="fw-800 mb-2" style="color:var(--vert-dark)">📍 Vous avez une pharmacie à Bamako ?</h5>
+    <p class="text-muted mb-3" style="font-size:.9rem">Rejoignez le réseau E-Pharma et augmentez votre visibilité !</p>
+    <a href="mailto:contact@epharma.ml" class="btn btn-vert rounded-pill px-4">
+      <i class="fa fa-envelope me-2"></i>Nous contacter
+    </a>
+  </div>
+
+</div>
+{% endblock %}

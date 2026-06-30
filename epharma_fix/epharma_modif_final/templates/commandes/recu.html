@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}Reçu #{{ commande.numero }} — E-Pharma{% endblock %}
+
+{% block extra_css %}
+<style>
+  @media print {
+    .navbar, footer, .no-print, .top-bar { display: none !important; }
+    body { background: white; }
+    .recu-card { box-shadow: none !important; border: none !important; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width:680px;">
+
+  <!-- Boutons actions -->
+  <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+    <a href="{% url 'detail_commande' commande.pk %}" class="btn btn-outline-vert">
+      <i class="fa fa-arrow-left me-2"></i>Retour
+    </a>
+    <div class="d-flex gap-2">
+      <button onclick="window.print()" class="btn btn-outline-vert">
+        <i class="fa fa-print me-2"></i>Imprimer
+      </button>
+      <a href="{% url 'recu_pdf' commande.pk %}" class="btn btn-vert">
+        <i class="fa fa-file-pdf me-2"></i>Télécharger PDF
+      </a>
+    </div>
+  </div>
+
+  <!-- Reçu -->
+  <div class="recu-card card-custom p-4 p-md-5">
+
+    <!-- En-tête -->
+    <div class="text-center mb-4 pb-4" style="border-bottom:2px solid var(--vert-light);">
+      <div style="font-family:'Poppins',sans-serif;font-size:1.8rem;font-weight:900;color:var(--vert);">E-PHARMA MALI</div>
+      <div style="color:var(--muted);font-size:.88rem;margin-top:4px;">Votre pharmacie en un clic — Bamako, Mali</div>
+      <div style="color:var(--muted);font-size:.82rem;">epharma473@gmail.com · +223 82 53 41 83</div>
+      <div class="mt-3 d-inline-block px-4 py-2 rounded-pill fw-800" style="background:var(--vert-light);color:var(--vert);font-size:.88rem;">
+        REÇU DE PAIEMENT N° {{ commande.numero }}
+      </div>
+    </div>
+
+    <!-- Infos commande -->
+    <div class="row g-3 mb-4">
+      <div class="col-6">
+        <div style="font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Date</div>
+        <div style="font-weight:700;font-size:.95rem;">{{ commande.date_creation|date:"d/m/Y à H:i" }}</div>
+      </div>
+      <div class="col-6">
+        <div style="font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Statut</div>
+        <span class="badge bg-{{ commande.statut_badge }} rounded-pill">{{ commande.get_statut_display }}</span>
+      </div>
+      <div class="col-6">
+        <div style="font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Client</div>
+        <div style="font-weight:700;font-size:.95rem;">{{ commande.client.get_full_name|default:commande.client.username }}</div>
+      </div>
+      <div class="col-6">
+        <div style="font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Paiement</div>
+        <div style="font-weight:700;font-size:.95rem;">{{ commande.get_mode_paiement_display }}</div>
+      </div>
+      <div class="col-12">
+        <div style="font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Adresse de livraison</div>
+        <div style="font-weight:700;font-size:.95rem;">{{ commande.adresse_livraison }}</div>
+      </div>
+      {% if carte %}
+      <div class="col-12">
+        <div style="font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Carte AMO</div>
+        <div style="font-weight:700;font-size:.95rem;color:#1565c0;">{{ carte.numero_carte }} — {{ carte.nom_assure }}</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Articles -->
+    <div style="border-top:1px solid var(--vert-light);padding-top:20px;margin-bottom:20px;">
+      <h6 class="fw-800 mb-3">Détail de la commande</h6>
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="background:var(--vert);color:white;">
+            <th style="padding:10px 12px;border-radius:8px 0 0 8px;font-size:.85rem;">Médicament</th>
+            <th style="padding:10px 8px;text-align:center;font-size:.85rem;">Qté</th>
+            <th style="padding:10px 8px;text-align:right;font-size:.85rem;">Prix</th>
+            <th style="padding:10px 12px;text-align:right;border-radius:0 8px 8px 0;font-size:.85rem;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ligne in commande.lignes.all %}
+          <tr style="border-bottom:1px solid var(--vert-light);">
+            <td style="padding:10px 12px;">
+              <div style="font-weight:700;font-size:.9rem;">{{ ligne.medicament.nom }}</div>
+              {% if ligne.medicament.couvert_amo %}
+              <span style="background:#e3f2fd;color:#1565c0;font-size:.68rem;border-radius:20px;padding:2px 8px;font-weight:700;">AMO</span>
+              {% endif %}
+            </td>
+            <td style="padding:10px 8px;text-align:center;font-weight:700;">{{ ligne.quantite }}</td>
+            <td style="padding:10px 8px;text-align:right;font-size:.9rem;">{{ ligne.prix_unitaire|floatformat:0 }} FCFA</td>
+            <td style="padding:10px 12px;text-align:right;font-weight:700;font-size:.9rem;">{{ ligne.sous_total|floatformat:0 }} FCFA</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" style="padding:8px 12px;text-align:right;color:var(--muted);font-size:.88rem;">Livraison :</td>
+            <td style="padding:8px 12px;text-align:right;font-weight:700;font-size:.88rem;">500 FCFA</td>
+          </tr>
+          {% if reduction_amo > 0 %}
+          <tr>
+            <td colspan="3" style="padding:8px 12px;text-align:right;color:#1565c0;font-size:.88rem;">Prise en charge AMO :</td>
+            <td style="padding:8px 12px;text-align:right;font-weight:700;color:#1565c0;font-size:.88rem;">- {{ reduction_amo }} FCFA</td>
+          </tr>
+          {% endif %}
+          <tr style="background:var(--vert-xlight);">
+            <td colspan="3" style="padding:12px;text-align:right;font-weight:800;font-size:1rem;border-radius:8px 0 0 8px;">TOTAL PAYÉ :</td>
+            <td style="padding:12px;text-align:right;font-weight:900;font-size:1.1rem;color:var(--vert);border-radius:0 8px 8px 0;">{{ total_final }} FCFA</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Pied -->
+    <div class="text-center pt-3" style="border-top:1px solid var(--vert-light);color:var(--muted);font-size:.82rem;">
+      <p class="mb-1 fw-700">Merci pour votre confiance — E-Pharma Mali</p>
+      <p class="mb-0">ISC Business School · Bamako, Mali · 2025-2026</p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

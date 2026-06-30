@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Mes adresses — E-Pharma{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h3 class="fw-800 mb-4"><i class="fa fa-map-marker-alt me-2" style="color:var(--vert)"></i>Mes adresses</h3>
+  <div class="card border-0 rounded-4 p-4" style="box-shadow:0 2px 12px rgba(0,0,0,.07); max-width:500px">
+    <form method="post">
+      {% csrf_token %}
+      <label class="fw-700 mb-2">Adresse principale de livraison</label>
+      <textarea name="adresse" class="form-control mb-3" rows="3">{{ user.adresse }}</textarea>
+      <button type="submit" class="btn btn-vert px-4 fw-700">Mettre à jour</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

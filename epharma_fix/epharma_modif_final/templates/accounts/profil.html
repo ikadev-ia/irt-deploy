@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Mon profil — E-Pharma{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container d-flex align-items-center gap-3">
+    {% if user.photo %}
+    <img src="{{ user.photo.url }}" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:3px solid #fff" />
+    {% else %}
+    <div style="width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;border:3px solid #fff">
+      <i class="fa fa-user fa-2x"></i>
+    </div>
+    {% endif %}
+    <div>
+      <h2 class="fw-800 mb-0">{{ user.get_full_name|default:user.username }}</h2>
+      <p class="mb-0 opacity-80">{{ user.email }} · {{ user.get_role_display }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <div class="row g-4">
+
+    <!-- SIDEBAR -->
+    <div class="col-md-3">
+      <div class="card border-0 rounded-4 p-3" style="box-shadow:0 2px 10px rgba(0,0,0,.06)">
+        <ul class="list-unstyled mb-0">
+          <li class="mb-1"><a href="{% url 'profil' %}" class="d-block px-3 py-2 rounded-3 fw-700 text-decoration-none" style="background:var(--vert);color:#fff"><i class="fa fa-user me-2"></i>Mon profil</a></li>
+          <li class="mb-1"><a href="{% url 'mes_commandes' %}" class="d-block px-3 py-2 rounded-3 fw-700 text-decoration-none text-muted"><i class="fa fa-box me-2"></i>Mes commandes</a></li>
+          <li class="mb-1"><a href="{% url 'mes_adresses' %}" class="d-block px-3 py-2 rounded-3 fw-700 text-decoration-none text-muted"><i class="fa fa-map-marker-alt me-2"></i>Mes adresses</a></li>
+          <li><a href="{% url 'deconnexion' %}" class="d-block px-3 py-2 rounded-3 fw-700 text-decoration-none text-danger"><i class="fa fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FORMULAIRE -->
+    <div class="col-md-9">
+      <div class="card border-0 rounded-4 p-4 mb-4" style="box-shadow:0 2px 10px rgba(0,0,0,.06)">
+        <h5 class="fw-800 mb-3">✏️ Modifier mes informations</h5>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-6"><label class="fw-700 mb-1">Prénom</label>{{ form.first_name }}</div>
+            <div class="col-6"><label class="fw-700 mb-1">Nom</label>{{ form.last_name }}</div>
+            <div class="col-12"><label class="fw-700 mb-1">Email</label>{{ form.email }}</div>
+            <div class="col-6"><label class="fw-700 mb-1">Téléphone</label>{{ form.telephone }}</div>
+            <div class="col-6"><label class="fw-700 mb-1">Date de naissance</label>{{ form.date_naissance }}</div>
+            <div class="col-12"><label class="fw-700 mb-1">Adresse de livraison</label>{{ form.adresse }}</div>
+            <div class="col-12"><label class="fw-700 mb-1">Photo de profil</label>{{ form.photo }}</div>
+          </div>
+          <button type="submit" class="btn btn-vert mt-4 px-5 fw-700">Sauvegarder</button>
+        </form>
+      </div>
+
+      <!-- DERNIÈRES COMMANDES -->
+      {% if commandes %}
+      <div class="card border-0 rounded-4 p-4" style="box-shadow:0 2px 10px rgba(0,0,0,.06)">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-800 mb-0">📦 Dernières commandes</h5>
+          <a href="{% url 'mes_commandes' %}" class="text-success fw-700 text-decoration-none small">Voir tout →</a>
+        </div>
+        {% for cmd in commandes %}
+        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+          <div>
+            <span class="fw-700">#{{ cmd.numero }}</span>
+            <span class="text-muted small ms-2">{{ cmd.date_creation|date:"d M Y" }}</span>
+          </div>
+          <div class="d-flex gap-2 align-items-center">
+            <span class="badge bg-{{ cmd.statut_badge }}">{{ cmd.get_statut_display }}</span>
+            <span class="fw-800 prix-tag">{{ cmd.total|floatformat:0 }} FCFA</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+<style>
+.col-md-9 input, .col-md-9 textarea, .col-md-9 select { width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:10px; font-family:'Nunito',sans-serif; font-size:.95rem; }
+.col-md-9 input:focus, .col-md-9 textarea:focus { border-color:var(--vert); outline:none; box-shadow:0 0 0 3px rgba(26,171,95,.12); }
+</style>
+{% endblock %}
