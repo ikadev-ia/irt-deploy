@@ -21,7 +21,7 @@ services:
       # - "traefik.http.routers.takami.tls.certresolver=myresolver"
       - "traefik.http.services.takami.loadbalancer.server.port=80"
     networks:
-      - traefik-net
+      - proxy-net
       - takami-net
 
   takami-db:
@@ -39,7 +39,7 @@ services:
       - takami-net
 
 networks:
-  traefik-net:
+  proxy-net:
     external: true
   takami-net:
 

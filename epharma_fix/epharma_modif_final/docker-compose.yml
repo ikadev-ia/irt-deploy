@@ -18,7 +18,7 @@ services:
       - "traefik.http.routers.epharma.entrypoints=websecure"
       - "traefik.http.services.epharma.loadbalancer.server.port=8000"
     networks:
-      - traefik-net
+      - proxy-net
       - epharma-net
 
   epharma-db:
@@ -34,7 +34,7 @@ services:
       - epharma-net
 
 networks:
-  traefik-net:
+  proxy-net:
     external: true
   epharma-net:
 
