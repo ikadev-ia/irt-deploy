@@ -1,3 +1,5 @@
+from pyexpat.errors import messages
+
 from django.shortcuts import render
 from .models import Produit
 from django.contrib.auth.forms import UserCreationForm
@@ -39,14 +41,16 @@ def paiement(request):
             methode_paiement=methode
         )
 
-        return render(request, "shop/succes.html")
+        return render(
+    request,
+    "shop/success.html",
+    {
+        "nom": request.user.username,
+        "methode": methode,
+    }
+)
 
     return render(request, "shop/paiement.html")
-
-
-
-
-
 
 
 
@@ -72,9 +76,10 @@ def connexion(request):
         if user:
             login(request, user)
             return redirect("index")
+        else:
+            messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
 
     return render(request, "shop/login.html")
-
 def deconnexion(request):
     logout(request)
     return redirect("index")

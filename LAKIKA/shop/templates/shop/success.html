@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Commande confirmée</title>
+</head>
+<body>
+
+    <div style="text-align:center; margin-top:80px;">
+        <h1>✅ Commande effectuée avec succès !</h1>
+
+        <h2>Merci {{ nom }}.</h2>
+
+        <p>
+            Votre commande a été enregistrée avec succès et sera traitée dans les plus brefs délais.
+        </p>
+
+        <p>
+            Moyen de paiement choisi : <strong>{{ methode }}</strong>
+        </p>
+
+        <p>
+            Vous serez contacté prochainement pour la confirmation et la livraison.
+        </p>
+
+        <a href="{% url 'index' %}">
+            Retour à l'accueil
+        </a>
+    </div>
+
+</body>
+</html>
