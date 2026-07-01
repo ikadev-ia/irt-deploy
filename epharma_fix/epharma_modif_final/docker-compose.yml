@@ -14,8 +14,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.epharma.rule=Host(`epharma-mali.com`) || Host(`www.epharma-mali.com`)"
-      - "traefik.http.routers.epharma.entrypoints=web"
+      #- "traefik.http.routers.epharma.entrypoints=web"
       - "traefik.http.routers.epharma.entrypoints=websecure"
+      - "traefik.http.routers.epharma.tls.certresolver=myresolver"
       - "traefik.http.services.epharma.loadbalancer.server.port=8000"
     networks:
       - proxy-net

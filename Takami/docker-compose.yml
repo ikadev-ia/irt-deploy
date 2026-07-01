@@ -14,11 +14,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.takami.rule=Host(`takami-mali.com`) || Host(`www.takami-mali.com`)"
-      - "traefik.http.routers.takami.entrypoints=web"
+      # - "traefik.http.routers.takami.entrypoints=web"
       - "traefik.http.routers.takami.entrypoints=websecure"
       # Décommentez pour HTTPS avec Traefik si configuré
       # - "traefik.http.routers.takami.tls=true"
-      # - "traefik.http.routers.takami.tls.certresolver=myresolver"
+      - "traefik.http.routers.takami.tls.certresolver=myresolver"
       - "traefik.http.services.takami.loadbalancer.server.port=80"
     networks:
       - proxy-net
