@@ -1,0 +1,160 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="payment-container">
+
+    <h1>Choisissez votre moyen de paiement</h1>
+
+    <form method="POST" action="{% url 'paiement' %}" class="payment-form">
+
+        {% csrf_token %}
+
+        <!-- Choix du moyen de paiement -->
+        <div class="payment-methods">
+
+            <div class="payment-card" onclick="showPaymentForm('orange')">
+                <img src="{% static 'images/orange-money.png' %}" width="70">
+                <h3>Orange Money</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('wave')">
+                <img src="{% static 'images/wave.png' %}" width="70">
+                <h3>Wave</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('moov')">
+                <img src="{% static 'images/moov-money.png' %}" width="70">
+                <h3>Moov Money</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('visa')">
+                <img src="{% static 'images/visa.png' %}" width="70">
+                <h3>Visa</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('mastercard')">
+                <img src="{% static 'images/mastercard.png' %}" width="70">
+                <h3>MasterCard</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('paypal')">
+                <img src="{% static 'images/paypal.png' %}" width="70">
+                <h3>PayPal</h3>
+            </div>
+
+            <div class="payment-card" onclick="showPaymentForm('livraison')">
+                <img src="{% static 'images/livraison.png' %}" width="70">
+                <h3>Paiement à la livraison</h3>
+            </div>
+
+        </div>
+
+        <!-- Champ caché envoyé à Django -->
+        <input type="hidden" name="methode" id="methode">
+
+        <!-- CHAMP TELEPHONE UNIQUE (partagé par toutes les méthodes) -->
+        <div class="payment-details" style="display: none;" id="telephone-wrapper">
+            <input type="text" name="telephone" id="telephone" placeholder="Numéro de téléphone">
+        </div>
+
+        <!-- Orange -->
+        <div id="orange" class="payment-details" style="display: none;"></div>
+
+        <!-- Wave -->
+        <div id="wave" class="payment-details" style="display: none;"></div>
+
+        <!-- Moov -->
+        <div id="moov" class="payment-details" style="display: none;"></div>
+
+        <!-- Visa -->
+        <div id="visa" class="payment-details" style="display: none;">
+            <input type="text" placeholder="Numéro de carte">
+            <input type="text" placeholder="Nom du titulaire">
+            <input type="text" placeholder="Date expiration MM/AA">
+        </div>
+
+        <!-- Mastercard -->
+        <div id="mastercard" class="payment-details" style="display: none;">
+            <input type="text" placeholder="Numéro de carte">
+            <input type="text" placeholder="Nom du titulaire">
+            <input type="text" placeholder="Date expiration MM/AA">
+        </div>
+
+        <!-- Paypal -->
+        <div id="paypal" class="payment-details" style="display: none;">
+            <input type="email" placeholder="Adresse email PayPal">
+        </div>
+
+        <!-- Livraison -->
+        <div id="livraison" class="payment-details" style="display: none;">
+            <input type="text"
+                   name="adresse_livraison"
+                   placeholder="Adresse de livraison">
+
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+
+            <button type="button" onclick="getLocation()">
+                Obtenir ma position
+            </button>
+        </div>
+
+        <button type="submit" class="btn-primary">
+            Payer
+        </button>
+
+    </form>
+
+</section>
+
+<script>
+
+// Méthodes qui nécessitent un numéro de téléphone (mobile money + livraison)
+const methodesAvecTelephone = ["orange", "wave", "moov", "livraison"];
+
+function showPaymentForm(method){
+
+    document.querySelectorAll(".payment-details")
+        .forEach(form => {
+            form.style.display = "none";
+        });
+
+    document.getElementById(method).style.display = "block";
+    document.getElementById("methode").value = method;
+
+    // Afficher/masquer le champ téléphone unique selon la méthode
+    const telWrapper = document.getElementById("telephone-wrapper");
+    if (methodesAvecTelephone.includes(method)) {
+        telWrapper.style.display = "block";
+    } else {
+        telWrapper.style.display = "none";
+        document.getElementById("telephone").value = "";
+    }
+}
+
+function getLocation(){
+
+    if(navigator.geolocation){
+
+        navigator.geolocation.getCurrentPosition(function(position){
+
+            document.getElementById("latitude").value =
+                position.coords.latitude;
+
+            document.getElementById("longitude").value =
+                position.coords.longitude;
+
+            alert("Position récupérée avec succès.");
+
+        });
+
+    }else{
+        alert("Votre navigateur ne supporte pas la géolocalisation.");
+    }
+}
+
+</script>
+
+{% endblock %}

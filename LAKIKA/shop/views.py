@@ -34,21 +34,23 @@ def paiement(request):
     if request.method == "POST":
         telephone = request.POST.get("telephone")
         methode = request.POST.get("methode")
+        adresse = request.POST.get("adresse_livraison", "")  # vide si pas "livraison"
 
         Commande.objects.create(
             client=request.user,
             telephone=telephone,
-            methode_paiement=methode
+            methode_paiement=methode,
+            adresse_livraison=adresse,   # <-- nécessite ce champ dans models.py
         )
 
         return render(
-    request,
-    "shop/success.html",
-    {
-        "nom": request.user.username,
-        "methode": methode,
-    }
-)
+            request,
+            "shop/success.html",
+            {
+                "nom": request.user.username,
+                "methode": methode,
+            }
+        )
 
     return render(request, "shop/paiement.html")
 

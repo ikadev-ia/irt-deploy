@@ -129,3 +129,21 @@ STATIC_URL = 'static/'
 # Fichiers médias (images uploadées)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# ============================================
+# CONFIGURATION EMAIL (notifications de commande)
+# ============================================
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# Le username/mot de passe sont lus depuis des variables d'environnement
+# pour ne jamais les écrire en clair ici (voir explication en dessous).
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'kanezoumana643@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'pmna chcq qzuq ypmo')
+
+# Email qui recevra les notifications de commande (toi, l'admin)
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'kanezoumana643@gmail.com')
