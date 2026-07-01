@@ -6,7 +6,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-epharma-change-this-in-production-xyz123')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'epharma-mali.com,localhost').split(',')
-CSRF_TRUSTED_ORIGINS = ['https://*.ngrok-free.app', 'https://*.ngrok.io', 'http://localhost:8000', 'http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = ['https://*.ngrok-free.app', 'https://*.ngrok.io', 'http://localhost:8000', 'http://127.0.0.1:8000','https://epharma-mali.com','https://www.epharma-mali.com']
+
+# Configuration CSRF pour le HTTPS (Traefik)
+CSRF_TRUSTED_ORIGINS = [
+    "https://epharma-mali.com",
+    "https://www.epharma-mali.com"
+]
+
+# Indiquer à Django qu'il est derrière un proxy HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
