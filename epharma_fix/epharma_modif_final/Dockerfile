@@ -21,9 +21,11 @@ RUN pip install --no-cache-dir gunicorn psycopg2-binary
 # Copier le projet
 COPY . /app/
 
-# Collecter les fichiers statiques (optionnel selon config)
-# RUN python manage.py collectstatic --noinput
+RUN chmod +x /app/manage.py
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "epharma.wsgi:application"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
