@@ -731,7 +731,7 @@ if ($batch) {
             <div class="lot-card card">
                 <div>
                     <i class="fas fa-chicken" style="color: var(--green); margin-right: 8px;"></i>
-                    <strong>Lot actif :</strong>
+                    <strong>lot actif :</strong>
                     <select id="batchSelect" class="lot-select">
                         <?php foreach ($all_batches as $b): ?>
                             <option value="<?php echo $b['id']; ?>" <?php echo ($selected_batch_id == $b['id']) ? 'selected' : ''; ?>>
@@ -768,7 +768,7 @@ if ($batch) {
                 <div class="stat-card">
                     <div class="stat-title">
                         <span><i class="fas fa-chicken"></i> POULETS RESTANTS</span>
-                        <span class="stat-icon"><i class="fas fa-warehouse"></i></span>
+                        <span class="stat-icon"><i class=""></i></span>
                     </div>
                     <div class="stat-value"><?php echo number_format($batch['current_birds']); ?></div>
                     <div class="stat-trend">
@@ -780,11 +780,11 @@ if ($batch) {
                 <div class="stat-card">
                     <div class="stat-title">
                         <span><i class=""></i> TAUX DE SURVIE</span>
-                        <span class="stat-icon"><i class="fas fa-chart-line"></i></span>
+                        <span class="stat-icon"><i class=""></i></span>
                     </div>
                     <div class="stat-value"><?php echo round(($batch['current_birds'] / max(1, $total_birds)) * 100, 1); ?><span style="font-size: 1rem;">%</span></div>
                     <div class="stat-trend">
-                         <b>Objectif >95%</b>
+                         <b>survie</b>
                     </div>
                 </div>
 
@@ -792,7 +792,7 @@ if ($batch) {
                 <div class="stat-card">
                     <div class="stat-title">
                         <span><i class=""></i> ÂGE DU LOT</span>
-                        <span class="stat-icon"><i class="fas fa-hourglass-half"></i></span>
+                        <span class="stat-icon"><i class=""></i></span>
                     </div>
                     <div class="stat-value"><?php echo $batch_age; ?><span style="font-size: 1rem;"> jours</span></div>
                     <div class="stat-trend">
@@ -804,14 +804,14 @@ if ($batch) {
                 <div class="stat-card <?php echo $alert_mortality ? 'alert-critical' : ''; ?>">
                     <div class="stat-title">
                         <span><i class=""></i> DERNIÈRE MORTALITÉ</span>
-                        <span class="stat-icon"><i class="fas fa-heartbeat"></i></span>
+                        <span class="stat-icon"><i class=""></i></span>
                     </div>
                     <div class="stat-value"><?php echo $last_mortality_value; ?><span style="font-size: 1rem;"> morts</span></div>
                     <div class="stat-trend">
                         <b>Dernier relevé</b>
                         <?php if ($alert_mortality): ?>
                             <span class="alert-badge">
-                                <i class=""></i> Alerte → Notifications
+                                <i class=""></i> alerte - notifications
                             </span>
                         <?php endif; ?>
                     </div>
@@ -823,27 +823,27 @@ if ($batch) {
                 <div class="card feature-card" onclick="window.location.href='enregistrement.php'">
                     <div class="feature-icon"><i class="fas fa-edit"></i></div>
                     <h3>Enregistrement quotidien</h3>
-                    <p>Température, alimentation, observations terrain</p>
+                    <p>Température alimentation observations terrain</p>
                 </div>
                 <div class="card feature-card" onclick="window.location.href='diagnostic.php'">
                     <div class="feature-icon"><i class="fas fa-stethoscope"></i></div>
                     <h3>Diagnostic </h3>
-                    <p>Symptômes → diagnostic précis et traitements</p>
+                    <p>Symptômes  diagnostic précis et traitements</p>
                 </div>
                 <div class="card feature-card" onclick="window.location.href='vaccins.php'">
                     <div class="feature-icon"><i class="fas fa-syringe"></i></div>
                     <h3>Calendrier vaccinal</h3>
-                    <p>Planification, rappels et suivi</p>
+                    <p>Planification rappels et suivi</p>
                 </div>
                 <div class="card feature-card" onclick="window.location.href='taches.php'">
                     <div class="feature-icon"><i class="fas fa-clock"></i></div>
                     <h3>Tâches recommandées</h3>
-                    <p>Alimentation, eau, nettoyage, pesée</p>
+                    <p>Alimentation eau nettoyage </p>
                 </div>
                 <div class="card feature-card" onclick="window.location.href='conseils.php'">
                     <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
                     <h3>Conseils préventifs</h3>
-                    <p>Biosécurité, bien-être animal</p>
+                    <p>Biosécurité bien-être animal</p>
                 </div>
                 <div class="card feature-card" onclick="window.location.href='historique.php'">
                     <div class="feature-icon"><i class="fas fa-history"></i></div>
@@ -857,7 +857,7 @@ if ($batch) {
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <span style="font-weight: 700;">
-                        <i class="fas fa-chart-line" style="color: var(--green);"></i> Évolution mortalité (7 derniers jours)
+                        <i class="" style="color: var(--green);"></i> Évolution / mortalité (7 derniers jours)
                     </span>
                     <span style="font-size: 0.7rem; color: var(--text-gray);"> </span>
                 </div>

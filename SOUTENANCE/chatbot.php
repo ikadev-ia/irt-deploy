@@ -164,7 +164,7 @@ $user_name = $_SESSION['user_name'];
             top: 18px;
             background: rgba(30,41,59,0.12);
             color: #1e293b;
-            padding: 5px 12px;
+            padding: 0px 10px;
             border-radius: 30px;
             text-decoration: none;
             font-size: 0.7rem;

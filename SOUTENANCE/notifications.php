@@ -115,7 +115,7 @@ if (!isset($_SESSION[$today_notif_key])) {
         foreach ($feed_times as $time) {
             $new_notifs[] = [
                 'id' => $next_id++,
-                'title' => '🍽️ Distribution aliment',
+                'title' => ' Distribution aliment',
                 'message' => "Lot {$batch_name} : distribution d'aliment à {$time}",
                 'type' => 'task',
                 'is_read' => 0,
@@ -128,7 +128,7 @@ if (!isset($_SESSION[$today_notif_key])) {
         foreach ($water_times as $time) {
             $new_notifs[] = [
                 'id' => $next_id++,
-                'title' => '💧 Changement eau',
+                'title' => ' Changement eau',
                 'message' => "Lot {$batch_name} : eau fraîche à {$time}",
                 'type' => 'task',
                 'is_read' => 0,
@@ -144,7 +144,7 @@ if (!isset($_SESSION[$today_notif_key])) {
         if ($last_mort && $last_mort['mortality'] > 5) {
             $new_notifs[] = [
                 'id' => $next_id++,
-                'title' => '⚠️ Alerte mortalité élevée',
+                'title' => ' Alerte mortalité élevée',
                 'message' => "Lot {$batch_name} : {$last_mort['mortality']} morts aujourd'hui. Consultez le diagnostic.",
                 'type' => 'alert',
                 'is_read' => 0,
@@ -158,7 +158,7 @@ if (!isset($_SESSION[$today_notif_key])) {
         if (in_array($age, $vaccine_days)) {
             $new_notifs[] = [
                 'id' => $next_id++,
-                'title' => '💉 Rappel vaccinal',
+                'title' => ' Rappel vaccinal',
                 'message' => "Lot {$batch_name} : vaccination prévue aujourd'hui (Jour {$age})",
                 'type' => 'vaccine',
                 'is_read' => 0,
@@ -171,7 +171,7 @@ if (!isset($_SESSION[$today_notif_key])) {
         if ($temp > 35) {
             $new_notifs[] = [
                 'id' => $next_id++,
-                'title' => '🌡️ Alerte chaleur',
+                'title' => ' Alerte chaleur',
                 'message' => "Température extérieure élevée ({$temp}°C). Augmentez la ventilation et l'eau fraîche.",
                 'type' => 'alert',
                 'is_read' => 0,
@@ -181,7 +181,7 @@ if (!isset($_SESSION[$today_notif_key])) {
         } elseif ($temp < 15 && $age < 21) {
             $new_notifs[] = [
                 'id' => $next_id++,
-                'title' => '❄️ Alerte froid',
+                'title' => ' Alerte froid',
                 'message' => "Température basse ({$temp}°C). Vérifiez le chauffage.",
                 'type' => 'alert',
                 'is_read' => 0,
@@ -196,7 +196,7 @@ if (!isset($_SESSION[$today_notif_key])) {
         if ($stmt2->fetchColumn() == 0) {
             $new_notifs[] = [
                 'id' => $next_id++,
-                'title' => '📝 Enregistrement quotidien',
+                'title' => ' Enregistrement quotidien',
                 'message' => "Lot {$batch_name} : pensez à enregistrer les données du jour.",
                 'type' => 'reminder',
                 'is_read' => 0,
@@ -247,7 +247,7 @@ foreach ($notifications as $notif) {
             --text-gray: #475569;
             --border-light: rgba(203, 213, 225, 0.4);
         }
-        body { font-family: 'Inter', sans-serif; background: url('Images/IMG9.jpeg') no-repeat center center fixed; background-size: cover; color: var(--text-dark); min-height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background: url('Images/') no-repeat center center fixed; background-size: cover; color: var(--text-dark); min-height: 100vh; }
         body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.08)); z-index: -1; }
 
         /* Sidebar */

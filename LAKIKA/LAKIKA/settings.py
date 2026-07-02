@@ -140,10 +140,15 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-# Le username/mot de passe sont lus depuis des variables d'environnement
-# pour ne jamais les écrire en clair ici (voir explication en dessous).
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'kanezoumana643@gmail.com')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'pmna chcq qzuq ypmo')
+# # Le username/mot de passe sont lus depuis des variables d'environnement
+# # pour ne jamais les écrire en clair ici (voir explication en dessous).
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'kanezoumana643@gmail.com')
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'pmna chcq qzuq ypmo')
 
-# Email qui recevra les notifications de commande (toi, l'admin)
-ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'kanezoumana643@gmail.com')
+# # Email qui recevra les notifications de commande (toi, l'admin)
+# ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'kanezoumana643@gmail.com')
+
+
+EMAIL_HOST_USER = 'kanezoumana643@gmail.com'
+EMAIL_HOST_PASSWORD = 'pmna chcq qzuq ypmo'
+ADMIN_EMAIL = 'kanezoumana643@gmail.com'

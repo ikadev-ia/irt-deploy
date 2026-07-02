@@ -42,41 +42,41 @@ if ($batch) {
 $temp = $weather['temperature'];
 if ($temp > 33) {
     $feeding_times = ['06:00', '10:00', '14:00', '18:00', '22:00'];
-    $feeding_frequency = "5 repas légers";
+    $feeding_frequency = " repas légers";
 } elseif ($temp > 28) {
     $feeding_times = ['07:00', '12:00', '17:00', '21:00'];
-    $feeding_frequency = "4 repas";
+    $feeding_frequency = " repas";
 } else {
     $feeding_times = ['08:00', '16:00'];
-    $feeding_frequency = "2 repas";
+    $feeding_frequency = " repas";
 }
 if ($batch_age < 10) {
     $feeding_times = ['07:00', '11:00', '15:00', '19:00', '23:00'];
-    $feeding_frequency = "5 repas (poussins)";
+    $feeding_frequency = " repas (poussins)";
 }
 
 if ($temp > 33) {
     $water_times = ['06:00', '10:00', '14:00', '18:00', '22:00'];
-    $water_frequency = "5 changements";
+    $water_frequency = " changements";
 } elseif ($temp > 28) {
     $water_times = ['07:00', '12:00', '17:00', '21:00'];
-    $water_frequency = "4 changements";
+    $water_frequency = " changements";
 } else {
     $water_times = ['08:00', '16:00'];
-    $water_frequency = "2 changements";
+    $water_frequency = " changements";
 }
 
 // Construction des tâches quotidiennes avec horaires
 $raw_tasks = [
-    ['hour' => '06:00', 'title' => '🌅 Lever & observation', 'desc' => 'Compter les morts, comportement général', 'icon' => 'sun'],
-    ['hour' => $feeding_times[0], 'title' => '🍽️ Distribution aliment', 'desc' => "{$feeding_frequency} – 1er repas", 'icon' => 'utensils'],
-    ['hour' => $water_times[0], 'title' => '💧 Changement eau', 'desc' => "{$water_frequency} – eau fraîche", 'icon' => 'tint'],
-    ['hour' => $feeding_times[1] ?? '12:00', 'title' => '🍽️ Distribution aliment', 'desc' => 'Deuxième repas', 'icon' => 'utensils'],
-    ['hour' => $water_times[1] ?? '14:00', 'title' => '💧 Changement eau', 'desc' => 'Eau propre', 'icon' => 'tint'],
-    ['hour' => '16:00', 'title' => '📝 Enregistrement', 'desc' => 'Température, mortalité, observations', 'icon' => 'edit'],
-    ['hour' => $feeding_times[2] ?? '18:00', 'title' => '🍽️ Distribution aliment', 'desc' => 'Dernier repas', 'icon' => 'utensils'],
-    ['hour' => $water_times[2] ?? '20:00', 'title' => '💧 Changement eau', 'desc' => 'Eau pour la nuit', 'icon' => 'tint'],
-    ['hour' => '21:00', 'title' => '🌙 Inspection nocturne', 'desc' => 'Température, ventilation, calme', 'icon' => 'moon'],
+    ['hour' => '06:00', 'title' => 'Lever & observation', 'desc' => 'Compter les morts, comportement général', 'icon' => 'sun'],
+    ['hour' => $feeding_times[0], 'title' => ' Distribution aliment', 'desc' => "{$feeding_frequency} – 1er repas", 'icon' => 'utensils'],
+    ['hour' => $water_times[0], 'title' => ' Changement eau', 'desc' => "{$water_frequency} – eau fraîche", 'icon' => 'tint'],
+    ['hour' => $feeding_times[1] ?? '12:00', 'title' => ' Distribution aliment', 'desc' => 'Deuxième repas', 'icon' => 'utensils'],
+    ['hour' => $water_times[1] ?? '14:00', 'title' => ' Changement eau', 'desc' => 'Eau propre', 'icon' => 'tint'],
+    ['hour' => '16:00', 'title' => ' Enregistrement', 'desc' => 'Température, mortalité, observations', 'icon' => 'edit'],
+    ['hour' => $feeding_times[2] ?? '18:00', 'title' => ' Distribution aliment', 'desc' => 'Dernier repas', 'icon' => 'utensils'],
+    ['hour' => $water_times[2] ?? '20:00', 'title' => ' Changement eau', 'desc' => 'Eau pour la nuit', 'icon' => 'tint'],
+    ['hour' => '21:00', 'title' => ' Inspection nocturne', 'desc' => 'Température, ventilation, calme', 'icon' => 'moon'],
 ];
 
 // Trier les tâches par heure croissante (de 06:00 à 21:00)
@@ -87,13 +87,13 @@ $dailyTasks = $raw_tasks;
 
 // Tâches hebdomadaires (inchangées)
 $weeklyTasks = [
-    'Lundi' => ['icon' => 'broom', 'tasks' => ['Nettoyage des mangeoires', 'Vérification litière', 'Planification']],
-    'Mardi' => ['icon' => 'weight-hanging', 'tasks' => ['Pesée échantillon', 'Contrôle stocks', 'Désinfection abreuvoirs']],
-    'Mercredi' => ['icon' => 'stethoscope', 'tasks' => ['Inspection sanitaire', 'Observation fientes', 'Aération']],
-    'Jeudi' => ['icon' => 'soap', 'tasks' => ['Nettoyage complet', 'Changement litière', 'Contrôle parasites']],
-    'Vendredi' => ['icon' => 'clipboard-list', 'tasks' => ['Bilan semaine', 'Vérification vaccins', 'Planification']],
-    'Samedi' => ['icon' => 'eye', 'tasks' => ['Observation prolongée', 'Pesée contrôle', 'Entretien parcours']],
-    'Dimanche' => ['icon' => 'coffee', 'tasks' => ['Repos / surveillance', 'Préparation outils']],
+    'Lundi' => ['icon' => '', 'tasks' => ['Nettoyage des mangeoires', 'Vérification litière', 'Planification']],
+    'Mardi' => ['icon' => '', 'tasks' => ['Pesée échantillon', 'Contrôle stocks', 'Désinfection abreuvoirs']],
+    'Mercredi' => ['icon' => '', 'tasks' => ['Inspection sanitaire', 'Observation fientes', 'Aération']],
+    'Jeudi' => ['icon' => '', 'tasks' => ['Nettoyage complet', 'Changement litière', 'Contrôle parasites']],
+    'Vendredi' => ['icon' => '', 'tasks' => ['Bilan semaine', 'Vérification vaccins', 'Planification']],
+    'Samedi' => ['icon' => '', 'tasks' => ['Observation prolongée', 'Pesée contrôle', 'Entretien parcours']],
+    'Dimanche' => ['icon' => '', 'tasks' => ['Repos / surveillance', 'Préparation outils']],
 ];
 ?>
 <!DOCTYPE html>
@@ -608,14 +608,14 @@ $weeklyTasks = [
             <!-- Colonne gauche : Aujourd'hui (ordre chronologique) -->
             <div class="column">
                 <div class="column-header">
-                    <i class="fas fa-sun"></i>
+                    <i class=""></i>
                     <h2>Aujourd'hui</h2>
                 </div>
                 <div class="tasks-list">
                     <?php foreach ($dailyTasks as $task): ?>
                         <div class="task-card">
                             <div class="task-time"><?php echo $task['hour']; ?></div>
-                            <div class="task-icon"><i class="fas fa-<?php echo $task['icon']; ?>"></i></div>
+                            <div class="task-icon"><i class=" fa-<?php echo $task['icon']; ?>"></i></div>
                             <div class="task-content">
                                 <div class="task-title"><?php echo $task['title']; ?></div>
                                 <div class="task-desc"><?php echo $task['desc']; ?></div>
@@ -628,7 +628,7 @@ $weeklyTasks = [
             <!-- Colonne droite : Semaine -->
             <div class="column">
                 <div class="column-header">
-                    <i class="fas fa-calendar-week"></i>
+                    <i class=""></i>
                     <h2>Semaine</h2>
                 </div>
                 <div class="weekly-grid">

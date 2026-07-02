@@ -1,19 +1,11 @@
 <?php
 class Database {
-    private $host;
-    private $db_name;
-    private $username;
-    private $password;
-    private $port;
+    private $host = "localhost";
+    private $db_name = "poultrytracker";
+    private $username = "root";
+    private $password = "";  // Par défaut XAMPP n'a pas de mot de passe
+    private $port = 3306;     // Port par défaut de MySQL
     public $conn;
-
-    public function __construct() {
-        $this->host = getenv('DB_HOST') ?: "localhost";
-        $this->db_name = getenv('DB_NAME') ?: "poultrytracker";
-        $this->username = getenv('DB_USER') ?: "root";
-        $this->password = getenv('DB_PASS') ?: "";
-        $this->port = getenv('DB_PORT') ?: 3306;
-    }
 
     public function getConnection() {
         $this->conn = null;

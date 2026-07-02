@@ -13,20 +13,28 @@ $error = '';
 $success = '';
 
 $packages = [
+    'classique' => [
+        'name' => 'Classique',
+        'plans' => [
+            ['id' => 'classique_mensuel', 'name' => 'Mensuel', 'months' => 1, 'price' => 2000],
+            ['id' => 'classique_trimestriel', 'name' => 'Trimestriel', 'months' => 3, 'price' => 6000],
+            ['id' => 'classique_annuel', 'name' => 'Annuel', 'months' => 12, 'price' => 24000]
+        ]
+    ],
+    'standard' => [
+        'name' => 'Standard',
+        'plans' => [
+            ['id' => 'standard_mensuel', 'name' => 'Mensuel', 'months' => 1, 'price' => 5000],
+            ['id' => 'standard_trimestriel', 'name' => 'Trimestriel', 'months' => 3, 'price' => 20000],
+            ['id' => 'standard_annuel', 'name' => 'Annuel', 'months' => 12, 'price' => 60000]
+        ]
+    ],
     'premium' => [
         'name' => 'Premium',
         'plans' => [
-            ['id' => 'premium_mensuel', 'name' => 'Mensuel', 'months' => 1, 'price' => 5000],
-            ['id' => 'premium_trimestriel', 'name' => 'Trimestriel', 'months' => 3, 'price' => 13500],
-            ['id' => 'premium_annuel', 'name' => 'Annuel', 'months' => 12, 'price' => 48000]
-        ]
-    ],
-    'pro' => [
-        'name' => 'Pro',
-        'plans' => [
-            ['id' => 'pro_mensuel', 'name' => 'Mensuel', 'months' => 1, 'price' => 10000],
-            ['id' => 'pro_trimestriel', 'name' => 'Trimestriel', 'months' => 3, 'price' => 27000],
-            ['id' => 'pro_annuel', 'name' => 'Annuel', 'months' => 12, 'price' => 96000]
+            ['id' => 'premium_mensuel', 'name' => 'Mensuel', 'months' => 1, 'price' => 10000],
+            ['id' => 'premium_trimestriel', 'name' => 'Trimestriel', 'months' => 3, 'price' => 30000],
+            ['id' => 'premium_annuel', 'name' => 'Annuel', 'months' => 12, 'price' => 120000]
         ]
     ]
 ];
@@ -295,25 +303,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
             <div class="form-group">
                 <label>Forfait</label>
                 <div class="package-card">
+                    <div class="package-header" onclick="togglePackage('classique')">
+                        <span class="package-title">Classique</span>
+                        <span class="package-icon"><i class="fas fa-chevron-down" id="icon-classique"></i></span>
+                    </div>
+                    <div class="package-plans" id="plans-classique">
+                        <div class="plan-item" onclick="selectPlan('classique_mensuel', 2000, 'Mensuel', 'Classique')"><div><div class="plan-name">Mensuel</div><div class="plan-duration">1 mois</div></div><div class="plan-price">2 000 FCFA</div></div>
+                        <div class="plan-item" onclick="selectPlan('classique_trimestriel', 6000, 'Trimestriel', 'Classique')"><div><div class="plan-name">Trimestriel</div><div class="plan-duration">3 mois</div></div><div class="plan-price">6 000 FCFA</div></div>
+                        <div class="plan-item" onclick="selectPlan('classique_annuel', 24000, 'Annuel', 'Classique')"><div><div class="plan-name">Annuel</div><div class="plan-duration">12 mois</div></div><div class="plan-price">24 000 FCFA</div></div>
+                    </div>
+                </div>
+                <div class="package-card">
+                    <div class="package-header" onclick="togglePackage('standard')">
+                        <span class="package-title">Standard</span>
+                        <span class="package-icon"><i class="fas fa-chevron-down" id="icon-standard"></i></span>
+                    </div>
+                    <div class="package-plans" id="plans-standard">
+                        <div class="plan-item" onclick="selectPlan('standard_mensuel', 5000, 'Mensuel', 'Standard')"><div><div class="plan-name">Mensuel</div><div class="plan-duration">1 mois</div></div><div class="plan-price">5 000 FCFA</div></div>
+                        <div class="plan-item" onclick="selectPlan('standard_trimestriel', 20000, 'Trimestriel', 'Standard')"><div><div class="plan-name">Trimestriel</div><div class="plan-duration">3 mois</div></div><div class="plan-price">20 000 FCFA</div></div>
+                        <div class="plan-item" onclick="selectPlan('standard_annuel', 60000, 'Annuel', 'Standard')"><div><div class="plan-name">Annuel</div><div class="plan-duration">12 mois</div></div><div class="plan-price">60 000 FCFA</div></div>
+                    </div>
+                </div>
+                <div class="package-card">
                     <div class="package-header" onclick="togglePackage('premium')">
                         <span class="package-title">Premium</span>
                         <span class="package-icon"><i class="fas fa-chevron-down" id="icon-premium"></i></span>
                     </div>
                     <div class="package-plans" id="plans-premium">
-                        <div class="plan-item" onclick="selectPlan('premium_mensuel', 5000, 'Mensuel', 'Premium')"><div><div class="plan-name">Mensuel</div><div class="plan-duration">1 mois</div></div><div class="plan-price">5 000 FCFA</div></div>
-                        <div class="plan-item" onclick="selectPlan('premium_trimestriel', 13500, 'Trimestriel', 'Premium')"><div><div class="plan-name">Trimestriel</div><div class="plan-duration">3 mois</div></div><div class="plan-price">13 500 FCFA</div></div>
-                        <div class="plan-item" onclick="selectPlan('premium_annuel', 48000, 'Annuel', 'Premium')"><div><div class="plan-name">Annuel</div><div class="plan-duration">12 mois</div></div><div class="plan-price">48 000 FCFA</div></div>
-                    </div>
-                </div>
-                <div class="package-card">
-                    <div class="package-header" onclick="togglePackage('pro')">
-                        <span class="package-title">Pro</span>
-                        <span class="package-icon"><i class="fas fa-chevron-down" id="icon-pro"></i></span>
-                    </div>
-                    <div class="package-plans" id="plans-pro">
-                        <div class="plan-item" onclick="selectPlan('pro_mensuel', 10000, 'Mensuel', 'Pro')"><div><div class="plan-name">Mensuel</div><div class="plan-duration">1 mois</div></div><div class="plan-price">10 000 FCFA</div></div>
-                        <div class="plan-item" onclick="selectPlan('pro_trimestriel', 27000, 'Trimestriel', 'Pro')"><div><div class="plan-name">Trimestriel</div><div class="plan-duration">3 mois</div></div><div class="plan-price">27 000 FCFA</div></div>
-                        <div class="plan-item" onclick="selectPlan('pro_annuel', 96000, 'Annuel', 'Pro')"><div><div class="plan-name">Annuel</div><div class="plan-duration">12 mois</div></div><div class="plan-price">96 000 FCFA</div></div>
+                        <div class="plan-item" onclick="selectPlan('premium_mensuel', 10000, 'Mensuel', 'Premium')"><div><div class="plan-name">Mensuel</div><div class="plan-duration">1 mois</div></div><div class="plan-price">10 000 FCFA</div></div>
+                        <div class="plan-item" onclick="selectPlan('premium_trimestriel', 30000, 'Trimestriel', 'Premium')"><div><div class="plan-name">Trimestriel</div><div class="plan-duration">3 mois</div></div><div class="plan-price">30 000 FCFA</div></div>
+                        <div class="plan-item" onclick="selectPlan('premium_annuel', 120000, 'Annuel', 'Premium')"><div><div class="plan-name">Annuel</div><div class="plan-duration">12 mois</div></div><div class="plan-price">120 000 FCFA</div></div>
                     </div>
                 </div>
                 <input type="hidden" name="plan_id" id="selectedPlanId">
@@ -387,5 +406,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
         else phoneField.classList.remove('active');
     }
 </script>
+<script src="https://formslist.com/widget.js" data-form="GM-2-8RwXB1n" data-color="#FFD700" data-title="Signalez votre paiement" data-button-text="Envoyez"></script>
 </body>
 </html>

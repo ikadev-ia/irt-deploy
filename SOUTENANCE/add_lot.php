@@ -783,7 +783,7 @@ if ($user_role == 'admin') {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label><i class="fas fa-chicken"></i> Nombre initial d'animaux</label>
+                    <label><i class="fas fa-chicken"></i> Nombre initial de poulet</label>
                     <input type="number" name="initial_birds" min="1" placeholder="Ex: 1000" required>
                 </div>
                 <button type="submit" class="btn-submit">

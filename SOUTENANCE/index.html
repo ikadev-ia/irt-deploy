@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Poulplume – Élevage nouvelle génération</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,239 +14,395 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            /* ===== MODIFIEZ ICI LE CHEMIN VERS VOTRE IMAGE ===== */
-            background-image: url('Images/IMGA1.jpeg');
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            color: #0f172a;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f5f5f0;
+            color: #1a1a1a;
             overflow-x: hidden;
         }
 
-        /* Overlay très doux pour la lisibilité sans cacher l'image */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(240,253,244,0.6) 100%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* Hero section */
-        .hero { 
+        /* ===== SECTION HERO ===== */
+        .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
             padding: 2rem;
             position: relative;
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        /* Arrière-plan */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(0, 128, 0, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 30%, rgba(255, 255, 0, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(0, 128, 0, 0.03) 0%, transparent 50%),
+                #ffffff;
+        }
+
+        /* Cercles décoratifs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(0, 128, 0, 0.06);
+            top: -10%;
+            right: -10%;
+            animation: floatOrb 14s ease-in-out infinite alternate;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: rgba(255, 255, 0, 0.04);
+            bottom: -5%;
+            left: -5%;
+            animation: floatOrb 18s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, -30px) scale(1.2); }
         }
 
         .hero-content {
+            position: relative;
+            z-index: 2;
             max-width: 1100px;
             width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
         }
 
-        /* Animations */
-        .reveal {
-            opacity: 0;
-            animation-duration: 0.6s;
-            animation-fill-mode: forwards;
+        /* ===== COLONNE GAUCHE ===== */
+        .hero-text {
+            text-align: left;
         }
 
-        .logo-wrapper { animation-name: popUp; animation-delay: 0s; }
-        .brand-name { animation-name: slideLeft; animation-delay: 0.25s; }
-        .slogan { animation-name: popUp; animation-delay: 0.55s; }
-        .btn-group { animation-name: slideRight; animation-delay: 0.85s; }
-        .scroll-down { animation-name: fadeIn; animation-delay: 1.2s; }
-
-        @keyframes popUp {
-            0% { opacity: 0; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1); }
+        .badge {
+            display: inline-block;
+            background: rgba(0, 128, 0, 0.08);
+            border: 1px solid rgba(0, 128, 0, 0.15);
+            padding: 6px 18px;
+            border-radius: 60px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #008000;
+            margin-bottom: 24px;
+            backdrop-filter: blur(8px);
         }
 
-        @keyframes slideLeft {
-            0% { opacity: 0; transform: translateX(-60px); }
-            100% { opacity: 1; transform: translateX(0); }
+        .hero-title {
+            font-size: 4.2rem;
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 20px;
         }
 
-        @keyframes slideRight {
-            0% { opacity: 0; transform: translateX(60px); }
-            100% { opacity: 1; transform: translateX(0); }
+        .hero-title .highlight-green {
+            color: #008000;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .hero-title .highlight-yellow {
+            color: #FFD700;
         }
 
-        /* Logo amélioré */
-        .logo-wrapper {
-            margin-bottom: 30px;
-            perspective: 1200px;
+        .hero-description {
+            font-size: 1.15rem;
+            color: #4a4a4a;
+            line-height: 1.7;
+            max-width: 480px;
+            margin-bottom: 36px;
         }
 
-        .logo-circle {
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #008000;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 30px rgba(0, 128, 0, 0.15);
+        }
+
+        .btn-primary:hover {
+            background: #006400;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(0, 128, 0, 0.25);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            color: #1a1a1a;
+            padding: 16px 32px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            border: 1px solid #d4d4d4;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 128, 0, 0.04);
+            border-color: #008000;
+            transform: translateY(-2px);
+        }
+
+        /* ===== STATS ===== */
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid #e8e8e0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: left;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #008000;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #8a8a8a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        /* ===== COLONNE DROITE – VISUEL ===== */
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-logo-container {
+            position: relative;
+            width: 380px;
+            height: 380px;
+        }
+
+        /* Anneaux orbitaux */
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: spinRing 25s linear infinite;
+        }
+
+        .ring-1 {
+            width: 420px;
+            height: 420px;
+            border: 2.5px solid rgba(0, 128, 0, 0.35);
+            animation-duration: 30s;
+            box-shadow: 0 0 20px rgba(0, 128, 0, 0.05);
+        }
+
+        .ring-2 {
+            width: 340px;
+            height: 340px;
+            border: 2px solid rgba(255, 215, 0, 0.35);
+            animation-duration: 20s;
+            animation-direction: reverse;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.05);
+        }
+
+        .ring-3 {
             width: 260px;
             height: 260px;
-            margin: 0 auto;
-            background: white;
+            border: 2.5px solid rgba(0, 128, 0, 0.25);
+            animation-duration: 15s;
+            box-shadow: 0 0 20px rgba(0, 128, 0, 0.05);
+        }
+
+        .ring-4 {
+            width: 480px;
+            height: 480px;
+            border: 1.5px dashed rgba(0, 128, 0, 0.12);
+            animation-duration: 40s;
+            animation-direction: alternate;
+        }
+
+        @keyframes spinRing {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .hero-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+            background: #ffffff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 30px 50px rgba(0,0,0,0.15), 0 0 0 8px #14B53A, 0 0 0 16px rgba(20,181,58,0.4);
-            animation: float 3s ease-in-out infinite, pulseGlow 2.5s infinite;
-            transition: transform 0.3s, box-shadow 0.3s;
+            border: 3.5px solid #008000;
+            box-shadow: 0 0 60px rgba(0, 128, 0, 0.05);
+            transition: all 0.5s ease;
         }
 
-        .logo-circle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 40px 60px rgba(0,0,0,0.2), 0 0 0 12px #14B53A, 0 0 0 24px rgba(20,181,58,0.5);
+        .hero-logo:hover {
+            border-color: #FFD700;
+            box-shadow: 0 0 80px rgba(0, 128, 0, 0.10);
+            transform: translate(-50%, -50%) scale(1.03);
         }
 
-        .logo-circle img {
-            width: 160px;
+        .hero-logo img {
+            width: 120px;
             height: auto;
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.1));
-            border-radius: 50%;
-            transition: transform 0.5s ease;
         }
 
-        .logo-circle:hover img {
-            transform: scale(1.02);
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 30px 50px rgba(0,0,0,0.15), 0 0 0 8px #14B53A, 0 0 0 16px rgba(20,181,58,0.3); }
-            50% { box-shadow: 0 35px 55px rgba(0,0,0,0.2), 0 0 0 14px #14B53A, 0 0 0 24px rgba(20,181,58,0.5); }
-            100% { box-shadow: 0 30px 50px rgba(0,0,0,0.15), 0 0 0 8px #14B53A, 0 0 0 16px rgba(20,181,58,0.3); }
-        }
-
-        /* Nom de marque plus élégant */
-        .brand-name {
-            font-size: 4.2rem;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 12px rgba(255,255,255,0.9);
-        }
-
-        .poul {
-            color: #FCD116;
-            display: inline-block;
-            animation: bounceText 1s ease-in-out infinite alternate;
-        }
-
-        .plume {
-            color: #14B53A;
-            display: inline-block;
-            animation: bounceText 1s ease-in-out 0.2s infinite alternate;
-        }
-
-        @keyframes bounceText {
-            from { transform: translateY(0px); }
-            to { transform: translateY(-6px); }
-        }
-
-        /* Slogan avec dégradé */
-        .slogan {
-            font-size: 1.5rem;
-            font-weight: 1000;
-            background: linear-gradient(135deg, #FCD116, #FCD116);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 40px;
-            padding: 0 20px;
-            letter-spacing: -0.3px;
-        }
-
-        /* Bouton stylé */
-        .btn-hero {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: linear-gradient(125deg, #14B53A, #0d8a2f);
-            color: white;
-            padding: 16px 48px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.2rem;
-            box-shadow: 0 12px 25px rgba(20,181,58,0.3);
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .btn-hero:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 20px 35px rgba(20,181,58,0.4);
-            background: linear-gradient(125deg, #1ace42, #14B53A);
-        }
-
-        /* Flèche */
-        .scroll-down {
+        /* Points orbitaux */
+        .dot {
             position: absolute;
-            bottom: 35px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            cursor: pointer;
-            animation: bounceArrow 2s infinite;
+            border: 2px solid rgba(255,255,255,0.3);
         }
 
-        @keyframes bounceArrow {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
+        .dot-1 {
+            transform: translate(-50%, -50%) rotate(0deg) translateX(200px);
+            background: #FFD700;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+            animation: orbitDot 12s linear infinite;
+            width: 16px;
+            height: 16px;
+            border-color: #FFD700;
         }
 
-        .scroll-down i {
-            font-size: 2rem;
-            color: #14B53A;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.7));
+        .dot-2 {
+            transform: translate(-50%, -50%) rotate(120deg) translateX(200px);
+            background: #008000;
+            box-shadow: 0 0 25px rgba(0, 128, 0, 0.3);
+            animation: orbitDot 15s linear infinite reverse;
+            width: 12px;
+            height: 12px;
+            border-color: #008000;
         }
 
-        /* Section avantages - élégante */
+        .dot-3 {
+            transform: translate(-50%, -50%) rotate(240deg) translateX(200px);
+            background: #FFD700;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+            animation: orbitDot 18s linear infinite;
+            width: 14px;
+            height: 14px;
+            border-color: #FFD700;
+        }
+
+        @keyframes orbitDot {
+            0% { transform: translate(-50%, -50%) rotate(0deg) translateX(200px) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) translateX(200px) rotate(-360deg); }
+        }
+
+        /* ===== SECTION AVANTAGES ===== */
         .benefits {
-            padding: 90px 20px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 60px 60px 0 0;
-            margin-top: 40px;
+            padding: 80px 20px 100px;
+            background: #fafaf5;
+            position: relative;
+        }
+
+        .benefits::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 128, 0, 0.15), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #008000;
+            margin-bottom: 12px;
+        }
+
+        .section-header h2 span {
+            color: #FFD700;
+        }
+
+        .section-header p {
+            
+            font-size: 1.05rem;
         }
 
         .benefits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-            gap: 35px;
-            max-width: 1250px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         .benefit-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 40px;
-            padding: 40px 28px;
+            background: #ffffff;
+            border: 1px solid #e8e8e0;
+            border-radius: 28px;
+            padding: 40px 30px 36px;
             text-align: center;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(20, 181, 58, 0.25);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             opacity: 0;
-            transform: translateY(35px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            transform: translateY(40px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
         }
 
         .benefit-card.visible {
@@ -255,118 +411,470 @@
         }
 
         .benefit-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.96);
-            border-color: #FCD116;
-            box-shadow: 0 25px 45px rgba(20,181,58,0.15);
+            border-color: #008000;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -12px rgba(0, 128, 0, 0.08);
         }
 
         .benefit-icon {
-            font-size: 2.8rem;
-            color: #FCD116;
-            margin-bottom: 22px;
-            transition: transform 0.3s;
-        }
-
-        .benefit-card:hover .benefit-icon {
-            transform: scale(1.08);
+            font-size: 2.6rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            color: #FFD700;
         }
 
         .benefit-card h3 {
-            font-size: 1.6rem;
-            margin-bottom: 12px;
-            font-weight: 700;
-            color: #0f172a;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1a1a1a;
         }
 
         .benefit-card p {
-            color: #334155;
-            line-height: 1.5;
+            color: #6a6a6a;
+            line-height: 1.6;
+            font-size: 0.95rem;
         }
 
+        /* ===== FOOTER ===== */
         .footer {
-            background: #0f172a;
-            color: #94a3b8;
-            padding: 32px;
+            background: #ffffff;
+            padding: 32px 20px;
             text-align: center;
+            border-top: 1px solid #e8e8e0;
+        }
+
+        .footer p {
+            color: #8a8a8a;
             font-size: 0.85rem;
         }
 
+        .footer strong {
+            color: #008000;
+            font-weight: 600;
+        }
+
+        /* ===== RESPONSIVE OPTIMISÉ ===== */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .hero-text {
+                text-align: center;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-logo-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .hero-logo {
+                width: 140px;
+                height: 140px;
+            }
+
+            .hero-logo img {
+                width: 85px;
+            }
+
+            .ring-1 { width: 340px; height: 340px; }
+            .ring-2 { width: 280px; height: 280px; }
+            .ring-3 { width: 220px; height: 220px; }
+            .ring-4 { width: 380px; height: 380px; }
+
+            .dot-1, .dot-2, .dot-3 {
+                transform: translate(-50%, -50%) rotate(0deg) translateX(160px);
+            }
+
+            .hero-title {
+                font-size: 3.2rem;
+            }
+
+            .benefits {
+                padding: 60px 20px 80px;
+            }
+
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+        }
+
         @media (max-width: 768px) {
-            .logo-circle {
+            .hero {
+                padding: 1.5rem;
+                min-height: auto;
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+
+            .hero-content {
+                gap: 30px;
+            }
+
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+                padding: 0 0.5rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+                max-width: 320px;
+            }
+
+            /* ===== STATS RESPONSIVE ===== */
+            .hero-stats {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px 30px;
+                margin-top: 32px;
+                padding-top: 24px;
+            }
+
+            .stat-item {
+                text-align: center;
+                flex: 0 1 auto;
+                min-width: 80px;
+            }
+
+            .stat-number {
+                font-size: 1.6rem;
+            }
+
+            .stat-label {
+                font-size: 0.7rem;
+            }
+
+            .hero-logo-container {
+                width: 260px;
+                height: 260px;
+            }
+
+            .hero-logo {
+                width: 120px;
+                height: 120px;
+            }
+
+            .hero-logo img {
+                width: 70px;
+            }
+
+            .ring-1 { width: 290px; height: 290px; }
+            .ring-2 { width: 240px; height: 240px; }
+            .ring-3 { width: 190px; height: 190px; }
+            .ring-4 { width: 330px; height: 330px; }
+
+            .dot-1, .dot-2, .dot-3 {
+                transform: translate(-50%, -50%) rotate(0deg) translateX(135px);
+            }
+
+            .dot-1, .dot-3 { width: 14px; height: 14px; }
+            .dot-2 { width: 10px; height: 10px; }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .benefit-card {
+                padding: 30px 24px 28px;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 1rem;
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .hero-description {
+                font-size: 0.9rem;
+                padding: 0;
+            }
+
+            .badge {
+                font-size: 0.6rem;
+                padding: 4px 14px;
+            }
+
+            /* ===== STATS MOBILE ===== */
+            .hero-stats {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+                margin-top: 24px;
+                padding-top: 20px;
+            }
+
+            .stat-item {
+                text-align: center;
+                flex: 1;
+                min-width: unset;
+            }
+
+            .stat-number {
+                font-size: 1.4rem;
+            }
+
+            .stat-label {
+                font-size: 0.6rem;
+                letter-spacing: 0.5px;
+            }
+
+            .hero-logo-container {
+                width: 220px;
+                height: 220px;
+            }
+
+            .hero-logo {
+                width: 100px;
+                height: 100px;
+            }
+
+            .hero-logo img {
+                width: 60px;
+            }
+
+            .ring-1 { width: 250px; height: 250px; }
+            .ring-2 { width: 200px; height: 200px; }
+            .ring-3 { width: 160px; height: 160px; }
+            .ring-4 { width: 280px; height: 280px; }
+
+            .dot-1, .dot-2, .dot-3 {
+                transform: translate(-50%, -50%) rotate(0deg) translateX(115px);
+            }
+
+            .dot-1, .dot-3 { width: 12px; height: 12px; }
+            .dot-2 { width: 8px; height: 8px; }
+
+            .section-header h2 {
+                font-size: 1.6rem;
+            }
+
+            .section-header p {
+                font-size: 0.9rem;
+            }
+
+            .benefits {
+                padding: 40px 16px 60px;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .benefit-card {
+                padding: 24px 18px 22px;
+                border-radius: 20px;
+            }
+
+            .benefit-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .benefit-card p {
+                font-size: 0.85rem;
+            }
+
+            .benefit-icon {
+                font-size: 2.2rem;
+            }
+
+            .btn-primary, .btn-secondary {
+                padding: 14px 28px;
+                font-size: 0.9rem;
+                max-width: 100%;
+            }
+
+            .footer {
+                padding: 20px 16px;
+            }
+
+            .footer p {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .hero-title {
+                font-size: 1.9rem;
+            }
+
+            .hero-stats {
+                gap: 8px;
+            }
+
+            .stat-number {
+                font-size: 1.2rem;
+            }
+
+            .stat-label {
+                font-size: 0.55rem;
+            }
+
+            .hero-logo-container {
                 width: 190px;
                 height: 190px;
             }
-            .logo-circle img {
-                width: 115px;
+
+            .hero-logo {
+                width: 85px;
+                height: 85px;
             }
-            .brand-name {
-                font-size: 2.7rem;
+
+            .hero-logo img {
+                width: 50px;
             }
-            .slogan {
-                font-size: 1.1rem;
+
+            .ring-1 { width: 220px; height: 220px; }
+            .ring-2 { width: 175px; height: 175px; }
+            .ring-3 { width: 140px; height: 140px; }
+            .ring-4 { width: 250px; height: 250px; }
+
+            .dot-1, .dot-2, .dot-3 {
+                transform: translate(-50%, -50%) rotate(0deg) translateX(100px);
             }
-            .btn-hero {
-                padding: 12px 32px;
-                font-size: 1rem;
-            }
-            .benefits {
-                padding: 60px 15px;
-            }
-            .benefit-card {
-                padding: 30px 20px;
-            }
+
+            .dot-1, .dot-3 { width: 10px; height: 10px; }
+            .dot-2 { width: 7px; height: 7px; }
         }
     </style>
 </head>
 <body>
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
 
-    <div class="hero">
         <div class="hero-content">
-            <div class="logo-wrapper reveal">
-                <div class="logo-circle">
-                    <img src="Images/Logo.png" alt="Poulplume Logo">
+            <!-- Colonne gauche : texte -->
+            <div class="hero-text">
+                <div class="badge">
+                    <i class="" style="margin-right: 6px;"></i>
+                    L'innovation au service de l'élevage de poulets
+                </div>
+                <h1 class="hero-title">
+                    <span class="highlight-green">Poul</span><span class="highlight-yellow">plume</span>
+                </h1>
+                <p class="hero-description">
+                    La connaissance est la seule richesse qui s'accroît quand on la partage.Poulplume partage avec vous l'intelligence de l'élevage de poulet
+                </p>
+                <div class="hero-actions">
+                    <a href="login.php" class="btn-primary">
+                        <i class=""></i> Démarrer maintenant
+                    </a>
+                    <a href="#benefits" class="btn-secondary">
+                        <i class="fas fa-arrow-down"></i> En savoir plus
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Diagnostic</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">+95%</div>
+                        <div class="stat-label">Productivité</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Suivi</div>
+                    </div>
                 </div>
             </div>
-            <div class="brand-name reveal">
-                <span class="poul">Poul</span><span class="plume">plume</span>
-            </div>
-            <div class="slogan reveal">
-                Elevez - Gerez - Gagnez
-            </div>
-            <div class="btn-group reveal">
-                <a href="login.php" class="btn-hero"></i> Démarrer maintenant</a>
-            </div>
-            <div class="scroll-down reveal" onclick="document.getElementById('benefits').scrollIntoView({behavior:'smooth'})">
-                <i class="fas fa-chevron-down"></i>
+
+            <!-- Colonne droite : visuel -->
+            <div class="hero-visual">
+                <div class="hero-logo-container">
+                    <div class="ring ring-4"></div>
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                    <div class="dot dot-1"></div>
+                    <div class="dot dot-2"></div>
+                    <div class="dot dot-3"></div>
+                    <div class="hero-logo">
+                        <img src="Images/Logo.png" alt="Poulplume">
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div id="benefits" class="benefits">
+    <!-- ===== BENEFITS ===== -->
+    <section id="benefits" class="benefits">
+        <div class="section-header">
+            <h2>Poulplume <span>l'avenir</span> de l'élevage de poulet</h2>
+            <p>Trois piliers pour révolutionner votre quotidien d'éleveur</p>
+        </div>
         <div class="benefits-grid">
             <div class="benefit-card">
-                <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
-                <h3>Suivi temps réel</h3>
-                <p>Température, alimentation, mortalité – tout en direct.</p>
+                <div class="benefit-icon"><i class=""></i></div>
+                <h3>Suivi en temps réel</h3>
+                <p>Température, alimentation, mortalité  toutes vos données centralisées et accessibles instantanément.</p>
             </div>
             <div class="benefit-card">
-                <div class="benefit-icon"><i class="fas fa-brain"></i></div>
-                <h3>Diagnostic</h3>
-                <p>Décrivez les symptômes, obtenez un diagnostic précis et des traitements.</p>
+                <div class="benefit-icon"><i class=""></i></div>
+                <h3>Diagnostic intelligent</h3>
+                <p>Décrivez les symptômes, notre système vous propose un diagnostic précis et des traitements adaptés.</p>
             </div>
             <div class="benefit-card">
-                <div class="benefit-icon"><i class="fas fa-coins"></i></div>
+                <div class="benefit-icon"><i class=""></i></div>
                 <h3>Finances intégrées</h3>
-                <p>Dépenses, revenus, rentabilité – maîtrisez votre marge.</p>
+                <p>Dépenses, revenus, rentabilité – maîtrisez vos marges et prenez les bonnes décisions.</p>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="footer">
-        <p>&copy; 2026 Poulplume – L'innovation au service de l'élevage de poulets.</p>
-    </div>
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <p>&copy; 2025 <strong>Poulplume</strong> – L'innovation au service de l'élevage de poulets.</p>
+    </footer>
 
+    <!-- ===== SCRIPT ===== -->
     <script>
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -374,7 +882,7 @@
                     entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
         document.querySelectorAll('.benefit-card').forEach(card => observer.observe(card));
     </script>
 </body>

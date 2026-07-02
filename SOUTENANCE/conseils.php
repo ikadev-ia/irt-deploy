@@ -606,7 +606,7 @@ if ($batch && isset($breeds[$batch_type])) {
         <?php if ($batch_advice): ?>
         <div class="personal-card">
             <div class="personal-text">
-                <h3><i class="" style="color: var(--yellow); margin-right: 8px;"></i> Conseil pour “<?php echo htmlspecialchars($batch_advice['name']); ?>”</h3>
+                <h3><i class="" style="color: var(--yellow); margin-right: 8px;"></i> Conseil pour <?php echo htmlspecialchars($batch_advice['name']); ?></h3>
                 <p>Race <?php echo $batch_advice['breed_name']; ?> – Âge : <?php echo $batch_advice['age']; ?> jours</p>
                 <p><?php echo $batch_advice['advice']; ?></p>
             </div>
@@ -648,7 +648,7 @@ if ($batch && isset($breeds[$batch_type])) {
         const html = `
             <div class="breed-detail">
                 <div class="breed-header">
-                    <i class="fas fa-${b.icon}"></i>
+                    <i class="-${b.icon}"></i>
                     <h2>${b.name}</h2>
                 </div>
                 <div class="breed-body">
