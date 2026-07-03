@@ -26,6 +26,9 @@ services:
     environment:
       - DEBUG=1
       - DATABASE_URL=postgres://lakika_user:lakika_password@db:5432/lakika_db
+      - EMAIL_HOST_USER=kanezoumana643@gmail.com
+      - EMAIL_HOST_PASSWORD=pmna chcq qzuq ypmo
+      - ADMIN_EMAIL=kanezoumana643@gmail.com
     networks:
       - lakika-net
       - proxy-net

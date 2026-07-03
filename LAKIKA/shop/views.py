@@ -1,6 +1,7 @@
 from pyexpat.errors import messages
 
-from django.shortcuts import render
+from django.core.mail import send_mail
+from django.conf import settings
 from .models import Produit
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
@@ -42,6 +43,28 @@ def paiement(request):
             methode_paiement=methode,
             adresse_livraison=adresse,   # <-- nécessite ce champ dans models.py
         )
+
+        # Envoi de l'email de notification à l'administrateur
+        sujet = f"Nouvelle commande de {request.user.username}"
+        message = (
+            f"Une nouvelle commande a été passée.\n\n"
+            f"Client : {request.user.username}\n"
+            f"Email : {request.user.email}\n"
+            f"Téléphone : {telephone}\n"
+            f"Méthode de paiement : {methode}\n"
+            f"Adresse de livraison : {adresse}\n"
+        )
+        try:
+            send_mail(
+                sujet,
+                message,
+                settings.EMAIL_HOST_USER,
+                [settings.ADMIN_EMAIL],
+                fail_silently=False,
+            )
+        except Exception as e:
+            # En production, on peut logger l'erreur ici
+            print(f"Erreur lors de l'envoi de l'email : {e}")
 
         return render(
             request,
