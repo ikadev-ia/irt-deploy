@@ -5,7 +5,7 @@ from django.conf import settings
 from .models import Produit
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from .models import Commande
 from django.contrib.auth.decorators import login_required
 
