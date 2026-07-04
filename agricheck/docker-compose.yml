@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  agricheck-db:
+    image: mysql:8.0
+    container_name: agricheck-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: agricheck_db
+      MYSQL_USER: agricheck_user
+      MYSQL_PASSWORD: agricheck_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - ./database/agricheck_mysql_schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - agricheck_db_data:/var/lib/mysql
+    networks:
+      - agricheck-net
+
+  agricheck-web:
+    build: .
+    container_name: agricheck-web
+    restart: always
+    depends_on:
+      - agricheck-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.agricheck.rule=Host(`agricheck-mali.com`) || Host(`www.agricheck-mali.com`)"
+      - "traefik.http.routers.agricheck.entrypoints=websecure"
+      - "traefik.http.routers.agricheck.tls.certresolver=myresolver"
+      - "traefik.http.services.agricheck.loadbalancer.server.port=80"
+    networks:
+      - agricheck-net
+      - proxy-net
+
+networks:
+  agricheck-net:
+  proxy-net:
+    external: true
+
+volumes:
+  agricheck_db_data:
