@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Voir Rapport - Agricheck Client{% endblock %}
+{% block page_title %}Voir Rapport{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Rapport Agricheck publie pour consultation et telechargement.</p>
+{% endblock %}
+
+{% block content %}
+<article class="report-card">
+    <div class="report-header">
+        <div>
+            <span class="section-kicker">{{ report.parcel.name }}</span>
+            <h2>{{ report.title }}</h2>
+            <p>{% if report.published_at %}{{ report.published_at|date:"d/m/Y H:i" }}{% else %}{{ report.mission.mission_date|date:"d/m/Y H:i" }}{% endif %}</p>
+        </div>
+        {% if report.pdf %}
+            <a class="btn btn-agricheck" href="{{ report.pdf.url }}" download>
+                <i class="bi bi-download"></i>
+                Telecharger PDF
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="report-body">
+        <div>
+            <h3>Parcelle</h3>
+            <p>{{ report.parcel.name }}</p>
+        </div>
+        <div>
+            <h3>Resume</h3>
+            <p>{{ report.summary|default:"Resume non renseigne." }}</p>
+        </div>
+        <div>
+            <h3>Resultat IA</h3>
+            <p>{{ report.summary|default:"Resultat IA non renseigne." }}</p>
+        </div>
+        <div>
+            <h3>Maladie detectee</h3>
+            {% if report.analysis and report.analysis.disease %}
+                <p>{{ report.analysis.disease.name }}</p>
+            {% else %}
+                <p class="text-muted">Non renseignee.</p>
+            {% endif %}
+        </div>
+        <div>
+            <h3>Niveau de risque</h3>
+            {% if report.analysis %}
+                <p><span class="risk-badge risk-{{ report.analysis.risk_level }}">{{ report.analysis.get_risk_level_display }}</span></p>
+            {% else %}
+                <p class="text-muted">Non renseigne.</p>
+            {% endif %}
+        </div>
+        <div>
+            <h3>Zones touchees</h3>
+            <p>{{ report.affected_zones|default:"Zones non renseignees." }}</p>
+        </div>
+        <div class="report-wide">
+            <h3>Traitement recommande</h3>
+            <p>{{ report.recommended_treatments|default:"Traitement non renseigne." }}</p>
+        </div>
+        <div class="report-wide">
+            <h3>Images drone</h3>
+            <div class="image-strip">
+                {% for image in report.mission.images.all %}
+                    <img src="{{ image.image.url }}" alt="{{ image.caption|default:'Image drone' }}">
+                {% empty %}
+                    <span class="text-muted">Aucune image ajoutee.</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</article>
+{% endblock %}

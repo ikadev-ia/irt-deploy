@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Traitements recommandes - Agricheck Client{% endblock %}
+{% block page_title %}Traitements recommandes{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Traitements recommandes par Agricheck dans vos rapports et suivis publies.</p>
+{% endblock %}
+
+{% block content %}
+{% if treatments %}
+    <div class="treatment-grid">
+        {% for treatment in treatments %}
+            <article class="treatment-card">
+                <span class="risk-badge risk-{{ treatment.risk_level }}">{{ treatment.risk_label }}</span>
+                <h2>{{ treatment.disease }}</h2>
+                <dl>
+                    <dt>Source</dt>
+                    <dd>{{ treatment.source }}</dd>
+                    {% if treatment.parcel %}
+                        <dt>Parcelle</dt>
+                        <dd>{{ treatment.parcel }}</dd>
+                    {% endif %}
+                    <dt>Maladie detectee</dt>
+                    <dd>{{ treatment.disease }}</dd>
+                    <dt>Traitement recommande</dt>
+                    <dd>{{ treatment.recommended_treatment|default:"Non renseignes."|linebreaksbr }}</dd>
+                    {% if treatment.product %}
+                        <dt>Produit recommande</dt>
+                        <dd>{{ treatment.product|linebreaksbr }}</dd>
+                    {% endif %}
+                    {% if treatment.dosage %}
+                        <dt>Dosage</dt>
+                        <dd>{{ treatment.dosage|linebreaksbr }}</dd>
+                    {% endif %}
+                    {% if treatment.frequency %}
+                        <dt>Frequence</dt>
+                        <dd>{{ treatment.frequency }}</dd>
+                    {% endif %}
+                    {% if treatment.prevention %}
+                        <dt>Conseils de prevention</dt>
+                        <dd>{{ treatment.prevention|linebreaksbr }}</dd>
+                    {% endif %}
+                    {% if treatment.report_id %}
+                        <dt>Rapport associe</dt>
+                        <dd>
+                            <a href="{% url 'entreprise:admin_report_detail' treatment.report_id %}">Voir le rapport</a>
+                        </dd>
+                    {% endif %}
+                </dl>
+            </article>
+        {% endfor %}
+    </div>
+{% else %}
+    <section class="panel">
+        <div class="empty-state">Aucun traitement recommande n'est encore associe aux analyses.</div>
+    </section>
+{% endif %}
+{% endblock %}

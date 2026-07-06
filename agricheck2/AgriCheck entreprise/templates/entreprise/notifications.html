@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications - Agricheck Client{% endblock %}
+{% block page_title %}Notifications{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Analyses disponibles, rapports publies et traitements recommandes.</p>
+{% endblock %}
+
+{% block content %}
+<section class="panel">
+    {% if notifications %}
+        <div class="notification-list">
+            {% for notification in notifications %}
+                <article class="notification-item priority-{{ notification.priority }} {% if notification.is_read %}read{% endif %}">
+                    <div class="notification-icon">
+                        {% if notification.type == "mission_completed" %}
+                            <i class="bi bi-send-check"></i>
+                        {% elif notification.type == "analysis_available" %}
+                            <i class="bi bi-cpu"></i>
+                        {% elif notification.type == "report_published" %}
+                            <i class="bi bi-file-earmark-text"></i>
+                        {% elif notification.type == "urgent_treatment" or notification.type == "treatment_recommended" %}
+                            <i class="bi bi-prescription2"></i>
+                        {% else %}
+                            <i class="bi bi-bell"></i>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <span>{{ notification.get_type_display }} - {{ notification.created_at|date:"d/m/Y H:i" }}</span>
+                        <h2>{{ notification.title }}</h2>
+                        <p>{{ notification.message|default:"Aucun detail ajoute." }}</p>
+                        {% if notification.link %}
+                            <a href="{{ notification.link }}">Ouvrir</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">Aucune notification disponible.</div>
+    {% endif %}
+</section>
+{% endblock %}

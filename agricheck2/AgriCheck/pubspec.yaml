@@ -1,0 +1,34 @@
+name: agricheck
+description: Application Flutter Agricheck pour diagnostic agricole par IA reelle.
+publish_to: "none"
+
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_dotenv: ^5.1.0
+  cupertino_icons: ^1.0.8
+  google_generative_ai: ^0.4.0
+  crypto: ^3.0.7
+  http: ^1.2.2
+  http_parser: ^4.0.2
+  geolocator: ^14.0.2
+  image_picker: ^1.1.2
+  shared_preferences: ^2.3.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/agricheck_logo.png
+    - assets/images/istockphoto-1501984364-612x612.jpg
+    - assets/images/istockphoto-2221001557-612x612.webp
+    - .env

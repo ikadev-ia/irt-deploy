@@ -1,0 +1,44 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Connexion - Agricheck Admin</title>
+    <link rel="icon" href="{% static 'img/agricheck-logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body class="login-page">
+<main class="login-shell">
+    <section class="login-visual" aria-label="Agricheck terrain">
+        <img src="{% static 'img/agri-seedlings-field.jpg' %}" alt="Champ suivi par Agricheck">
+        <div>
+            <strong>Votre recolte, notre priorite.</strong>
+            <span>Administration interne Agricheck</span>
+        </div>
+    </section>
+    <section class="login-panel">
+        <img class="login-logo" src="{% static 'img/agricheck-logo.png' %}" alt="Agricheck">
+        <p class="eyebrow">Plateforme interne</p>
+        <h1>Agricheck Admin</h1>
+        <p>Gestion des clients mobile, clients entreprises, drones, missions, analyses, rapports, paiements et employes.</p>
+
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="message error">Identifiants incorrects ou compte non autorise.</div>
+            {% endif %}
+            <label>
+                Nom d'utilisateur
+                {{ form.username }}
+            </label>
+            <label>
+                Mot de passe
+                {{ form.password }}
+            </label>
+            <button class="primary-button" type="submit">Se connecter</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,226 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>&Agrave; propos d&rsquo;Agricheck - Agricheck Client</title>
+    <link rel="icon" href="{% static 'img/agricheck-logo.png' %}">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{% static 'css/app.css' %}" rel="stylesheet">
+</head>
+<body class="about-page">
+<main class="about-shell">
+    <nav class="about-nav">
+        <a class="home-brand" href="{% url 'entreprise:home' %}">
+            <img src="{% static 'img/agricheck-logo.png' %}" alt="Agri Check">
+            <span>
+                <strong>AGRICHECK CLIENT</strong>
+                <small>Votre recolte, notre priorite.</small>
+            </span>
+        </a>
+        <div>
+            <a class="btn btn-outline-agricheck" href="{% url 'entreprise:home' %}">Accueil</a>
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-agricheck" href="{% url 'entreprise:dashboard' %}">Mon espace</a>
+            {% else %}
+                <a class="btn btn-agricheck" href="{% url 'login' %}">Connexion</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <section class="about-hero">
+        <span class="section-kicker">&Agrave; propos d&rsquo;Agricheck</span>
+        <h1>&Agrave; propos d&rsquo;Agricheck</h1>
+        <p>Votre r&eacute;colte, notre priorit&eacute;.</p>
+    </section>
+
+
+
+    <section class="about-section">
+        <div class="about-section-heading">
+            <span><i class="bi bi-building-check"></i></span>
+            <div>
+                <p class="section-kicker">Qui sommes-nous ?</p>
+                <h2>Entreprise malienne specialisee en detection intelligente</h2>
+            </div>
+        </div>
+        <div class="about-text-card">
+            <p>
+                Agricheck est une entreprise malienne sp&eacute;cialis&eacute;e dans la d&eacute;tection intelligente
+                des maladies des plantes gr&acirc;ce &agrave; l'intelligence artificielle et aux technologies de
+                surveillance agricole.
+            </p>
+            <p>
+                Notre solution accompagne les agriculteurs, les coop&eacute;ratives agricoles et les grandes
+                exploitations dans l'identification rapide des maladies des cultures afin d'am&eacute;liorer
+                les rendements agricoles, r&eacute;duire les pertes de r&eacute;coltes et faciliter la prise de
+                d&eacute;cision.
+            </p>
+            <p>
+                Agricheck contribue &agrave; la modernisation de l'agriculture malienne en proposant des outils
+                num&eacute;riques accessibles, innovants et adapt&eacute;s aux r&eacute;alit&eacute;s du terrain.
+            </p>
+        </div>
+    </section>
+
+    <section class="about-grid">
+        <article class="about-card">
+            <i class="bi bi-bullseye"></i>
+            <h2>Notre mission</h2>
+            <p>Notre mission est d'aider les agriculteurs &agrave; prot&eacute;ger leurs cultures gr&acirc;ce &agrave; :</p>
+            <ul>
+                <li>La d&eacute;tection pr&eacute;coce des maladies des plantes.</li>
+                <li>L'analyse intelligente des images agricoles.</li>
+                <li>La surveillance des exploitations par drone.</li>
+                <li>La recommandation de traitements adapt&eacute;s.</li>
+                <li>Le suivi continu de l'&eacute;tat des cultures.</li>
+            </ul>
+            <p>Nous voulons rendre les technologies agricoles modernes accessibles &agrave; tous les producteurs.</p>
+        </article>
+        <article class="about-card">
+            <i class="bi bi-eye"></i>
+            <h2>Notre vision</h2>
+            <p>
+                Devenir une r&eacute;f&eacute;rence de l'Agritech en Afrique de l'Ouest en d&eacute;veloppant
+                des solutions innovantes bas&eacute;es sur l'intelligence artificielle, les drones et
+                l'analyse des donn&eacute;es agricoles.
+            </p>
+            <p>
+                Notre ambition est de contribuer &agrave; la s&eacute;curit&eacute; alimentaire, &agrave; l'am&eacute;lioration
+                des rendements agricoles et au d&eacute;veloppement durable du secteur agricole malien.
+            </p>
+        </article>
+    </section>
+
+    <section class="about-section">
+        <div class="about-section-heading">
+            <span><i class="bi bi-layers"></i></span>
+            <div>
+                <p class="section-kicker">Nos solutions</p>
+                <h2>Agricheck Mobile, Client et Admin</h2>
+            </div>
+        </div>
+        <div class="solution-grid">
+            <article class="solution-card">
+                <h3>Agricheck Mobile</h3>
+                <ul>
+                    <li>Analyse des plantes par photo.</li>
+                    <li>D&eacute;tection automatique des maladies.</li>
+                    <li>Historique des analyses.</li>
+                    <li>Traitements recommand&eacute;s.</li>
+                    <li>Conseils agricoles.</li>
+                </ul>
+            </article>
+            <article class="solution-card">
+                <h3>Agricheck Client</h3>
+                <ul>
+                    <li>Suivi des grandes exploitations agricoles.</li>
+                    <li>Consultation des analyses r&eacute;alis&eacute;es par Agricheck.</li>
+                    <li>Acc&egrave;s aux rapports.</li>
+                    <li>Traitements recommand&eacute;s.</li>
+                    <li>Historique du suivi.</li>
+                </ul>
+            </article>
+            <article class="solution-card">
+                <h3>Agricheck Admin</h3>
+                <ul>
+                    <li>Gestion compl&egrave;te de l'entreprise.</li>
+                    <li>Gestion des clients.</li>
+                    <li>Gestion des drones.</li>
+                    <li>Gestion des analyses.</li>
+                    <li>Gestion des rapports.</li>
+                    <li>Gestion des abonnements et paiements.</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
+    <section class="about-grid">
+        <article class="about-card">
+            <i class="bi bi-cpu"></i>
+            <h2>Nos technologies</h2>
+            <p>Agricheck utilise :</p>
+            <ul>
+                <li>Intelligence Artificielle (IA)</li>
+                <li>Vision par ordinateur</li>
+                <li>Drones agricoles</li>
+                <li>Applications mobiles</li>
+                <li>Applications web</li>
+                <li>Bases de donn&eacute;es agricoles</li>
+            </ul>
+            <p>Sources de donn&eacute;es IA :</p>
+            <ul>
+                <li>PlantVillage</li>
+                <li>PlantDoc</li>
+                <li>Plant Pathology Dataset</li>
+                <li>Pl@ntNet</li>
+                <li>Donn&eacute;es collect&eacute;es localement au Mali</li>
+            </ul>
+        </article>
+        <article class="about-card">
+            <i class="bi bi-geo-alt"></i>
+            <h2>Notre implantation</h2>
+            <p>Localisation :</p>
+            <p><strong>S&eacute;b&eacute;nikoro<br>Bamako<br>Mali</strong></p>
+            <p>
+                Cette implantation permet &agrave; Agricheck d'assurer un acc&egrave;s rapide aux diff&eacute;rentes
+                zones agricoles, de faciliter les interventions sur le terrain et de d&eacute;velopper des
+                partenariats avec les acteurs du secteur agricole.
+            </p>
+        </article>
+    </section>
+
+    <section class="about-section">
+        <div class="about-section-heading">
+            <span><i class="bi bi-stars"></i></span>
+            <div>
+                <p class="section-kicker">Nos valeurs</p>
+                <h2>Ce qui guide Agricheck</h2>
+            </div>
+        </div>
+        <div class="value-grid">
+            <span>Innovation</span>
+            <span>Fiabilit&eacute;</span>
+            <span>Professionnalisme</span>
+            <span>Accessibilit&eacute;</span>
+            <span>Satisfaction client</span>
+            <span>D&eacute;veloppement durable</span>
+        </div>
+    </section>
+
+    <section class="about-contact">
+        <div>
+            <p class="section-kicker">Contacts</p>
+            <h2>Contacter Agricheck</h2>
+            <p>S&eacute;b&eacute;nikoro, Bamako, Mali</p>
+        </div>
+        <div class="contact-grid">
+            <a href="mailto:agricheck05@gmail.com">
+                <i class="bi bi-envelope"></i>
+                agricheck05@gmail.com
+            </a>
+            <a href="tel:70000110">
+                <i class="bi bi-telephone"></i>
+                70000110
+            </a>
+            <a href="tel:60000110">
+                <i class="bi bi-phone"></i>
+                60000110
+            </a>
+            <span>
+                <i class="bi bi-geo-alt"></i>
+                S&eacute;b&eacute;nikoro, Bamako, Mali
+            </span>
+        </div>
+    </section>
+
+    <footer class="about-footer">
+        <span>Agricheck Client</span>
+        <a href="{% url 'entreprise:home' %}">Accueil</a>
+    </footer>
+</main>
+</body>
+</html>

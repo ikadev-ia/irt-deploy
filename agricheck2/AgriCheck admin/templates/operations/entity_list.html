@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.label }} - Agricheck Admin{% endblock %}
+{% block page_title %}{{ config.title }}{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">{{ config.subtitle }}</p>
+{% endblock %}
+
+{% block content %}
+<div class="module-head">
+    <form class="toolbar" method="get">
+        <label class="search-field">
+            <span>Recherche</span>
+            <span class="search-control">
+                <span class="search-icon" aria-hidden="true"></span>
+                <input type="search" name="q" value="{{ query }}" placeholder="Rechercher...">
+            </span>
+        </label>
+        {% if config.filter_options %}
+            <label class="filter-field">
+                <span>Filtre</span>
+                <select name="filter">
+                    <option value="">Tous</option>
+                    {% for value, label in config.filter_options %}
+                        <option value="{{ value }}" {% if selected_filter == value|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        {% endif %}
+        <button class="ghost-button" type="submit">Appliquer</button>
+        <a class="primary-button" href="{{ create_url }}">Ajouter</a>
+        {% if parcels_url %}
+            <a class="ghost-button" href="{{ parcels_url }}">Parcelles</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="table-panel">
+    <table>
+        <thead>
+            <tr>
+                {% for header in headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+                <th class="action-col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    {% for cell in row.cells %}
+                        <td>{{ cell }}</td>
+                    {% endfor %}
+                    <td class="action-col">
+                        <div class="row-actions">
+                            <a class="table-action" href="{{ row.edit_url }}">Modifier</a>
+                            {% if slug == "analyses" and row.analysis_url %}
+                                <form class="inline-action-form" method="post" action="{{ row.analysis_url }}">
+                                    {% csrf_token %}
+                                    <button class="table-action ai-action" type="submit">
+                                        {% if row.has_ai_result %}Relancer IA{% else %}Analyser IA{% endif %}
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td class="empty-state" colspan="{{ headers|length|add:1 }}">Aucune donnee enregistree pour ce module.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

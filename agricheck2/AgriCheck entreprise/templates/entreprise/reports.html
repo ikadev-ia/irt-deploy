@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Rapports - Agricheck Client{% endblock %}
+{% block page_title %}Rapports{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Rapports publies par Agricheck avec resultat IA, risque et traitement recommande.</p>
+{% endblock %}
+
+{% block content %}
+{% if reports or admin_reports %}
+    <div class="report-list">
+        {% for report in admin_reports %}
+            <article class="report-card">
+                <div class="report-header">
+                    <div>
+                        <span class="section-kicker">{{ report.parcel|default:"Parcelle Agricheck" }}</span>
+                        <h2>{{ report.title }}</h2>
+                        <p>{{ report.published_at|default:"Date non renseignee" }}</p>
+                    </div>
+                    <div class="report-actions">
+                        <a class="btn btn-outline-agricheck" href="{% url 'entreprise:admin_report_detail' report.id %}">
+                            <i class="bi bi-eye"></i>
+                            Voir rapport
+                        </a>
+                        {% if report.pdf_url %}
+                            <a class="btn btn-agricheck" href="{{ report.pdf_url }}" download>
+                                <i class="bi bi-download"></i>
+                                Telecharger PDF
+                            </a>
+                        {% else %}
+                            <button class="btn btn-outline-secondary" type="button" disabled>
+                                <i class="bi bi-file-earmark"></i>
+                                PDF non ajoute
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="report-body">
+                    <div>
+                        <h3>Source</h3>
+                        <p>Agricheck Admin</p>
+                    </div>
+                    <div>
+                        <h3>Resultat IA</h3>
+                        <p>{{ report.ai_result|default:"Resultat IA non renseigne."|linebreaksbr }}</p>
+                    </div>
+                    <div>
+                        <h3>Traitement recommande</h3>
+                        <p>{{ report.recommended_treatment|default:"Traitements non renseignes."|linebreaksbr }}</p>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+
+        {% for report in reports %}
+            <article class="report-card">
+                <div class="report-header">
+                    <div>
+                        <span class="section-kicker">{{ report.parcel.name }}</span>
+                        <h2>{{ report.title }}</h2>
+                        <p>{% if report.published_at %}{{ report.published_at|date:"d/m/Y H:i" }}{% else %}{{ report.mission.mission_date|date:"d/m/Y H:i" }}{% endif %}</p>
+                    </div>
+                    <div class="report-actions">
+                        <a class="btn btn-outline-agricheck" href="{% url 'entreprise:report_detail' report.id %}">
+                            <i class="bi bi-eye"></i>
+                            Voir rapport
+                        </a>
+                        {% if report.pdf %}
+                            <a class="btn btn-agricheck" href="{{ report.pdf.url }}" download>
+                                <i class="bi bi-download"></i>
+                                Telecharger PDF
+                            </a>
+                        {% else %}
+                            <button class="btn btn-outline-secondary" type="button" disabled>
+                                <i class="bi bi-file-earmark"></i>
+                                PDF non ajoute
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="report-body">
+                    <div>
+                        <h3>Resume</h3>
+                        <p>{{ report.summary|default:"Resultat non renseigne." }}</p>
+                    </div>
+                    <div>
+                        <h3>Resultat IA</h3>
+                        <p>{{ report.summary|default:"Resultat IA non renseigne." }}</p>
+                    </div>
+                    <div>
+                        <h3>Maladie detectee</h3>
+                        {% if report.analysis and report.analysis.disease %}
+                            <p>{{ report.analysis.disease.name }}</p>
+                        {% else %}
+                            <p class="text-muted">Non renseignee.</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h3>Niveau de risque</h3>
+                        {% if report.analysis %}
+                            <p><span class="risk-badge risk-{{ report.analysis.risk_level }}">{{ report.analysis.get_risk_level_display }}</span></p>
+                        {% else %}
+                            <p class="text-muted">Non renseigne.</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h3>Traitement recommande</h3>
+                        <p>{{ report.recommended_treatments|default:"Traitements non renseignes." }}</p>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+{% else %}
+    <section class="panel">
+        <div class="empty-state">Aucun rapport disponible.</div>
+    </section>
+{% endif %}
+{% endblock %}

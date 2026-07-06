@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Detail Parcelle - Agricheck Client{% endblock %}
+{% block page_title %}Detail Parcelle{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Vue lecture seule d'une parcelle suivie par Agricheck.</p>
+{% endblock %}
+
+{% block content %}
+<section class="panel profile-panel">
+    <div class="profile-header">
+        <div class="profile-avatar">{{ parcel.name|slice:":1" }}</div>
+        <div>
+            <span class="section-kicker">Parcelle suivie</span>
+            <h2>{{ parcel.name }}</h2>
+            <p>{{ parcel.crop }} - {{ parcel.surface_hectares }} ha</p>
+        </div>
+    </div>
+    <div class="detail-grid">
+        <div>
+            <span>Surface</span>
+            <strong>{{ parcel.surface_hectares }} ha</strong>
+        </div>
+        <div>
+            <span>Culture</span>
+            <strong>{{ parcel.crop }}</strong>
+        </div>
+        <div>
+            <span>Etat global</span>
+            <strong><span class="status-badge {{ parcel.client_state_class }}">{{ parcel.client_state_label }}</span></strong>
+        </div>
+        <div>
+            <span>Coordonnees GPS</span>
+            <strong>{{ parcel.gps_label|default:"Non renseignees" }}</strong>
+        </div>
+    </div>
+</section>
+
+<div class="latest-grid">
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>Rapports recents</h2>
+        </div>
+        {% if latest_reports %}
+            <div class="compact-list">
+                {% for report in latest_reports %}
+                    <article>
+                        <strong>{{ report.title }}</strong>
+                        <span>{% if report.published_at %}{{ report.published_at|date:"d/m/Y H:i" }}{% else %}Date non renseignee{% endif %}</span>
+                        <a href="{% url 'entreprise:report_detail' report.id %}">Voir rapport</a>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">Aucun rapport disponible.</div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

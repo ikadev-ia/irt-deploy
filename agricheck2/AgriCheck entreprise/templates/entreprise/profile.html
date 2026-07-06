@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Profil Client - Agricheck Client{% endblock %}
+{% block page_title %}Profil Client{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Coordonnees du client, exploitation suivie et informations d'inscription.</p>
+{% endblock %}
+
+{% block content %}
+<section class="panel profile-panel">
+    {% if company %}
+        <div class="profile-header">
+            <div class="profile-avatar">{{ company.name|slice:":1" }}</div>
+            <div>
+                <span class="section-kicker">Nom exploitation</span>
+                <h2>{{ company.name }}</h2>
+                <p>{{ company.address|default:"Adresse non renseignee." }}</p>
+            </div>
+        </div>
+        <div class="detail-grid">
+            <div>
+                <span>Nom client</span>
+                <strong>{{ company.manager_name|default:"Non renseigne" }}</strong>
+            </div>
+            <div>
+                <span>Telephone</span>
+                <strong>{{ company.phone|default:"Non renseigne" }}</strong>
+            </div>
+            <div>
+                <span>Email</span>
+                <strong>{{ company.email|default:"Non renseigne" }}</strong>
+            </div>
+            <div>
+                <span>Nom exploitation</span>
+                <strong>{{ company.name }}</strong>
+            </div>
+            <div>
+                <span>Nombre d'hectares</span>
+                <strong>{{ company.hectares }}</strong>
+            </div>
+            <div>
+                <span>Date inscription</span>
+                <strong>{{ company.created_at|date:"d/m/Y" }}</strong>
+            </div>
+            <div>
+                <span>Abonnement</span>
+                <strong>{{ company.subscription_label|default:"Non renseigne" }}</strong>
+            </div>
+            <div>
+                <span>Prix</span>
+                <strong>{{ company.subscription_price_display }}</strong>
+            </div>
+            <div>
+                <span>Deplacement</span>
+                <strong>{{ company.travel_included_display }}</strong>
+            </div>
+        </div>
+        <div class="profile-about-link">
+            <div>
+                <span class="section-kicker">Infos Agricheck</span>
+                <h2>&Agrave; propos d&rsquo;Agricheck</h2>
+                <p>Consulter la mission, les solutions, les technologies et les contacts d'Agricheck.</p>
+            </div>
+            <a class="btn btn-agricheck" href="{% url 'entreprise:about' %}">
+                <i class="bi bi-info-circle"></i>
+                Ouvrir
+            </a>
+        </div>
+    {% else %}
+        <div class="empty-state">Aucun profil client disponible.</div>
+    {% endif %}
+</section>
+{% endblock %}

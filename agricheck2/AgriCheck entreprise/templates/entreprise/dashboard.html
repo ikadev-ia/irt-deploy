@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard - Agricheck Client{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Vue simple du suivi Agricheck publie pour votre exploitation.</p>
+{% endblock %}
+
+{% block content %}
+<div class="stat-grid">
+    <article class="stat-card">
+        <span>Parcelles</span>
+        <strong>{{ parcel_count }}</strong>
+        <small>parcelles suivies</small>
+    </article>
+    <article class="stat-card">
+        <span>Rapports</span>
+        <strong>{{ report_count }}</strong>
+        <small>rapports disponibles</small>
+    </article>
+    <article class="stat-card">
+        <span>Traitements</span>
+        <strong>{{ treatment_count }}</strong>
+        <small>recommandations recues</small>
+    </article>
+    <article class="stat-card">
+        <span>Factures</span>
+        <strong>{{ invoice_count }}</strong>
+        <small>factures disponibles</small>
+    </article>
+</div>
+
+<section class="dashboard-hero" style="--dashboard-bg: url('{% static 'img/agri-aerial-field.jpg' %}')">
+    <div>
+        <span class="section-kicker">Suivi Agricheck</span>
+        {% if dashboard_company %}
+            <h2>{{ dashboard_company.name }}</h2>
+            <p>
+                {{ dashboard_company.hectares }} hectares enregistres. L'equipe Agricheck ajoute vos parcelles,
+                resultats d'analyse, alertes maladies, traitements recommandes et rapports au fur et a mesure du suivi.
+            </p>
+            <span class="status-badge state-watch">{{ dashboard_company.get_registration_status_display }}</span>
+        {% else %}
+            <h2>Suivi des clients Agricheck</h2>
+            <p>Votre espace affichera les parcelles, rapports, traitements et factures publies par Agricheck.</p>
+        {% endif %}
+    </div>
+</section>
+
+<div class="latest-grid">
+    <section class="panel latest-card">
+        <div class="panel-heading">
+            <h2>Dernier rapport</h2>
+            <a href="{% url 'entreprise:reports' %}">Voir</a>
+        </div>
+        {% if latest_report %}
+            <strong>{{ latest_report.title }}</strong>
+            <span>{% if latest_report.published_at %}{{ latest_report.published_at|date:"d/m/Y H:i" }}{% else %}Date non renseignee{% endif %}</span>
+            <p>{{ latest_report.parcel.name }}</p>
+        {% elif latest_admin_report %}
+            <strong>{{ latest_admin_report.title }}</strong>
+            <span>{{ latest_admin_report.published_at|default:"Date non renseignee" }}</span>
+            <p>{{ latest_admin_report.parcel|default:"Rapport publie par Agricheck Admin" }}</p>
+        {% else %}
+            <div class="empty-state">Aucun rapport disponible.</div>
+        {% endif %}
+    </section>
+
+    <section class="panel latest-card">
+        <div class="panel-heading">
+            <h2>Derniere facture</h2>
+            <a href="{% url 'entreprise:billing' %}">Voir</a>
+        </div>
+        {% if latest_admin_invoice %}
+            <strong>{{ latest_admin_invoice.number }}</strong>
+            <span>{{ latest_admin_invoice.issued_at|default:"Date non renseignee" }}</span>
+            <p>{{ latest_admin_invoice.amount_total }} FCFA - {{ latest_admin_invoice.status_label }}</p>
+        {% else %}
+            <div class="empty-state">Aucune facture disponible.</div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

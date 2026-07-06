@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Parcelles - Agricheck Client{% endblock %}
+{% block page_title %}Mes Parcelles{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Parcelles suivies par Agricheck, surfaces, cultures et etat global.</p>
+{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Liste des parcelles</h2>
+        <span>{{ parcels|length }} parcelle{{ parcels|length|pluralize }}</span>
+    </div>
+    {% if parcels %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                <tr>
+                    <th>Nom parcelle</th>
+                    <th>Surface</th>
+                    <th>Culture</th>
+                    <th>Coordonnees GPS</th>
+                    <th>Etat global</th>
+                    <th>Detail</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for parcel in parcels %}
+                    <tr>
+                        <td><strong>{{ parcel.name }}</strong></td>
+                        <td>{{ parcel.surface_hectares }} ha</td>
+                        <td>{{ parcel.crop }}</td>
+                        <td>
+                            {% if parcel.gps_label %}
+                                {{ parcel.gps_label }}
+                            {% else %}
+                                <span class="text-muted">Non renseignees</span>
+                            {% endif %}
+                        </td>
+                        <td><span class="status-badge {{ parcel.client_state_class }}">{{ parcel.client_state_label }}</span></td>
+                        <td>
+                            <a class="icon-link" href="{% url 'entreprise:parcel_detail' parcel.id %}" title="Voir detail">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">Aucune parcelle n'a encore ete ajoutee par Agricheck.</div>
+    {% endif %}
+</section>
+{% endblock %}

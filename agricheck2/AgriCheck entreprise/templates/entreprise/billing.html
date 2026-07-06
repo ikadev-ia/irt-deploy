@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Facturation - Agricheck Client{% endblock %}
+{% block page_title %}Facturation{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Abonnement actif, paiements, factures PDF et statut de paiement.</p>
+{% endblock %}
+
+{% block content %}
+<section class="panel subscription-panel">
+    <div>
+        <span class="section-kicker">Abonnement actif</span>
+        {% if subscription_company %}
+            <h2>{{ subscription_company.subscription_label|default:"Non renseigne" }}</h2>
+            <p>{{ subscription_company.name }}</p>
+            <div class="subscription-pricing">
+                <span>{{ subscription_company.subscription_price_display }}</span>
+                <span>{{ subscription_company.travel_included_display }}</span>
+            </div>
+        {% else %}
+            <h2>Non renseigne</h2>
+            <p>Aucun client selectionne.</p>
+        {% endif %}
+    </div>
+    <i class="bi bi-shield-check"></i>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Paiements et factures</h2>
+        <span>{{ invoice_count }} facture{{ invoice_count|pluralize }}</span>
+    </div>
+    {% if invoices or admin_invoices %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                <tr>
+                    <th>Facture</th>
+                    <th>Source</th>
+                    <th>Montant</th>
+                    <th>Paye</th>
+                    <th>Restant</th>
+                    <th>Emission</th>
+                    <th>Echeance</th>
+                    <th>Statut paiement</th>
+                    <th>PDF</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for invoice in admin_invoices %}
+                    <tr>
+                        <td><strong>{{ invoice.number }}</strong></td>
+                        <td>Agricheck Admin</td>
+                        <td>{{ invoice.amount_total }} FCFA</td>
+                        <td>{{ invoice.amount_paid }} FCFA</td>
+                        <td>{{ invoice.amount_unpaid }} FCFA</td>
+                        <td>{{ invoice.issued_at|default:"Non renseignee" }}</td>
+                        <td>{{ invoice.due_date|default:"Non renseignee" }}</td>
+                        <td><span class="status-badge invoice-{{ invoice.status }}">{{ invoice.status_label }}</span></td>
+                        <td>
+                            {% if invoice.pdf_url %}
+                                <a class="icon-link" href="{{ invoice.pdf_url }}" download title="Telecharger la facture">
+                                    <i class="bi bi-download"></i>
+                                </a>
+                            {% else %}
+                                <span class="text-muted">Non ajoute</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% for invoice in invoices %}
+                    <tr>
+                        <td>
+                            <strong>{{ invoice.number }}</strong>
+                        </td>
+                        <td>Agricheck Client</td>
+                        <td>{{ invoice.amount }} {{ invoice.currency }}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>{{ invoice.issued_at|date:"d/m/Y" }}</td>
+                        <td>{% if invoice.due_date %}{{ invoice.due_date|date:"d/m/Y" }}{% else %}<span class="text-muted">Non renseignee</span>{% endif %}</td>
+                        <td><span class="status-badge invoice-{{ invoice.status }}">{{ invoice.get_status_display }}</span></td>
+                        <td>
+                            {% if invoice.pdf %}
+                                <a class="icon-link" href="{{ invoice.pdf.url }}" download title="Telecharger la facture">
+                                    <i class="bi bi-download"></i>
+                                </a>
+                            {% else %}
+                                <span class="text-muted">Non ajoute</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">Aucune facture disponible.</div>
+    {% endif %}
+</section>
+{% endblock %}

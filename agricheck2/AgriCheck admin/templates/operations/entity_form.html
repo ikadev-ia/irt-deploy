@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{% if instance %}Modifier{% else %}Ajouter{% endif %} - {{ config.label }}{% endblock %}
+{% block page_title %}{% if instance %}Modifier{% else %}Ajouter{% endif %} : {{ config.label }}{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">{{ config.subtitle }}</p>
+{% endblock %}
+
+{% block content %}
+<form class="form-panel" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+        <div class="message error">{{ form.non_field_errors }}</div>
+    {% endif %}
+    {% if slug == "reports" and analysis_preview %}
+        <section class="analysis-preview">
+            <span>Resultat analyse liee</span>
+            <pre>{{ analysis_preview }}</pre>
+        </section>
+    {% endif %}
+    <div class="form-grid">
+        {% for field in form %}
+            <label class="{% if field.field.widget.input_type == 'checkbox' %}checkbox-field{% endif %}">
+                <span>{{ field.label }}</span>
+                {{ field }}
+                {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                {% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+            </label>
+        {% endfor %}
+    </div>
+    <div class="form-actions">
+        <a class="ghost-button" href="{{ list_url }}">Retour</a>
+        <button class="primary-button" type="submit">Enregistrer</button>
+    </div>
+</form>
+{% endblock %}

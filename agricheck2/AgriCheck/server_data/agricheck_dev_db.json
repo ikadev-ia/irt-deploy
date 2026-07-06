@@ -1,0 +1,37 @@
+{
+  "users": [
+    {
+      "id": "1780681771841-6fBiFi5YC6w",
+      "fullName": "Test Agricheck",
+      "phone": "7020260605174931",
+      "email": "test-20260605174931@agricheck.local",
+      "passwordHash": "c190b04ae88848c56124ce380ec0b418d3d1af8398bf6227804399de8311af40",
+      "createdAt": "2026-06-05T17:49:31.841665"
+    },
+    {
+      "id": "1780683116905-CdQHXwQP-mM",
+      "fullName": "md",
+      "phone": "98552532",
+      "email": "mariam@gmail.com",
+      "passwordHash": "c190b04ae88848c56124ce380ec0b418d3d1af8398bf6227804399de8311af40",
+      "createdAt": "2026-06-05T18:11:56.905919",
+      "updatedAt": "2026-06-08T09:50:57.300771"
+    },
+    {
+      "id": "1780684399197-Ew4o6L-X6Dc",
+      "fullName": "md",
+      "phone": "98552521",
+      "email": "mariam@gmal.com",
+      "passwordHash": "c161ea3421ae6fa47a7569eb41d67a8e1dce89c6c42b7d2cf7aec40588e80e1f",
+      "createdAt": "2026-06-05T18:33:19.196322"
+    },
+    {
+      "id": "1780910971589-Zg0XI23Bb1g",
+      "fullName": "md",
+      "phone": "76150497",
+      "email": "mariamd@gmail.com",
+      "passwordHash": "c161ea3421ae6fa47a7569eb41d67a8e1dce89c6c42b7d2cf7aec40588e80e1f",
+      "createdAt": "2026-06-08T09:29:31.542393"
+    }
+  ]
+}

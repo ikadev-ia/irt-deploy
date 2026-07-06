@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Historique de Suivi - Agricheck Client{% endblock %}
+{% block page_title %}Historique de Suivi{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Chronologie des actions publiees par Agricheck pour vos parcelles.</p>
+{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Chronologie</h2>
+        <span>{{ timeline_items|length }} action{{ timeline_items|length|pluralize }}</span>
+    </div>
+    {% if timeline_items %}
+        <div class="timeline-list">
+            {% for item in timeline_items %}
+                <article class="timeline-item timeline-{{ item.kind }}">
+                    <div class="timeline-marker">
+                        {% if item.kind == "analysis" %}
+                            <i class="bi bi-cpu"></i>
+                        {% elif item.kind == "report" %}
+                            <i class="bi bi-file-earmark-text"></i>
+                        {% else %}
+                            <i class="bi bi-prescription2"></i>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <span>{{ item.date|date:"d/m/Y H:i" }} - {{ item.parcel }}</span>
+                        <h2>{{ item.action }}</h2>
+                        <p>{{ item.summary }}</p>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">Aucun element de suivi n'est encore disponible.</div>
+    {% endif %}
+</section>
+{% endblock %}

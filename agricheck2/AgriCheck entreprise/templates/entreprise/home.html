@@ -1,0 +1,147 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agricheck Client</title>
+    <link rel="icon" href="{% static 'img/agricheck-logo.png' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{% static 'css/app.css' %}" rel="stylesheet">
+</head>
+<body class="home-page">
+<main class="home-shell interactive-home">
+    <nav class="home-nav">
+        <a class="home-brand" href="{% url 'entreprise:home' %}">
+            <img src="{% static 'img/agricheck-logo.png' %}" alt="Agri Check">
+            <span>
+                <strong>AGRICHECK CLIENT</strong>
+                <small>Votre recolte, notre priorite.</small>
+            </span>
+        </a>
+        <div class="home-nav-actions">
+            <a class="btn btn-outline-light" href="{% url 'entreprise:about' %}">A propos</a>
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-light" href="{% url 'entreprise:dashboard' %}">Mon espace</a>
+            {% else %}
+                <a class="btn btn-light" href="{% url 'login' %}">Connexion</a>
+            {% endif %}
+            <a class="btn btn-agricheck" href="{% url 'entreprise:register' %}">Inscription</a>
+        </div>
+    </nav>
+
+    <section class="welcome-intro"  >
+        <div>
+            <p class="section-kicker">Espace client Agricheck</p>
+            <h1 style="font-size: 2.5rem;">Comprendre votre suivi agricole avant d'ouvrir vos rapports.</h1>
+        </div>
+        <div class="carousel-controls" aria-label="Controle du carousel">
+            <button class="carousel-button" type="button" data-carousel-prev="agricheck-cards" aria-label="Carte precedente">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <button class="carousel-button" type="button" data-carousel-next="agricheck-cards" aria-label="Carte suivante">
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <section class="agricheck-carousel" id="agricheck-cards" aria-label="Presentation Agricheck">
+        <article class="welcome-card is-featured" style="--card-image: url('{% static 'img/agri-wheat-hand.webp' %}')">
+            <div class="card-visual"><i class="bi bi-stars"></i></div>
+            <div class="card-content">
+                <span>01</span>
+                <h2>Bienvenue sur Agricheck</h2>
+                <p>Agricheck surveille les cultures avec drones et intelligence artificielle pour aider les producteurs a proteger leurs recoltes, ameliorer les rendements et reduire les pertes.</p>
+                <a class="btn btn-light" href="#agricheck-cards">Decouvrir Agricheck</a>
+            </div>
+        </article>
+
+        <article class="welcome-card" style="--card-image: url('{% static 'img/agri-aerial-field.jpg' %}')">
+            <div class="card-visual"><i class="bi bi-airplane-engines"></i></div>
+            <div class="card-content">
+                <span>02</span>
+                <h2>Comment fonctionne Agricheck ?</h2>
+                <p>Nos equipes collectent des images terrain avec drones. Ces captures sont ensuite analysees pour identifier rapidement les problemes qui touchent les parcelles.</p>
+            </div>
+        </article>
+
+        <article class="welcome-card" style="--card-image: url('{% static 'img/agri-seedlings.jpg' %}')">
+            <div class="card-visual"><i class="bi bi-cpu"></i></div>
+            <div class="card-content">
+                <span>03</span>
+                <h2>Analyse intelligente des cultures</h2>
+                <p>Les resultats regroupent detection des maladies, niveau de risque, confiance IA et recommandations utiles pour agir au bon moment.</p>
+                <div class="mini-metrics">
+                    <strong>Maladies</strong>
+                    <strong>Risque</strong>
+                    <strong>Confiance</strong>
+                    <strong>Conseils</strong>
+                </div>
+            </div>
+        </article>
+
+        <article class="welcome-card" style="--card-image: url('{% static 'img/agri-field-walk.jpg' %}')">
+            <div class="card-visual"><i class="bi bi-file-earmark-text"></i></div>
+            <div class="card-content">
+                <span>04</span>
+                <h2>Rapports et recommandations</h2>
+                <p>Apres chaque mission, Agricheck publie un rapport avec resultats d'analyse, observations terrain, traitements recommandes et prevention.</p>
+                {% if request.user.is_authenticated %}
+                    <a class="btn btn-light" href="{% url 'entreprise:reports' %}">Voir mes rapports</a>
+                {% else %}
+                    <a class="btn btn-light" href="{% url 'login' %}">Voir mes rapports</a>
+                {% endif %}
+            </div>
+        </article>
+
+        <article class="welcome-card" style="--card-image: url('{% static 'img/agri-soil-hands.jpg' %}')">
+            <div class="card-visual"><i class="bi bi-activity"></i></div>
+            <div class="card-content">
+                <span>05</span>
+                <h2>Suivi continu de vos parcelles</h2>
+                <p>Le suivi regulier permet d'identifier les evolutions sanitaires et de consulter l'historique complet des interventions Agricheck.</p>
+            </div>
+        </article>
+
+        <article class="welcome-card" style="--card-image: url('{% static 'img/agri-aerial-field.jpg' %}')">
+            <div class="card-visual"><i class="bi bi-shield-check"></i></div>
+            <div class="card-content">
+                <span>06</span>
+                <h2>Pourquoi choisir Agricheck ?</h2>
+                <ul class="feature-list">
+                    <li>Surveillance par drone</li>
+                    <li>Intelligence artificielle</li>
+                    <li>Rapports detailles</li>
+                    <li>Accompagnement technique</li>
+                    <li>Gain de temps</li>
+                    <li>Reduction des pertes agricoles</li>
+                </ul>
+            </div>
+        </article>
+
+        <article class="welcome-card is-featured" style="--card-image: url('{% static 'img/agri-wheat-hand.webp' %}')">
+            <div class="card-visual"><i class="bi bi-leaf"></i></div>
+            <div class="card-content">
+                <span>07</span>
+                <h2>Votre recolte, notre priorite</h2>
+                <p>Agricheck accompagne les producteurs vers une agriculture plus performante, moderne et durable, avec des services fiables et adaptes au terrain.</p>
+                {% if request.user.is_authenticated %}
+                    <a class="btn btn-light" href="{% url 'entreprise:dashboard' %}">Acceder a mon espace client</a>
+                {% else %}
+                    <a class="btn btn-light" href="{% url 'login' %}">Acceder a mon espace client</a>
+                {% endif %}
+            </div>
+        </article>
+    </section>
+
+    <div class="carousel-dots" data-carousel-dots="agricheck-cards" aria-hidden="true"></div>
+
+    <footer class="home-footer">
+        <span>Agricheck Client</span>
+        <a href="{% url 'entreprise:about' %}">A propos d'Agricheck</a>
+    </footer>
+</main>
+<script src="{% static 'js/app.js' %}" defer></script>
+</body>
+</html>

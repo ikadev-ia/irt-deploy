@@ -1,0 +1,22 @@
+# Docker
+.DS_Store
+*.log
+docker-compose.override.yml
+
+# Flutter build and cache outputs
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+android/
+ios/
+linux/
+macos/
+windows/
+
+# Sensitive env files
+.env
+.env.local
+**/assets/.env
+**/flutter_assets/.env

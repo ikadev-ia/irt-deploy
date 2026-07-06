@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  agricheck-db:
+    image: mysql:8.0
+    container_name: agricheck-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: agricheck_db
+      MYSQL_USER: agricheck_user
+      MYSQL_PASSWORD: agricheck_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - agricheck_db_data:/var/lib/mysql
+      # Optionnel: initialisation avec le schéma si présent
+      # - ./AgriCheck/database/agricheck_mysql_schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - agricheck-net
+
+  agricheck-admin:
+    build: 
+      context: "./AgriCheck admin"
+    container_name: agricheck-admin
+    restart: always
+    depends_on:
+      - agricheck-db
+    environment:
+      - DEBUG=0
+      - DB_ENGINE=django.db.backends.mysql
+      - DB_NAME=agricheck_db
+      - DB_USER=agricheck_user
+      - DB_PASSWORD=agricheck_password
+      - DB_HOST=agricheck-db
+      - DB_PORT=3306
+      - ALLOWED_HOSTS=admin.agricheck-mali.com,agricheck-mali.com
+      - CSRF_TRUSTED_ORIGINS=https://admin.agricheck-mali.com,https://agricheck-mali.com
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.agricheck-admin.rule=Host(`admin.agricheck-mali.com`)"
+      - "traefik.http.routers.agricheck-admin.entrypoints=websecure"
+      - "traefik.http.routers.agricheck-admin.tls.certresolver=myresolver"
+      - "traefik.http.services.agricheck-admin.loadbalancer.server.port=8090"
+    networks:
+      - agricheck-net
+      - proxy-net
+
+  agricheck-entreprise:
+    build:
+      context: "./AgriCheck entreprise"
+    container_name: agricheck-entreprise
+    restart: always
+    depends_on:
+      - agricheck-db
+      - agricheck-admin
+    environment:
+      - DEBUG=0
+      - DB_ENGINE=django.db.backends.mysql
+      - DB_NAME=agricheck_db
+      - DB_USER=agricheck_user
+      - DB_PASSWORD=agricheck_password
+      - DB_HOST=agricheck-db
+      - DB_PORT=3306
+      - ALLOWED_HOSTS=entreprise.agricheck-mali.com
+      - CSRF_TRUSTED_ORIGINS=https://entreprise.agricheck-mali.com
+      - AGRICHECK_ADMIN_API_BASE_URL=http://agricheck-admin:8090
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.agricheck-entreprise.rule=Host(`entreprise.agricheck-mali.com`)"
+      - "traefik.http.routers.agricheck-entreprise.entrypoints=websecure"
+      - "traefik.http.routers.agricheck-entreprise.tls.certresolver=myresolver"
+      - "traefik.http.services.agricheck-entreprise.loadbalancer.server.port=8091"
+    networks:
+      - agricheck-net
+      - proxy-net
+
+  agricheck-app:
+    build:
+      context: "./AgriCheck"
+    container_name: agricheck-app
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.agricheck-app.rule=Host(`agricheck-mali.com`)"
+      - "traefik.http.routers.agricheck-app.entrypoints=websecure"
+      - "traefik.http.routers.agricheck-app.tls.certresolver=myresolver"
+      - "traefik.http.services.agricheck-app.loadbalancer.server.port=80"
+    networks:
+      - agricheck-net
+      - proxy-net
+
+networks:
+  agricheck-net:
+  proxy-net:
+    external: true
+
+volumes:
+  agricheck_db_data:

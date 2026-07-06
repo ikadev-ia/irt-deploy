@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard - Agricheck Admin{% endblock %}
+{% block page_title %}Dashboard entreprise Agricheck{% endblock %}
+{% block page_subtitle %}
+    <p class="page-subtitle">Vue centrale des operations internes et des donnees recues des applications Mobile et Client.</p>
+{% endblock %}
+
+{% block content %}
+<section class="dashboard-hero" style="--hero-image: url('{% static 'img/agri-wheat-hand.webp' %}')">
+    <div>
+        <p class="eyebrow">Agricheck Admin</p>
+        <h2>Le centre de gestion de toute l'entreprise Agricheck</h2>
+        <p>
+            Admin centralise les clients mobile, les clients entreprises, les drones, les missions terrain,
+            les analyses IA, les rapports publies, les paiements et les employes.
+        </p>
+    </div>
+</section>
+
+<div class="metric-grid">
+    <article class="metric-card"><span>Total clients mobile</span><strong>{{ mobile_clients }}</strong><small>Utilisateurs inscrits</small></article>
+    <article class="metric-card"><span>Total clients entreprises</span><strong>{{ company_clients }}</strong><small>Exploitations suivies</small></article>
+    <article class="metric-card"><span>Total clients general</span><strong>{{ total_clients }}</strong><small>Mobile + entreprises</small></article>
+    <article class="metric-card"><span>Total drones</span><strong>{{ total_drones }}</strong><small>Flotte Agricheck</small></article>
+    <article class="metric-card"><span>Total missions</span><strong>{{ total_missions }}</strong><small>Terrain et drone</small></article>
+    <article class="metric-card"><span>Total analyses</span><strong>{{ total_analyses }}</strong><small>Mobile + drone</small></article>
+    <article class="metric-card"><span>Total rapports</span><strong>{{ total_reports }}</strong><small>Brouillons et publies</small></article>
+    <article class="metric-card"><span>Revenus du mois</span><strong>{{ monthly_revenue }}</strong><small>Revenus encaisses</small></article>
+    <article class="metric-card"><span>Factures impayees</span><strong>{{ unpaid_invoice_count }}</strong><small>{{ unpaid_total }}</small></article>
+</div>
+
+<div class="dashboard-grid">
+    <section class="panel">
+        <div class="panel-head">
+            <div>
+                <p class="eyebrow">Applications connectees</p>
+                <h2>Architecture Agricheck</h2>
+            </div>
+        </div>
+        <div class="connection-list">
+            <div class="connection-item">
+                <strong>Agricheck Mobile</strong>
+                <span>Envoie les utilisateurs, scans et analyses IA.</span>
+                <code>{{ mobile_project_path }}</code>
+            </div>
+            <div class="connection-item">
+                <strong>Agricheck Client</strong>
+                <span>Affiche uniquement les suivis et rapports publies.</span>
+                <code>{{ client_project_path }}</code>
+            </div>
+            <div class="connection-item">
+                <strong>Agricheck Admin</strong>
+                <span>Gere tout : clients, drones, missions, analyses, rapports, paiements, employes et statistiques.</span>
+                <code>{% if ai_proxy_ready %}Cle IA renseignee{% else %}Cle IA absente{% endif %}</code>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-head">
+            <div>
+                <p class="eyebrow">Alertes importantes</p>
+                <h2>Priorites</h2>
+            </div>
+        </div>
+        <div class="alert-list">
+            {% if high_risk_count %}
+                <div class="alert-item urgent">{{ high_risk_count }} analyses avec risque eleve ou critique.</div>
+            {% endif %}
+            {% if unpaid_invoice_count %}
+                <div class="alert-item warning">{{ unpaid_invoice_count }} factures avec montant impaye.</div>
+            {% endif %}
+            {% for alert in open_alerts %}
+                <div class="alert-item {{ alert.priority }}">{{ alert.title }}</div>
+            {% empty %}
+                {% if not high_risk_count and not unpaid_invoice_count %}
+                    <div class="empty-state">Aucune alerte ouverte.</div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<div class="dashboard-grid three">
+    <section class="panel">
+        <div class="panel-head"><h2>Dernieres missions</h2></div>
+        <div class="compact-list">
+            {% for mission in recent_missions %}
+                <a href="{% url 'operations:entity_update' 'missions' mission.pk %}">
+                    <strong>{{ mission.company.name }}</strong>
+                    <span>{{ mission.parcel.name }} - {{ mission.get_status_display }}</span>
+                </a>
+            {% empty %}
+                <div class="empty-state">Aucune mission enregistree.</div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-head"><h2>Dernieres analyses IA</h2></div>
+        <div class="compact-list">
+            {% for analysis in recent_analyses %}
+                <a href="{% url 'operations:entity_update' 'analyses' analysis.pk %}">
+                    <strong>{{ analysis.client_label }}</strong>
+                    <span>{{ analysis.detected_plant }} - {{ analysis.disease_label }}</span>
+                </a>
+            {% empty %}
+                <div class="empty-state">Aucune analyse enregistree.</div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-head"><h2>Derniers rapports</h2></div>
+        <div class="compact-list">
+            {% for report in recent_reports %}
+                <a href="{% url 'operations:entity_update' 'reports' report.pk %}">
+                    <strong>{{ report.title }}</strong>
+                    <span>{{ report.company.name }} - {{ report.get_status_display }}</span>
+                </a>
+            {% empty %}
+                <div class="empty-state">Aucun rapport enregistre.</div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}
