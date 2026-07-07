@@ -14,11 +14,13 @@ RUN apt-get update && apt-get install -y \
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir gunicorn
+RUN pip install --no-cache-dir gunicorn whitenoise
 
 COPY . .
 
 RUN chmod +x manage.py
+
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8091
 

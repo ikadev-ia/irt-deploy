@@ -5,3 +5,4 @@ crispy-bootstrap5>=0.7
 django-widget-tweaks>=1.5
 reportlab==4.2.5
 anthropic>=0.40.0
+dj-database-url>=2.1.0
