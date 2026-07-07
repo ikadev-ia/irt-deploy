@@ -92,11 +92,68 @@
         <!-- Ordonnance + notes -->
         <div class="card-custom p-4">
           <h5 class="fw-800 mb-3"><i class="fa fa-notes-medical me-2" style="color:var(--vert)"></i>Informations complémentaires</h5>
+
+          {% if necessite_ordonnance %}
+          <!-- Alerte ordonnance obligatoire -->
+          <div class="mb-3 p-3 rounded-3" style="background:#fff3cd;border:1.5px solid #ffc107;">
+            <div class="fw-800 mb-1" style="color:#856404;">
+              <i class="fa fa-exclamation-triangle me-2"></i>Ordonnance obligatoire
+            </div>
+            <div style="font-size:.88rem;color:#856404;">
+              Votre panier contient des médicaments nécessitant une ordonnance :
+              <strong>{{ meds_sous_ordonnance|join:", " }}</strong>.
+              Sans ordonnance valide, votre commande sera refusée.
+            </div>
+          </div>
+
+          {% if erreur_ordonnance %}
+          <div class="mb-3 p-3 rounded-3" style="background:#f8d7da;border:1.5px solid #f5c6cb;">
+            <div class="fw-800 mb-1" style="color:#721c24;">
+              <i class="fa fa-times-circle me-2"></i>Ordonnance refusée
+            </div>
+            {% if resultat_ordo %}
+            <div style="font-size:.88rem;color:#721c24;">{{ resultat_ordo.message }}</div>
+            {% if resultat_ordo.medicaments_manquants %}
+            <div class="mt-2" style="font-size:.85rem;color:#721c24;">
+              <strong>Médicaments non trouvés :</strong> {{ resultat_ordo.medicaments_manquants|join:", " }}
+            </div>
+            {% endif %}
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <div class="mb-3">
+            <label class="form-label fw-700">
+              <i class="fa fa-file-medical me-1" style="color:var(--vert)"></i>
+              Uploader votre ordonnance <span class="text-danger">*</span>
+            </label>
+            <input type="file" name="ordonnance" class="form-control {% if erreur_ordonnance %}is-invalid{% endif %}" accept="image/*,.pdf" required>
+            <div class="form-text">
+              <i class="fa fa-shield-alt me-1" style="color:var(--vert)"></i>
+              <strong>Votre ordonnance est analysée automatiquement</strong> par notre système pour vérifier son authenticité. Formats : JPG, PNG, PDF.
+            </div>
+          </div>
+
+          <!-- Étapes de vérification -->
+          <div class="p-3 rounded-3 mb-3" style="background:var(--vert-pale,#e8f5ee);border:1px solid #c3e0cc;">
+            <div class="fw-700 mb-2" style="font-size:.88rem;color:var(--vert);">
+              <i class="fa fa-robot me-1"></i>Comment fonctionne la vérification ?
+            </div>
+            <div style="font-size:.82rem;color:#374151;">
+              <div class="mb-1"><i class="fa fa-check me-2" style="color:var(--vert)"></i>Notre IA vérifie que le document est bien une ordonnance médicale</div>
+              <div class="mb-1"><i class="fa fa-check me-2" style="color:var(--vert)"></i>Elle s'assure que les médicaments commandés y sont mentionnés</div>
+              <div><i class="fa fa-check me-2" style="color:var(--vert)"></i>Un pharmacien valide ensuite manuellement avant livraison</div>
+            </div>
+          </div>
+
+          {% else %}
           <div class="mb-3">
             <label class="form-label">Ordonnance médicale <span class="text-muted fw-normal">(si nécessaire)</span></label>
             <input type="file" name="ordonnance" class="form-control" accept="image/*,.pdf">
             <div class="form-text"><i class="fa fa-info-circle me-1" style="color:var(--vert)"></i>Formats acceptés : JPG, PNG, PDF</div>
           </div>
+          {% endif %}
+
           <div class="mb-0">
             <label class="form-label">Notes pour le livreur <span class="text-muted fw-normal">(optionnel)</span></label>
             <textarea name="notes" class="form-control" rows="2"

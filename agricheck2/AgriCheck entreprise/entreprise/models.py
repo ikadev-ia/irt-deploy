@@ -12,19 +12,19 @@ class Company(models.Model):
 
     SUBSCRIPTION_PLAN_DETAILS = {
         SubscriptionPlan.STARTER.value: {
-            "price_xof": 75000,
+            "price_xof": 10000,
             "travel_limit_km": 30,
-            "summary": "Pour un client qui debute son suivi Agricheck.",
+            "summary": "Pour un client qui debute son suivi Agricheck 1 fois.",
         },
         SubscriptionPlan.GROWTH.value: {
-            "price_xof": 150000,
+            "price_xof": 250000,
             "travel_limit_km": 50,
-            "summary": "Pour une exploitation en croissance avec suivi drone regulier.",
+            "summary": "Pour une exploitation en croissance avec suivi drone regulier 3 fois.",
         },
         SubscriptionPlan.LARGE.value: {
-            "price_xof": 300000,
+            "price_xof": 450000,
             "travel_limit_km": 80,
-            "summary": "Pour les grandes surfaces et le suivi de plusieurs parcelles.",
+            "summary": "Pour les grandes surfaces et le suivi de plusieurs parcelles 5 fois.",
         },
     }
 
