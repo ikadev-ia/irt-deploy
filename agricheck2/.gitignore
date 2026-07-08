@@ -8,7 +8,7 @@ docker-compose.override.yml
 .packages
 .pub-cache/
 .pub/
-build/
+#build/
 android/
 ios/
 linux/
