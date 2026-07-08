@@ -6,6 +6,7 @@ import anthropic
 import base64
 import os
 from pathlib import Path
+#from pathlib import Path
 
 
 def verifier_ordonnance(image_file, medicaments_sous_ordonnance: list) -> dict:
