@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
     build-essential \
     pkg-config \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -20,8 +21,9 @@ COPY . .
 
 RUN chmod +x manage.py
 
-RUN python manage.py collectstatic --noinput
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 8090
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8090", "agricheck_admin.wsgi:application"]
+ENTRYPOINT ["/entrypoint.sh"]
