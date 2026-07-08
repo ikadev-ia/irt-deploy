@@ -5,12 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // 2. Connexion à la base de données
-$db_host = getenv('DB_HOST') ?: "localhost";
-$db_user = getenv('DB_USER') ?: "root";
-$db_pass = getenv('DB_PASSWORD') ?: "";
-$db_name = getenv('DB_NAME') ?: "takami_db";
-
-$conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+$conn = new mysqli("localhost", "root", "", "takami_db");
 if ($conn->connect_error) {
     die("Erreur de connexion : " . $conn->connect_error);
 }

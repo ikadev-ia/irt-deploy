@@ -16,6 +16,7 @@ if (empty($_SESSION['panier'])) {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valider ma commande - Takami</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
@@ -28,13 +29,20 @@ if (empty($_SESSION['panier'])) {
         .input-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 0.9rem; }
         .input-group input, .input-group textarea { width: 100%; padding: 14px 18px; border: 1px solid rgba(0, 0, 0, 0.15); border-radius: 15px; background: #fdfdfd; outline: none; font-size: 1rem; }
         
-        .payment-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 10px; margin-bottom: 20px; }
+        /* Grille optimisée pour 3 colonnes */
+        .payment-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; margin-bottom: 20px; }
+        .payment-option { display: block; }
         .payment-option input[type="radio"] { display: none; }
-        .payment-box { display: flex; flex-direction: column; align-items: center; background: #f5f5f5; border: 2px solid transparent; padding: 15px 10px; border-radius: 18px; cursor: pointer; transition: 0.2s; }
-        .payment-box img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 8px; }
+        .payment-box { display: flex; flex-direction: column; align-items: center; background: #f5f5f5; border: 2px solid transparent; padding: 12px 5px; border-radius: 15px; cursor: pointer; transition: 0.2s; height: 100%; }
+        .payment-box img { width: 35px; height: 35px; object-fit: contain; margin-bottom: 8px; }
+        .payment-box span { font-size: 0.75rem; font-weight: bold; color: #333; }
         .payment-option input[type="radio"]:checked + .payment-box { background: #f1f8e9; border-color: #2e7d32; }
         
         .btn { width: 100%; padding: 16px; border: none; border-radius: 30px; background: #2e7d32; color: white; font-weight: bold; cursor: pointer; margin-top: 15px; }
+
+        @media (max-width: 480px) {
+            .form-container { padding: 25px; }
+        }
     </style>
 </head>
 <body>
@@ -63,8 +71,9 @@ if (empty($_SESSION['panier'])) {
 
             <label>Mode de paiement</label>
             <div class="payment-selector">
-                <label class="payment-option"><input type="radio" name="paiement" value="orange" required><div class="payment-box"><img src="images/orangemoney.png" alt="Orange Money"><span>OM</span></div></label>
+                <label class="payment-option"><input type="radio" name="paiement" value="orange" required><div class="payment-box"><img src="images/orangemoney.png" alt="OM"><span>OM</span></div></label>
                 <label class="payment-option"><input type="radio" name="paiement" value="wave"><div class="payment-box"><img src="images/wave.jpeg" alt="Wave"><span>Wave</span></div></label>
+                <label class="payment-option"><input type="radio" name="paiement" value="moov"><div class="payment-box"><img src="images/moovmoney.png" alt="Moov"><span>Moov</span></div></label>
                 <label class="payment-option"><input type="radio" name="paiement" value="carte"><div class="payment-box"><img src="images/carte.png" alt="Carte"><span>Carte</span></div></label>
                 <label class="payment-option"><input type="radio" name="paiement" value="cash"><div class="payment-box"><img src="images/cash.png" alt="Cash"><span>Cash</span></div></label>
             </div>

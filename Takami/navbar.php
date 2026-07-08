@@ -18,7 +18,7 @@ if (isset($_SESSION['panier']) && is_array($_SESSION['panier'])) {
 $is_admin = (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin');
 ?>
 <style>
-    /* Styles de la Navbar */
+    /* Styles originaux */
     .custom-navbar {
         position: fixed;
         top: 20px;
@@ -111,6 +111,27 @@ $is_admin = (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === '
     }
 
     .navbar-spacer { height: 110px; width: 100%; }
+
+    /* Ajout simple pour le menu burger (responsivité) */
+    .burger { display: none; cursor: pointer; font-size: 24px; color: #333; }
+
+    @media (max-width: 850px) {
+        .burger { display: block; }
+        .navbar-links {
+            display: none;
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            width: 90%;
+        }
+        .navbar-links.active { display: flex; }
+    }
 </style>
 
 <nav class="custom-navbar">
@@ -118,9 +139,14 @@ $is_admin = (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === '
         <img src="images/logo.png" alt="TAKAMÍ" class="brand-logo-img">
     </a>
 
+    <!-- Icône Burger -->
+    <div class="burger" onclick="document.querySelector('.navbar-links').classList.toggle('active')">☰</div>
+
     <ul class="navbar-links">
         <li><a href="index.php">Accueil</a></li>
         <li><a href="produits.php">Nos Produits</a></li>
+        <li><a href="contact.php">Contact</a></li>
+        <li><a href="A_propos.php">A propos</a></li>
 
         <?php if (isset($_SESSION['user'])): ?>
             <?php if ($is_admin): ?>

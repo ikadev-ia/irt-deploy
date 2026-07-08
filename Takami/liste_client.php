@@ -7,7 +7,6 @@
             <th style="padding:15px; text-align:left;">Email</th>
             <th style="padding:15px; text-align:left;">Inscription</th>
             <th style="padding:15px; text-align:left;">Dernière connexion</th>
-            <th style="padding:15px; text-align:left;">Mot de passe (Hash)</th>
         </tr>
         <?php 
         // On récupère toutes les colonnes nécessaires
@@ -21,8 +20,6 @@
             <td style="padding:15px; color:#2e7d32; font-weight:bold;">
                 <?= $c['derniere_connexion'] ?? 'Jamais connecté' ?>
             </td>
-            <td style="padding:15px; font-family: monospace; font-size: 12px; color: #555;">
-                <?= substr($c['password'], 0, 15) . "..." ?>
             </td>
         </tr>
         <?php endwhile; ?>

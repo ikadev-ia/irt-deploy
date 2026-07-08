@@ -24,6 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajouter'])) {
 }
 ?>
 
+<style>
+    .responsive-box { width: 100%; overflow-x: auto; }
+    @media (max-width: 900px) {
+        form { flex-direction: column; }
+        table { min-width: 500px; }
+    }
+</style>
+
 <?php 
 $alertes = $conn->query("SELECT nom, Quantité FROM produits WHERE Quantité < 5");
 if ($alertes->num_rows > 0): ?>
@@ -38,9 +46,9 @@ if ($alertes->num_rows > 0): ?>
 <div class="card">
     <h3>Ajouter un Produit</h3>
     <form method="POST" enctype="multipart/form-data" style="display:flex; gap:10px;">
-        <input type="text" name="nom" placeholder="Nom" required style="padding:10px; border-radius:8px; border:1px solid #ddd;">
-        <input type="number" name="prix" placeholder="Prix" required style="padding:10px; border-radius:8px; border:1px solid #ddd;">
-        <input type="number" name="Quantité" placeholder="Stock" required style="padding:10px; border-radius:8px; border:1px solid #ddd;">
+        <input type="text" name="nom" placeholder="Nom" required style="padding:10px; border-radius:8px; border:1px solid #ddd; flex:1;">
+        <input type="number" name="prix" placeholder="Prix" required style="padding:10px; border-radius:8px; border:1px solid #ddd; width:100px;">
+        <input type="number" name="Quantité" placeholder="Stock" required style="padding:10px; border-radius:8px; border:1px solid #ddd; width:80px;">
         <input type="file" name="image" required>
         <button type="submit" name="ajouter" style="background:var(--primary); color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">Valider</button>
     </form>
@@ -48,20 +56,22 @@ if ($alertes->num_rows > 0): ?>
 
 <div class="card">
     <h3>Catalogue</h3>
-    <table style="width:100%; border-collapse: collapse;">
-        <tr style="text-align:left; color:#888;"><th>Image</th><th>Nom</th><th>Prix</th><th>Stock</th><th>Action</th></tr>
-        <?php $res = $conn->query("SELECT * FROM produits");
-        while($p = $res->fetch_assoc()): ?>
-        <tr style="border-bottom:1px solid #eee; <?= ($p['Quantité'] == 0) ? 'background:#ffebee;' : '' ?>">
-            <td style="padding:10px;"><img src="images/<?= $p['image'] ?>" width="50"></td>
-            <td><?= $p['nom'] ?> <?= ($p['Quantité'] == 0) ? '<span style="color:red; font-size:12px;">(RUPTURE)</span>' : '' ?></td>
-            <td><?= $p['prix'] ?> FCFA</td>
-            <td><?= $p['Quantité'] ?></td>
-            <td>
-                <a href="?page=liste_produit&ajouter_stock=<?= $p['id'] ?>" style="background:#4caf50; color:white; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">Ajouter +1</a>
-                <a href="?page=liste_produit&supprimer=<?= $p['id'] ?>" style="color:red; margin-left:10px; text-decoration:none;">Supprimer</a>
-            </td>
-        </tr>
-        <?php endwhile; ?>
-    </table>
+    <div class="responsive-box">
+        <table style="width:100%; border-collapse: collapse;">
+            <tr style="text-align:left; color:#888;"><th>Image</th><th>Nom</th><th>Prix</th><th>Stock</th><th>Action</th></tr>
+            <?php $res = $conn->query("SELECT * FROM produits");
+            while($p = $res->fetch_assoc()): ?>
+            <tr style="border-bottom:1px solid #eee; <?= ($p['Quantité'] == 0) ? 'background:#ffebee;' : '' ?>">
+                <td style="padding:10px;"><img src="images/<?= $p['image'] ?>" width="50"></td>
+                <td><?= $p['nom'] ?> <?= ($p['Quantité'] == 0) ? '<span style="color:red; font-size:12px;">(RUPTURE)</span>' : '' ?></td>
+                <td><?= $p['prix'] ?> FCFA</td>
+                <td><?= $p['Quantité'] ?></td>
+                <td>
+                    <a href="?page=liste_produit&ajouter_stock=<?= $p['id'] ?>" style="background:#4caf50; color:white; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">Ajouter +1</a>
+                    <a href="?page=liste_produit&supprimer=<?= $p['id'] ?>" style="color:red; margin-left:10px; text-decoration:none;">Supprimer</a>
+                </td>
+            </tr>
+            <?php endwhile; ?>
+        </table>
+    </div>
 </div>

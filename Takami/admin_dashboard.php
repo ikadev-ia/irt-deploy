@@ -8,6 +8,7 @@ if (isset($_GET['logout'])) { session_destroy(); header("Location: index.php"); 
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration Takami</title>
     <style>
         :root { --primary: #2e7d32; --bg: #f8f9fa; }
