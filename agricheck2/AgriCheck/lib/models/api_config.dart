@@ -3,7 +3,7 @@ class ApiConfig {
   const ApiConfig({
     this.backendBaseUrl = const String.fromEnvironment(
       'AGRICHECK_API_BASE_URL',
-      defaultValue: 'http://127.0.0.1:8090',
+      defaultValue: 'https://admin.agricheck-mali.com',
     ),
     this.useBackendProxy = true,
     this.openWeatherApiKey = const String.fromEnvironment(

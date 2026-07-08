@@ -3,14 +3,7 @@ import 'api_exceptions.dart';
 
 class BackendUrlResolver {
   static const List<String> localFallbackUrls = <String>[
-    'http://127.0.0.1:8090',
-    'http://10.0.2.2:8090',
-    'http://10.0.3.2:8090',
-    'http://172.20.10.3:8090',
-    'http://172.20.10.3:8000',
-    'http://10.0.2.2:8000',
-    'http://10.0.3.2:8000',
-    'http://127.0.0.1:8000',
+    'https://admin.agricheck-mali.com',
   ];
 
   static List<Uri> baseUris(ApiConfig config) {
