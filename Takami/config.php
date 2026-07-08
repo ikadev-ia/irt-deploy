@@ -1,5 +1,6 @@
 <?php
 // 1. On s'assure que la session est bien démarrée
+// 1. On s'assure que la session est bien démarrée
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
