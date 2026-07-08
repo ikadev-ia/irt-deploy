@@ -14,12 +14,59 @@ def checkout(request):
         return redirect('panier')
     total = sum(item.sous_total for item in items)
 
+    # Médicaments sous ordonnance dans le panier
+    meds_sous_ordonnance = [
+        item.medicament.nom
+        for item in items
+        if item.medicament.sur_ordonnance
+    ]
+    necessite_ordonnance = len(meds_sous_ordonnance) > 0
+
     if request.method == 'POST':
         adresse = request.POST.get('adresse_livraison', request.user.adresse)
         telephone = request.POST.get('telephone', request.user.telephone)
         mode_paiement = request.POST.get('mode_paiement', 'especes')
         notes = request.POST.get('notes', '')
         ordonnance = request.FILES.get('ordonnance')
+
+        # ── Vérification ordonnance ────────────────────────
+        if meds_sous_ordonnance:
+            if not ordonnance:
+                messages.error(
+                    request,
+                    f"⛔ Votre panier contient des médicaments sous ordonnance : "
+                    f"{', '.join(meds_sous_ordonnance)}. "
+                    f"Vous devez uploader une ordonnance médicale valide pour continuer."
+                )
+                return render(request, 'commandes/checkout.html', {
+                    'items': items,
+                    'total': total,
+                    'user': request.user,
+                    'necessite_ordonnance': necessite_ordonnance,
+                    'meds_sous_ordonnance': meds_sous_ordonnance,
+                    'erreur_ordonnance': True,
+                })
+
+            # Analyser l'ordonnance avec Claude Vision
+            from .ordonnance_verifier import verifier_ordonnance
+            resultat = verifier_ordonnance(ordonnance, meds_sous_ordonnance)
+
+            if not resultat['valide']:
+                messages.error(request, resultat['message'])
+                return render(request, 'commandes/checkout.html', {
+                    'items': items,
+                    'total': total,
+                    'user': request.user,
+                    'necessite_ordonnance': necessite_ordonnance,
+                    'meds_sous_ordonnance': meds_sous_ordonnance,
+                    'erreur_ordonnance': True,
+                    'resultat_ordo': resultat,
+                })
+
+            # Ordonnance valide — remettre le pointeur au début pour la sauvegarder
+            ordonnance.seek(0)
+            messages.info(request, resultat['message'])
+        # ──────────────────────────────────────────────────
 
         commande = Commande.objects.create(
             client=request.user,
@@ -74,6 +121,8 @@ def checkout(request):
         'items': items,
         'total': total,
         'user': request.user,
+        'necessite_ordonnance': necessite_ordonnance,
+        'meds_sous_ordonnance': meds_sous_ordonnance,
     })
 
 @login_required
