@@ -173,7 +173,7 @@ $panier_reel = $_SESSION['panier'];
 
     <div class="actions">
         <a href="produits.php" class="btn btn-continue">Continuer Mes Achats</a>
-        <a href="valider.php" class="btn btn-validate">Valider la commande</a>
+        <a href="Valider.php" class="btn btn-validate">Valider la commande</a>
     </div>
 </div>
 </body>
