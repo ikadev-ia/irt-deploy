@@ -34,6 +34,12 @@ services:
       - DB_PORT=3306
       - ALLOWED_HOSTS=admin.agricheck-mali.com,agricheck-mali.com
       - CSRF_TRUSTED_ORIGINS=https://admin.agricheck-mali.com,https://agricheck-mali.com
+      # Clés d'API pour les services d'analyse IA (À REMPLIR SUR LE SERVEUR)
+      - GEMINI_API_KEY=VOTRE_CLE_GEMINI_ICI
+      - PLANTNET_API_KEY=VOTRE_CLE_PLANTNET_ICI
+      - PLANTNET_PROJECT=all
+      - PLANT_ID_API_KEY=VOTRE_CLE_PLANT_ID_ICI
+      - KINDWISE_API_KEY=VOTRE_CLE_KINDWISE_ICI
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.agricheck-admin.rule=Host(`admin.agricheck-mali.com`)"
