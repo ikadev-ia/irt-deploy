@@ -5,8 +5,9 @@ from django.conf import settings
 
 
 def admin_base_url():
-    #return getattr(settings, "AGRICHECK_ADMIN_API_BASE_URL", "http://127.0.0.1:8090").rstrip("/")
-    return getattr(settings, "AGRICHECK_ADMIN_API_BASE_URL", "https://admin.agricheck-mali.com").rstrip("/")
+    # En production Docker, on utilise le nom du service défini dans docker-compose.yml
+    # Sinon on utilise la variable d'environnement AGRICHECK_ADMIN_API_BASE_URL
+    return getattr(settings, "AGRICHECK_ADMIN_API_BASE_URL", "http://agricheck-admin:8090").rstrip("/")
 
 
 def post_json(path, payload):
