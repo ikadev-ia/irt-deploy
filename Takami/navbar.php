@@ -1,9 +1,5 @@
 <?php
-// On s'assure que la session est démarrée
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+// On suppose que la session est démarrée par la page parente
 // Calcul du nombre total d'articles dans le panier
 $total_articles = 0;
 if (isset($_SESSION['panier']) && is_array($_SESSION['panier'])) {
@@ -152,7 +148,7 @@ $is_admin = (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === '
             <?php if ($is_admin): ?>
                 <li><a href="admin_dashboard.php" style="color: #ffa000;">💼 Admin</a></li>
             <?php else: ?>
-                <li><a href="facture.php">Ma Facture</a></li>
+                <li><a href="Facture.php">Ma Facture</a></li>
             <?php endif; ?>
             
             <li>
