@@ -5,7 +5,8 @@ from django.conf import settings
 
 
 def admin_base_url():
-    return getattr(settings, "AGRICHECK_ADMIN_API_BASE_URL", "http://127.0.0.1:8090").rstrip("/")
+    #return getattr(settings, "AGRICHECK_ADMIN_API_BASE_URL", "http://127.0.0.1:8090").rstrip("/")
+    return getattr(settings, "AGRICHECK_ADMIN_API_BASE_URL", "https://admin.agricheck-mali.com").rstrip("/")
 
 
 def post_json(path, payload):
