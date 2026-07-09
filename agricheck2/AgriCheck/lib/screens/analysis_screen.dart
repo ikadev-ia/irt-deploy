@@ -12,8 +12,11 @@ import 'analysis_progress_screen.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 Future<String?> analyserMaladieAvecGemini(XFile imageFile) async {
-  //const String geminiApiKey = "AIzaSy...";
-  final String geminiApiKey = dotenv.env['GEMINI_API_KEY']!;
+  // Récupération sécurisée de la clé API Gemini
+  final String? geminiApiKey = dotenv.env['GEMINI_API_KEY'];
+  if (geminiApiKey == null || geminiApiKey.trim().isEmpty) {
+    return "Erreur : Clé GEMINI_API_KEY introuvable ou non configurée dans l'environnement.";
+  }
 
   try {
     // 2. Initialiser le modèle Gemini (on utilise gemini-2.5-flash ou gemini-1.5-flash pour le traitement d'images)
