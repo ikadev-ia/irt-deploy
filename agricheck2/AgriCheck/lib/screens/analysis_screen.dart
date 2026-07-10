@@ -17,7 +17,9 @@ Future<String?> analyserMaladieAvecGemini(XFile imageFile) async {
   // if (geminiApiKey == null || geminiApiKey.trim().isEmpty) {
   //   return "Erreur : Clé GEMINI_API_KEY introuvable ou non configurée dans l'environnement.";
   // }
-  const String geminiApiKey = "AQ.Ab8RN6JrYW7LrJ-2caeHpfOcxgMf1_LKY5qydB0h9NJalmVIig";
+  
+  //const String geminiApiKey = "AQ.Ab8RN6JrYW7LrJ-2caeHpfOcxgMf1_LKY5qydB0h9NJalmVIig";
+  const String geminiApiKey = "ICI LA CLE API";
   
 
   try {
