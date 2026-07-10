@@ -29,7 +29,6 @@ if (empty($_SESSION['panier'])) {
         .input-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 0.9rem; }
         .input-group input, .input-group textarea { width: 100%; padding: 14px 18px; border: 1px solid rgba(0, 0, 0, 0.15); border-radius: 15px; background: #fdfdfd; outline: none; font-size: 1rem; }
         
-        /* Grille optimisée pour 3 colonnes */
         .payment-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; margin-bottom: 20px; }
         .payment-option { display: block; }
         .payment-option input[type="radio"] { display: none; }
@@ -57,13 +56,14 @@ if (empty($_SESSION['panier'])) {
         <form action="traitement.php" method="POST">
             <div class="input-group">
                 <label>Nom complet</label>
-                <input type="text" name="nom" value="<?php echo htmlspecialchars($_SESSION['user']['nom'] ?? ''); ?>" readonly>
+                <input type="text" name="nom" value="" placeholder="Entrez votre nom complet" required>
             </div>
 
             <div class="input-group">
                 <label for="telephone">Numéro de téléphone</label>
                 <input type="tel" id="telephone" name="telephone" placeholder="Ex: 70 00 00 00" required>
             </div>
+
             <div class="input-group">
                 <label for="adresse">Adresse exacte de livraison</label>
                 <textarea id="adresse" name="adresse" rows="3" required></textarea>

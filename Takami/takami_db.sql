@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 29 juin 2026 à 21:20
+-- Généré le : ven. 10 juil. 2026 à 00:26
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -42,9 +42,10 @@ CREATE TABLE `clients` (
 --
 
 INSERT INTO `clients` (`id`, `nom`, `email`, `password`, `numero`, `date_inscription`, `derniere_connexion`) VALUES
-(1, 'Fatoumata Diane', 'dianefatoushka@gmail.com', '$2y$10$sXGBkqavE/BrOL9SXoePBO89tCpyEHaWKTbPcCGjo.48L3m3ZWwhG', '90003100', '2026-06-26 14:48:55', '2026-06-29 11:12:30'),
-(2, 'Djenebou Sacko', 'kanykim@gmail.com', '$2y$10$JAYq0jlwY13z/nHtm/QXt.lBzDkqWHBCYsPYXityzVws9SFw.Mfca', '76120974', '2026-06-29 11:08:42', '2026-06-29 14:50:43'),
-(3, 'Fatoumata Diane', 'f@gmail.com', '$2y$10$0dSLkaqL8H6NXfj1zlo3N.DW3vmc3HhA/UThZmtC0CLopTBdRl7zC', '76269049', '2026-06-29 11:39:59', NULL);
+(1, 'Fatoumata Diane', 'dianefatoushka@gmail.com', '$2y$10$sXGBkqavE/BrOL9SXoePBO89tCpyEHaWKTbPcCGjo.48L3m3ZWwhG', '90003100', '2026-06-26 14:48:55', '2026-07-08 17:00:36'),
+(2, 'Djenebou Sacko', 'kanykim@gmail.com', '$2y$10$JAYq0jlwY13z/nHtm/QXt.lBzDkqWHBCYsPYXityzVws9SFw.Mfca', '76120974', '2026-06-29 11:08:42', '2026-07-08 13:26:43'),
+(3, 'Fatoumata Diane', 'f@gmail.com', '$2y$10$0dSLkaqL8H6NXfj1zlo3N.DW3vmc3HhA/UThZmtC0CLopTBdRl7zC', '76269049', '2026-06-29 11:39:59', NULL),
+(4, 'batoma diaby', 'batoss@gmail.com', '$2y$10$raq9tWJWzalUHC78whCTaucMRvolPsltuG7agoyEwcLw/bUMPpoY6', '70907090', '2026-07-09 21:48:24', NULL);
 
 -- --------------------------------------------------------
 
@@ -82,7 +83,20 @@ INSERT INTO `commandes` (`id`, `nom_client`, `adresse`, `paiement`, `date_comman
 (13, '', NULL, NULL, '2026-06-29 11:10:04', 'Nienaje (x1), ', 5500.00),
 (14, '', NULL, NULL, '2026-06-29 11:42:00', 'Nienaje (x1), ', 5500.00),
 (15, 'Administrateur', NULL, NULL, '2026-06-29 14:25:40', 'Dembaya (x1), ', 3000.00),
-(16, 'Djenebou Sacko', NULL, NULL, '2026-06-29 14:51:04', 'Dembaya (x1), ', 3000.00);
+(16, 'Djenebou Sacko', NULL, NULL, '2026-06-29 14:51:04', 'Dembaya (x1), ', 3000.00),
+(17, 'Fatoumata Diane', NULL, NULL, '2026-07-03 12:50:44', 'Grain Jigin (x1), ', 150.00),
+(18, 'Fatoumata Diane', NULL, NULL, '2026-07-05 01:58:36', 'Dembaya (x1), Nienaje (x1), ', 8500.00),
+(19, 'Fatoumata Diane', NULL, NULL, '2026-07-06 17:38:25', 'Nienaje (x1), ', 5500.00),
+(20, 'Fatoumata Diane', NULL, NULL, '2026-07-06 23:07:36', 'Grain Jigin (x1), Dembaya (x1), Nienaje (x1), ', 8650.00),
+(21, 'Fatoumata Diane', NULL, NULL, '2026-07-07 13:52:29', 'Grain Jigin (x1), Dembaya (x1), Nienaje (x1), ', 8650.00),
+(22, 'Fatoumata Diane', NULL, NULL, '2026-07-07 15:14:17', 'Grain Jigin (x1), ', 150.00),
+(23, 'Djenebou Sacko', NULL, NULL, '2026-07-08 13:27:37', 'Grain Jigin (x1), Nienaje (x1), ', 5650.00),
+(24, 'Fatoumata Diane', NULL, NULL, '2026-07-08 17:01:16', 'Grain Jigin (x1), ', 150.00),
+(25, 'Fatoumata Diane', NULL, NULL, '2026-07-08 17:08:17', 'Grain Jigin (x1), ', 150.00),
+(26, 'Fatoumata Diane', NULL, NULL, '2026-07-08 21:57:19', 'Grain Jigin (x1), ', 150.00),
+(27, 'Fatoumata Diane', NULL, NULL, '2026-07-08 22:02:26', 'Nienaje (x1), ', 5500.00),
+(28, 'Fatoumata Diane', NULL, NULL, '2026-07-09 21:47:18', 'Nienaje (x1), ', 5500.00),
+(29, 'batoma diaby', NULL, NULL, '2026-07-09 21:49:29', 'Grain Jigin (x1), Nienaje (x1), ', 5650.00);
 
 -- --------------------------------------------------------
 
@@ -123,9 +137,9 @@ CREATE TABLE `produits` (
 --
 
 INSERT INTO `produits` (`id`, `nom`, `prix`, `image`, `Quantité`) VALUES
-(1, 'Grain Jigin', 150, '250g.jpeg', 97),
-(2, 'Dembaya', 3000, '50kg.jpeg', 3),
-(3, 'Nienaje', 5500, '100kg.jpeg', 296);
+(1, 'Grain Jigin', 150, '250g.jpeg', 88),
+(2, 'Dembaya', 3000, '50kg.jpeg', 0),
+(3, 'Nyènajè', 5500, '100kg.jpeg', 288);
 
 --
 -- Index pour les tables déchargées
@@ -163,13 +177,13 @@ ALTER TABLE `produits`
 -- AUTO_INCREMENT pour la table `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `commandes`
 --
 ALTER TABLE `commandes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT pour la table `details_commande`
