@@ -1,5 +1,4 @@
 #version: '3.8'
-#version: '3.8'
 
 services:
   agricheck-db:
@@ -7,12 +6,12 @@ services:
     container_name: agricheck-db
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=root_password
-      #- MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: agricheck_db
+      MYSQL_USER: agricheck_user
+      MYSQL_PASSWORD: agricheck_password
+      MYSQL_ROOT_PASSWORD: root_password
     volumes:
       - agricheck_db_data:/var/lib/mysql
-      # Optionnel: initialisation avec le schéma si présent
-      # - ./AgriCheck/database/agricheck_mysql_schema.sql:/docker-entrypoint-initdb.d/schema.sql
     networks:
       - agricheck-net
 
@@ -26,9 +25,9 @@ services:
     environment:
       - DEBUG=0
       - DB_ENGINE=django.db.backends.mysql
-      - DB_NAME=agricheck_admin
-      - DB_USER=root
-      - DB_PASSWORD=root_password
+      - DB_NAME=agricheck_db
+      - DB_USER=agricheck_user
+      - DB_PASSWORD=agricheck_password
       - DB_HOST=agricheck-db
       - DB_PORT=3306
       - ALLOWED_HOSTS=admin.agricheck-mali.com,agricheck-mali.com
@@ -60,9 +59,9 @@ services:
     environment:
       - DEBUG=0
       - DB_ENGINE=django.db.backends.mysql
-      - DB_NAME=agricheck_entreprise
-      - DB_USER=root
-      - DB_PASSWORD=root_password
+      - DB_NAME=agricheck_db
+      - DB_USER=agricheck_user
+      - DB_PASSWORD=agricheck_password
       - DB_HOST=agricheck-db
       - DB_PORT=3306
       - ALLOWED_HOSTS=entreprise.agricheck-mali.com
