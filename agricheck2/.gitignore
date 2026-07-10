@@ -8,7 +8,8 @@ docker-compose.override.yml
 .packages
 .pub-cache/
 .pub/
-#build/
+# Autoriser l'envoi du build web pour le déploiement Docker
+!agricheck2/AgriCheck/build/web/
 android/
 ios/
 linux/
