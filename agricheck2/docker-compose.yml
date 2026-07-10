@@ -8,7 +8,7 @@ services:
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=root_password
-      MYSQL_ROOT_PASSWORD: root_password
+      #- MYSQL_ROOT_PASSWORD: root_password
     volumes:
       - agricheck_db_data:/var/lib/mysql
       # Optionnel: initialisation avec le schéma si présent
