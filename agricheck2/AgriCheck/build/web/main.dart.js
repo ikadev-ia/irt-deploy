@@ -8275,7 +8275,7 @@ aV7(a){var s=0,r=A.F(t.ob),q,p=2,o=[],n,m,l,k,j,i,h,g,f,e,d,c,b
 var $async$a_j=A.G(function(a0,a1){if(a0===1){o.push(a1)
 s=p}for(;;)switch(s){case 0:p=4
 h=A.azB("https","generativelanguage.googleapis.com","v1beta",null)
-n=new A.a66(A.aNJ("gemini-2.5-flash"),B.Ky,null,null,new A.a7p("AQ.Ab8RN6JrYW7LrJ-2caeHpfOcxgMf1_LKY5qydB0h9NJalmVIig",null),h,null,null)
+n=new A.a66(A.aNJ("gemini-2.5-flash"),B.Ky,null,null,new A.a7p("ICI LA CLE API",null),h,null,null)
 s=7
 return A.z(a.Bh(),$async$a_j)
 case 7:m=a1
